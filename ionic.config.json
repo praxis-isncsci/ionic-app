@@ -1,0 +1,7 @@
+{
+  "name": "isncsci",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}

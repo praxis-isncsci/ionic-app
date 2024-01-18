@@ -345,7 +345,7 @@ import 'isncsci-ui/dist/css/design-system.css';
 
 import {
   IAppState,
-  IExternalMessagePortProvider,
+  IExternalMessageProvider,
   StatusCodes,
 } from 'isncsci-ui/dist/esm/core/boundaries';
 
@@ -360,7 +360,7 @@ const classificationStyle = ref('');
 const inputLayoutRef = ref<HTMLElement | null>(null);
 const inputButtonsRef = ref<HTMLElement | null>(null);
 const classificationRef = ref<HTMLElement | null>(null);
-const externalMessagePortProvider: IExternalMessagePortProvider = {
+const externalMessagePortProvider: IExternalMessageProvider = {
   sendOutExamData: () => {
     console.log('externalMessagePortProvider called');
   },
@@ -370,9 +370,11 @@ const appStoreProvider = new AppStoreProvider(appStore);
 const isncsciExamProvider = new IsncsciExamProvider();
 let ready = false;
 
-const stateChanged = (state: IAppState) => {
+const stateChanged = (state: IAppState, actionType: string) => {
   if (!ready && state.status === StatusCodes.Ready) {
-    console.log(`The application has been initialized and is ready`);
+    console.log(
+      `The application has been initialized and is ready :: ${actionType}`,
+    );
     ready = true;
   }
 };
@@ -411,9 +413,12 @@ const calculate_onClick = () => {
   classificationStyle.value = 'visible';
 
   nextTick(() => {
+    const heightPx = classificationRef.value
+      ? classificationRef.value.clientHeight
+      : 280;
     document.documentElement.style.setProperty(
       '--calc-classification-height',
-      `${classificationRef.value.clientHeight / 16}rem`,
+      `${heightPx / 16}rem`,
     );
   });
 

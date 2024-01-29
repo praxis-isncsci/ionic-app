@@ -17,7 +17,7 @@
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
     "ionicons": "^7.0.0",
-    "isncsci-ui": "^0.0.23",
+    "isncsci-ui": "^0.0.24",
     "vue": "^3.3.0",
     "vue-router": "^4.2.0"
   },

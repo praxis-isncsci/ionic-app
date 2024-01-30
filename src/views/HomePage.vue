@@ -111,6 +111,10 @@
             </select>
             <label for="comments" slot="comments-label">Comments:</label>
             <textarea name="comments" id="comments" slot="comments"></textarea>
+            <praxis-isncsci-key-points-diagram
+              slot="key-points-diagram"
+              ref="keyPointsDiagramRef"
+            ></praxis-isncsci-key-points-diagram>
           </praxis-isncsci-input-layout>
           <praxis-isncsci-input
             slot="input-controls"
@@ -354,12 +358,16 @@ import {
   initializeAppUseCase,
 } from 'isncsci-ui/dist/esm/core/useCases';
 
-import {InputLayoutController} from 'isncsci-ui/dist/esm/app/controllers';
+import {
+  InputLayoutController,
+  KeyPointDiagramController,
+} from 'isncsci-ui/dist/esm/app/controllers';
 
 const classificationStyle = ref('');
 const inputLayoutRef = ref<HTMLElement | null>(null);
 const inputButtonsRef = ref<HTMLElement | null>(null);
 const classificationRef = ref<HTMLElement | null>(null);
+const keyPointsDiagramRef = ref<HTMLElement | null>(null);
 const externalMessagePortProvider: IExternalMessageProvider = {
   sendOutExamData: () => {
     console.log('externalMessagePortProvider called');
@@ -392,10 +400,15 @@ onMounted(() => {
     new InputLayoutController(
       appStore,
       appStoreProvider,
+      externalMessagePortProvider,
       inputLayoutRef.value,
       inputButtonsRef.value,
       classificationRef.value,
     );
+  }
+
+  if (keyPointsDiagramRef.value) {
+    new KeyPointDiagramController(appStore, keyPointsDiagramRef.value);
   }
 
   initializeAppUseCase(appStoreProvider);
@@ -429,6 +442,7 @@ const calculate_onClick = () => {
     state.dap,
     state.rightLowestNonKeyMuscleWithMotorFunction,
     state.leftLowestNonKeyMuscleWithMotorFunction,
+    state.comments,
     appStoreProvider,
     isncsciExamProvider,
     externalMessagePortProvider,

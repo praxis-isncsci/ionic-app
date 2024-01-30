@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package org.praxisinstitute.isncsci;
 
 import com.getcapacitor.BridgeActivity;
 

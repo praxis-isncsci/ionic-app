@@ -1,7 +1,7 @@
 {
   "name": "org.praxisinstitute.isncsci",
   "private": true,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -18,7 +18,7 @@
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
     "ionicons": "^7.0.0",
-    "isncsci-ui": "^0.0.24",
+    "isncsci-ui": "^1.0.0",
     "vue": "^3.3.0",
     "vue-router": "^4.2.0"
   },

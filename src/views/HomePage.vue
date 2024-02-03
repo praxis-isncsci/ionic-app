@@ -296,7 +296,8 @@
                   data-total="left-light-touch-total"
                   >&nbsp;</praxis-isncsci-classification-total
                 >
-                <praxis-isncsci-classification-total data-total="touch-total"
+                <praxis-isncsci-classification-total
+                  data-total="light-touch-total"
                   >&nbsp;</praxis-isncsci-classification-total
                 >
                 <div class="text-caption-2 row-header">Pin prick</div>

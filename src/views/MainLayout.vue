@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>{{ title }}</ion-title>
+        <ion-title @click="handleTitleClick">{{ title }}</ion-title>
         <slot name="header-buttons"></slot>
       </ion-toolbar>
     </ion-header>
@@ -28,10 +28,25 @@ import {
   IonContent,
   IonTitle
 } from '@ionic/vue';
+import { useRouter } from 'vue-router';
 import { defineProps } from 'vue';
-defineProps<{
+const props = defineProps<{
   title: string;
 }>();
+
+const router = useRouter();
+const handleTitleClick = () => {
+  if (props.title === 'EULA') {
+    const eulaAccepted = localStorage.getItem('eulaAccepted');
+    if (eulaAccepted === 'true') {
+      router.push('/home');
+      console.log('clicked!!!!!!')
+    }
+  } else if (props.title === 'ISNCSCI') {
+    router.push('/eula');
+    console.log('eula!!!!!!')
+  }
+};
 </script>
 
 <style scoped>

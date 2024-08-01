@@ -13,15 +13,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import {
   IonButton
 } from '@ionic/vue'
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import MainLayout from './MainLayout.vue';
 import { eulaContent } from '../eulaContent.ts'
 
 const router = useRouter();
+const route = useRoute();
 const isEulaAccepted = ref(false);
 
 const checkEulaAccepted = (): void => {
@@ -39,6 +40,10 @@ const acceptEula = (): void => {
 };
 
 onMounted(() => {
+  checkEulaAccepted();
+});
+
+watch(route, () => {
   checkEulaAccepted();
 });
 </script>

@@ -1,7 +1,7 @@
 <template>
   <MainLayout title="EULA">
-    <div class=" ion-padding">
-      <p>End User License Agreement content goes here...</p>
+    <div class="ion-padding">
+      <div v-html="eulaContent"></div>
       <ion-button @click="acceptEula">Accept</ion-button>
     </div>
   </MainLayout>
@@ -13,6 +13,7 @@ import {
 } from '@ionic/vue'
 import { useRouter } from 'vue-router';
 import MainLayout from './MainLayout.vue';
+import { eulaContent } from '../eulaContent.ts'
 
 const router = useRouter();
 const acceptEula = (): void => {

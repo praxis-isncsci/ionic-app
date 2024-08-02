@@ -40,11 +40,9 @@ const handleTitleClick = () => {
     const eulaAccepted = localStorage.getItem('eulaAccepted');
     if (eulaAccepted === 'true') {
       router.push('/home');
-      console.log('clicked!!!!!!')
     }
   } else if (props.title === 'ISNCSCI') {
     router.push('/eula');
-    console.log('eula!!!!!!')
   }
 };
 </script>

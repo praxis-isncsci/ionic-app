@@ -6,7 +6,10 @@
         <ion-button @click="acceptEula">Accept</ion-button>
       </div>
       <div v-else>
-        <p>Accepted</p>
+        <p>
+          <ion-icon :icon="checkmarkOutline"></ion-icon>
+          Accepted
+        </p>
       </div>
     </div>
   </MainLayout>
@@ -15,8 +18,9 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import {
-  IonButton
-} from '@ionic/vue'
+  IonButton, IonIcon
+} from '@ionic/vue';
+import { checkmarkOutline } from 'ionicons/icons';
 import { useRouter, useRoute } from 'vue-router';
 import MainLayout from './MainLayout.vue';
 import { eulaContent } from '../eulaContent.ts'

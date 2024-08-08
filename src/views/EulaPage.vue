@@ -23,7 +23,7 @@ import {
 import { checkmarkOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import MainLayout from './MainLayout.vue';
-import { eulaContent } from '../eulaContent.ts'
+import { eulaContent } from '../eulaContent'
 
 const router = useRouter();
 const isEulaAccepted = ref(false);

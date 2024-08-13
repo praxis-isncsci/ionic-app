@@ -2,6 +2,8 @@
   <MainLayout title="ISNCSCI">
     <template #header-buttons>
       <ion-buttons slot="end">
+        <ion-button @click="saveToLocalStorage_onClick">
+          <ion-icon slot="start" :icon="save"></ion-icon>Save</ion-button>
         <ion-button @click="calculate_onClick">
           <ion-icon slot="start" :icon="calculator"></ion-icon>Calculate</ion-button>
       </ion-buttons>
@@ -244,7 +246,7 @@ import {
 } from '@ionic/vue';
 import MainLayout from './MainLayout.vue';
 
-import { calculator, close } from 'ionicons/icons';
+import { calculator, close, save } from 'ionicons/icons';
 
 import { onBeforeUnmount, onMounted, ref, nextTick } from 'vue';
 
@@ -273,6 +275,9 @@ import {
   InputLayoutController,
   KeyPointDiagramController,
 } from 'isncsci-ui/dist/esm/app/controllers';
+
+import { Cell } from 'isncsci-ui/dist/esm/core/domain';
+
 
 const classificationStyle = ref('');
 const inputLayoutRef = ref<HTMLElement | null>(null);
@@ -361,6 +366,26 @@ const calculate_onClick = () => {
 
   return false;
 };
+
+const saveToLocalStorage_onClick = () => {
+  const inputData: Record<string, string> = {};
+
+  const state = appStore.getState();
+  const gridModel = state.gridModel ?? [];
+
+  // Extract cell names and their values in one loop
+  gridModel.flat().forEach((cell) => {
+    if (cell) inputData[cell.name] = cell.value;
+  });
+
+  inputLayoutRef.value?.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea')
+    .forEach((element) => {
+      inputData[element.name] = element.value;
+    });
+
+  localStorage.setItem('isncsciData', JSON.stringify(inputData));
+};
+
 
 const closeClassification_onClick = () => {
   classificationStyle.value = '';

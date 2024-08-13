@@ -276,7 +276,7 @@ import {
   KeyPointDiagramController,
 } from 'isncsci-ui/dist/esm/app/controllers';
 
-import { Cell } from 'isncsci-ui/dist/esm/core/domain';
+// import { Cell } from 'isncsci-ui/dist/esm/core/domain';
 
 
 const classificationStyle = ref('');
@@ -381,6 +381,15 @@ const saveToLocalStorage_onClick = () => {
   inputLayoutRef.value?.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea')
     .forEach((element) => {
       inputData[element.name] = element.value;
+    });
+
+  // Extract calculated values from the classification grid
+  classificationRef.value?.querySelectorAll('praxis-isncsci-classification-total[data-total]')
+    .forEach((element) => {
+      const name = element.getAttribute('data-total');
+      if (name) {
+        inputData[name] = element.textContent?.trim() || '';
+      }
     });
 
   localStorage.setItem('isncsciData', JSON.stringify(inputData));

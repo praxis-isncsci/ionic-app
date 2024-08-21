@@ -276,7 +276,7 @@ import {
   KeyPointDiagramController,
 } from 'isncsci-ui/dist/esm/app/controllers';
 
-// import { Cell } from 'isncsci-ui/dist/esm/core/domain';
+import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 
 
 const classificationStyle = ref('');
@@ -338,6 +338,8 @@ onBeforeUnmount(() => {
 
 initializeAppUseCase(appStoreProvider);
 
+const currentExamData = ref<ExamData | null>(null);
+
 const calculate_onClick = () => {
   classificationStyle.value = 'visible';
 
@@ -352,6 +354,7 @@ const calculate_onClick = () => {
   });
 
   const state = appStore.getState();
+  // const examData: ExamData = 
   calculateUseCase(
     state.gridModel ?? [],
     state.vac,
@@ -364,37 +367,45 @@ const calculate_onClick = () => {
     externalMessagePortProvider,
   );
 
+  // currentExamData.value = examData;
+
+  // console.log('Exam Data:', examData);
   return false;
 };
 
 const saveToLocalStorage_onClick = () => {
-  const inputData: Record<string, string> = {};
-
-  const state = appStore.getState();
-  const gridModel = state.gridModel ?? [];
-
-  // Extract cell names and their values in one loop
-  gridModel.flat().forEach((cell) => {
-    if (cell) inputData[cell.name] = cell.value;
-  });
-
-  inputLayoutRef.value?.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea')
-    .forEach((element) => {
-      inputData[element.name] = element.value;
-    });
-
-  // Extract calculated values from the classification grid
-  classificationRef.value?.querySelectorAll('praxis-isncsci-classification-total[data-total]')
-    .forEach((element) => {
-      const name = element.getAttribute('data-total');
-      if (name) {
-        inputData[name] = element.textContent?.trim() || '';
-      }
-    });
-
-  localStorage.setItem('isncsciData', JSON.stringify(inputData));
+  if (currentExamData.value) {
+    const examDataString = JSON.stringify(currentExamData.value);
+    localStorage.setItem('isncsciExamData', examDataString);
+    console.log('Exam Data saved to localStorage:', examDataString);
+  } else {
+    console.error('No exam data available to save.');
+  }
 };
+// const inputData: Record<string, string> = {};
 
+// const state = appStore.getState();
+// const gridModel = state.gridModel ?? [];
+
+// // Extract cell names and their values in one loop
+// gridModel.flat().forEach((cell) => {
+//   if (cell) inputData[cell.name] = cell.value;
+// });
+
+// inputLayoutRef.value?.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea')
+//   .forEach((element) => {
+//     inputData[element.name] = element.value;
+//   });
+
+// // Extract results 
+// classificationRef.value?.querySelectorAll('praxis-isncsci-classification-total[data-total]')
+//   .forEach((element) => {
+//     const name = element.getAttribute('data-total');
+//     if (name) {
+//       inputData[name] = element.textContent?.trim() || '';
+//     }
+//   });
+// localStorage.setItem('isncsciData', JSON.stringify(inputData));
 
 const closeClassification_onClick = () => {
   classificationStyle.value = '';

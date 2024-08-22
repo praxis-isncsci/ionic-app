@@ -1,5 +1,5 @@
 <template>
-  <MainLayout title="ISNCSCI">
+  <MainLayout title="ISNCSCI" :showNavbar="true">
     <template #header-buttons>
       <ion-buttons slot="end">
         <ion-button @click="calculate_onClick">
@@ -368,18 +368,3 @@ const closeClassification_onClick = () => {
   return false;
 };
 </script>
-
-<!-- <style scoped>
-[isncsci-web-app] {
-  display: flex;
-  flex-direction: column;
-  padding-top: 24px;
-  height: 100%;
-  overflow: hidden;
-}
-
-praxis-isncsci-app-layout {
-  height: 25rem;
-  flex-grow: 1;
-}
-</style> -->

@@ -1,5 +1,5 @@
 <template>
-  <MainLayout title="EULA">
+  <MainLayout title="EULA" :showNavbar="false">
     <div class="ion-padding">
       <div v-html="eulaContent" class="eula-content"></div>
       <div v-if="!isEulaAccepted">

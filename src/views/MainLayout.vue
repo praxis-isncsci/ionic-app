@@ -11,10 +11,11 @@
       <slot></slot>
     </ion-content>
 
-    <ion-footer>
-      <ion-toolbar>
+    <ion-footer v-if="showNavbar">
+      <!-- <ion-toolbar>
         <div class="footer-text">Copyright Praxis Institute</div>
-      </ion-toolbar>
+      </ion-toolbar> -->
+      <AppNavbar />
     </ion-footer>
   </ion-page>
 </template>
@@ -30,8 +31,10 @@ import {
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { defineProps } from 'vue';
+import AppNavbar from '@/components/AppNavbar.vue';
 const props = defineProps<{
   title: string;
+  showNavbar: boolean;
 }>();
 
 const router = useRouter();

@@ -13,7 +13,7 @@
                 <ion-icon :icon="saveOutline"></ion-icon>
                 Save
             </ion-tab-button>
-            <ion-tab-button tab="calculate">
+            <ion-tab-button tab="calculate" @click="calculateOnClick">
                 <ion-icon :icon="calculatorOutline"></ion-icon>
                 Calculate
             </ion-tab-button>
@@ -30,22 +30,25 @@
                     <ion-fab-button>
                         <ion-icon :icon="bookmarksOutline"></ion-icon>
                     </ion-fab-button>
-                    <ion-fab-button>
+                    <ion-fab-button @click="redirectToEula">
                         <ion-icon :icon="newspaperOutline"></ion-icon>
                     </ion-fab-button>
                 </ion-fab-list>
             </ion-fab>
         </ion-content>
     </ion-tabs>
-
-
 </template>
 
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import { IonTabButton, IonTabBar, IonIcon, IonFab, IonFabButton, IonFabList } from '@ionic/vue';
 import { manOutline, backspaceOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, helpCircleOutline } from 'ionicons/icons';
 
-// const calculate_onClick = () => {
-// };
+const { calculateOnClick } = defineProps<{ calculateOnClick: () => void }>();
+const router = useRouter();
+
+const redirectToEula = () => {
+    router.push('/eula');
+}
 </script>

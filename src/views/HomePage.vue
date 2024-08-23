@@ -1,10 +1,10 @@
 <template>
-  <MainLayout title="ISNCSCI" :showNavbar="true">
+  <MainLayout title="ISNCSCI" :showNavbar="true" :calculate_onClick="calculate_onClick">
     <template #header-buttons>
-      <ion-buttons slot="end">
+      <!-- <ion-buttons slot="end">
         <ion-button @click="calculate_onClick">
           <ion-icon slot="start" :icon="calculator"></ion-icon>Calculate</ion-button>
-      </ion-buttons>
+      </ion-buttons> -->
     </template>
 
     <div isncsci-web-app>

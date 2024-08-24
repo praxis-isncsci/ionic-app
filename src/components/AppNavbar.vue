@@ -9,7 +9,7 @@
                 <ion-icon :icon="backspaceOutline"></ion-icon>
                 Clear
             </ion-tab-button>
-            <ion-tab-button tab="save">
+            <ion-tab-button tab="save" @click="saveOnClick">
                 <ion-icon :icon="saveOutline"></ion-icon>
                 Save
             </ion-tab-button>
@@ -19,8 +19,8 @@
             </ion-tab-button>
         </ion-tab-bar>
         <ion-content>
-            <ion-fab slot="fixed" vertical="bottom" horizontal="center" style="bottom: 75px;">
-                <ion-fab-button>
+            <ion-fab slot="fixed" vertical="bottom" horizontal="center" style="bottom: 55px">
+                <ion-fab-button >
                     <ion-icon :icon="chevronUp"></ion-icon>
                 </ion-fab-button>
                 <ion-fab-list side="top">
@@ -45,7 +45,8 @@ import { useRouter } from 'vue-router';
 import { IonTabButton, IonTabBar, IonIcon, IonFab, IonFabButton, IonFabList } from '@ionic/vue';
 import { manOutline, backspaceOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, helpCircleOutline } from 'ionicons/icons';
 
-const { calculateOnClick } = defineProps<{ calculateOnClick: () => void }>();
+const { calculateOnClick, saveOnClick } = defineProps<{ calculateOnClick: () => void, saveOnClick: () => void }>();
+
 const router = useRouter();
 
 const redirectToEula = () => {

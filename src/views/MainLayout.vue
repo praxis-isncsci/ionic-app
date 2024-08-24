@@ -11,11 +11,11 @@
       <slot></slot>
     </ion-content>
 
-    <ion-footer>
+    <ion-footer v-if="showNavbar">
       <!-- <ion-toolbar>
         <div class="footer-text">Copyright Praxis Institute</div>
       </ion-toolbar> -->
-      <AppNavbar :calculateOnClick="calculate_onClick" />
+      <AppNavbar :calculateOnClick="calculate_onClick || (() => { })" :saveOnClick="save_onClick || (() => { })" />
     </ion-footer>
   </ion-page>
 </template>
@@ -35,7 +35,8 @@ import AppNavbar from '@/components/AppNavbar.vue';
 const props = defineProps<{
   title: string;
   showNavbar: boolean;
-  calculate_onClick: () => void;
+  calculate_onClick?: () => void;
+  save_onClick?: () => void;
 }>();
 
 const router = useRouter();

@@ -19,8 +19,8 @@
             </ion-tab-button>
         </ion-tab-bar>
         <ion-content>
-            <ion-fab slot="fixed" vertical="bottom" horizontal="center" style="bottom: 55px">
-                <ion-fab-button >
+            <ion-fab slot="fixed" vertical="bottom" horizontal="center" style="bottom: 65px">
+                <ion-fab-button>
                     <ion-icon :icon="chevronUp"></ion-icon>
                 </ion-fab-button>
                 <ion-fab-list side="top">

@@ -2,6 +2,8 @@
   <MainLayout title="ISNCSCI">
     <template #header-buttons>
       <ion-buttons slot="end">
+        <ion-button @click="saveToLocalStorage_onClick">
+          <ion-icon slot="start" :icon="save"></ion-icon>Save</ion-button>
         <ion-button @click="calculate_onClick">
           <ion-icon slot="start" :icon="calculator"></ion-icon>Calculate</ion-button>
       </ion-buttons>
@@ -244,7 +246,7 @@ import {
 } from '@ionic/vue';
 import MainLayout from './MainLayout.vue';
 
-import { calculator, close } from 'ionicons/icons';
+import { calculator, close, save } from 'ionicons/icons';
 
 import { onBeforeUnmount, onMounted, ref, nextTick } from 'vue';
 
@@ -273,6 +275,9 @@ import {
   InputLayoutController,
   KeyPointDiagramController,
 } from 'isncsci-ui/dist/esm/app/controllers';
+
+import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
+
 
 const classificationStyle = ref('');
 const inputLayoutRef = ref<HTMLElement | null>(null);
@@ -333,6 +338,8 @@ onBeforeUnmount(() => {
 
 initializeAppUseCase(appStoreProvider);
 
+const currentExamData = ref<ExamData | null>(null);
+
 const calculate_onClick = () => {
   classificationStyle.value = 'visible';
 
@@ -347,6 +354,7 @@ const calculate_onClick = () => {
   });
 
   const state = appStore.getState();
+  // const examData: ExamData = 
   calculateUseCase(
     state.gridModel ?? [],
     state.vac,
@@ -359,8 +367,45 @@ const calculate_onClick = () => {
     externalMessagePortProvider,
   );
 
+  // currentExamData.value = examData;
+
+  // console.log('Exam Data:', examData);
   return false;
 };
+
+const saveToLocalStorage_onClick = () => {
+  if (currentExamData.value) {
+    const examDataString = JSON.stringify(currentExamData.value);
+    localStorage.setItem('isncsciExamData', examDataString);
+    console.log('Exam Data saved to localStorage:', examDataString);
+  } else {
+    console.error('No exam data available to save.');
+  }
+};
+// const inputData: Record<string, string> = {};
+
+// const state = appStore.getState();
+// const gridModel = state.gridModel ?? [];
+
+// // Extract cell names and their values in one loop
+// gridModel.flat().forEach((cell) => {
+//   if (cell) inputData[cell.name] = cell.value;
+// });
+
+// inputLayoutRef.value?.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea')
+//   .forEach((element) => {
+//     inputData[element.name] = element.value;
+//   });
+
+// // Extract results 
+// classificationRef.value?.querySelectorAll('praxis-isncsci-classification-total[data-total]')
+//   .forEach((element) => {
+//     const name = element.getAttribute('data-total');
+//     if (name) {
+//       inputData[name] = element.textContent?.trim() || '';
+//     }
+//   });
+// localStorage.setItem('isncsciData', JSON.stringify(inputData));
 
 const closeClassification_onClick = () => {
   classificationStyle.value = '';

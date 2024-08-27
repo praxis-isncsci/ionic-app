@@ -400,17 +400,19 @@ const saveWorksheet = () => {
   const examData = currentExamData.value;
 
   if (examData && worksheetName.value) {
-    const savedData = JSON.parse(localStorage.getItem('savedWorksheets') || '[]');
+    const metaKey = 'isncsci_meta';
+    const savedMeta = JSON.parse(localStorage.getItem(metaKey) || '[]');
 
     const now = new Date();
     const savedItem = {
       id,
       name: worksheetName.value,
       savedAt: now.toLocaleString(),
-      data: examData,
     }
-    savedData.push(savedItem);
-    localStorage.setItem('savedWorksheets', JSON.stringify(savedData));
+    savedMeta.push(savedItem);
+
+    localStorage.setItem(metaKey, JSON.stringify(savedMeta));
+    localStorage.setItem(`isncsci_${id}`, JSON.stringify(examData));
     closeModal();
   } else {
     console.error('No exam data available to save');
@@ -423,7 +425,6 @@ const save_onClick = () => {
 
 const closeClassification_onClick = () => {
   classificationStyle.value = '';
-
   return false;
 };
 

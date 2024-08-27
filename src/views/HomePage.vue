@@ -1,10 +1,23 @@
 <template>
   <MainLayout title="ISNCSCI" :showNavbar="true" :calculate_onClick="calculate_onClick" :save_onClick="save_onClick">
     <template #header-buttons>
-      <!-- <ion-buttons slot="end">
-        <ion-button @click="calculate_onClick">
-          <ion-icon slot="start" :icon="calculator"></ion-icon>Calculate</ion-button>
-      </ion-buttons> -->
+      <IonModal :isOpen="isModalOpen" @didDismiss="closeModal">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Worksheet Name</ion-title>
+            <ion-buttons slot="end">
+              <ion-button @click="closeModal">Close</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <ion-item>
+            <ion-input :modelValue="worksheetName" @ionInput="worksheetName = $event.target.value"
+              label="Enter worksheet name here"></ion-input>
+          </ion-item>
+          <ion-button expand="full" @click="saveWorksheet">Save</ion-button>
+        </ion-content>
+      </IonModal>
     </template>
 
     <div isncsci-web-app>
@@ -239,7 +252,8 @@
 <script setup lang="ts">
 import {
   IonButton,
-  IonIcon
+  IonIcon,
+  IonModal
 } from '@ionic/vue';
 import MainLayout from './MainLayout.vue';
 
@@ -370,15 +384,41 @@ const calculate_onClick = async () => {
   return false;
 };
 
-const save_onClick = () => {
-  console.log('saved button clicked')
-  if (currentExamData.value) {
-    const examDataString = JSON.stringify(currentExamData.value);
-    localStorage.setItem('isncsciExamData', examDataString);
-    console.log('Exam Data saved to localStorage:', examDataString);
+const isModalOpen = ref(false);
+const worksheetName = ref('');
+
+const openModal = () => {
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+};
+
+const saveWorksheet = () => {
+  const id = new Date().getTime().toString();
+  const examData = currentExamData.value;
+
+  if (examData && worksheetName.value) {
+    const savedData = JSON.parse(localStorage.getItem('savedWorksheets') || '[]');
+
+    const now = new Date();
+    const savedItem = {
+      id,
+      name: worksheetName.value,
+      savedAt: now.toLocaleString(),
+      data: examData,
+    }
+    savedData.push(savedItem);
+    localStorage.setItem('savedWorksheets', JSON.stringify(savedData));
+    closeModal();
   } else {
-    console.error('No exam data available to save.');
+    console.error('No exam data available to save');
   }
+};
+
+const save_onClick = () => {
+  openModal();
 };
 
 const closeClassification_onClick = () => {

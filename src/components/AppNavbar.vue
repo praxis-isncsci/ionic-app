@@ -1,48 +1,56 @@
 <template>
-    <ion-tabs>
-        <ion-tab-bar slot="bottom">
-            <ion-tab-button tab="chart">
-                <ion-icon :icon="manOutline"></ion-icon>
-                Chart
-            </ion-tab-button>
-            <ion-tab-button tab="clear">
-                <ion-icon :icon="backspaceOutline"></ion-icon>
-                Clear
-            </ion-tab-button>
-            <ion-tab-button tab="save" @click="saveOnClick">
-                <ion-icon :icon="saveOutline"></ion-icon>
-                Save
-            </ion-tab-button>
-            <ion-tab-button tab="calculate" @click="calculateOnClick">
-                <ion-icon :icon="calculatorOutline"></ion-icon>
-                Calculate
-            </ion-tab-button>
-        </ion-tab-bar>
-        <ion-content>
-            <ion-fab slot="fixed" vertical="bottom" horizontal="center" style="bottom: 65px">
-                <ion-fab-button>
-                    <ion-icon :icon="chevronUp"></ion-icon>
-                </ion-fab-button>
-                <ion-fab-list side="top">
+    <ion-grid>
+        <ion-row>
+            <ion-col class="ion-text-center">
+                <ion-button size="small">
+                    <ion-icon slot="start" :icon="manOutline"></ion-icon>
+                    Chart
+                </ion-button>
+            </ion-col>
+            <ion-col class="ion-text-center">
+                <ion-button size="small">
+                    <ion-icon slot="start" :icon="backspaceOutline"></ion-icon>
+                    Clear
+                </ion-button>
+            </ion-col>
+            <ion-col>
+                <ion-fab horizontal="center">
                     <ion-fab-button>
-                        <ion-icon :icon="helpCircleOutline"></ion-icon>
+                        <ion-icon :icon="chevronUp"></ion-icon>
                     </ion-fab-button>
-                    <ion-fab-button>
-                        <ion-icon :icon="bookmarksOutline"></ion-icon>
-                    </ion-fab-button>
-                    <ion-fab-button @click="redirectToEula">
-                        <ion-icon :icon="newspaperOutline"></ion-icon>
-                    </ion-fab-button>
-                </ion-fab-list>
-            </ion-fab>
-        </ion-content>
-    </ion-tabs>
+                    <ion-fab-list side="top">
+                        <ion-fab-button>
+                            <ion-icon :icon="helpCircleOutline"></ion-icon>
+                        </ion-fab-button>
+                        <ion-fab-button>
+                            <ion-icon :icon="bookmarksOutline"></ion-icon>
+                        </ion-fab-button>
+                        <ion-fab-button @click="redirectToEula">
+                            <ion-icon :icon="newspaperOutline"></ion-icon>
+                        </ion-fab-button>
+                    </ion-fab-list>
+                </ion-fab>
+            </ion-col>
+            <ion-col class="ion-text-center">
+                <ion-button size="small" @click="saveOnClick">
+                    <ion-icon slot="start" :icon="saveOutline"></ion-icon>
+                    Save
+                </ion-button>
+            </ion-col>
+            <ion-col class="ion-text-center">
+                <ion-button size="small" @click="calculateOnClick">
+                    <ion-icon slot="start" :icon="calculatorOutline"></ion-icon>
+                    Calculate
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </template>
 
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { IonTabButton, IonTabBar, IonIcon, IonFab, IonFabButton, IonFabList } from '@ionic/vue';
+import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList } from '@ionic/vue';
 import { manOutline, backspaceOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, helpCircleOutline } from 'ionicons/icons';
 
 const { calculateOnClick, saveOnClick } = defineProps<{ calculateOnClick: () => void, saveOnClick: () => void }>();

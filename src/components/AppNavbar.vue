@@ -30,7 +30,7 @@
                     <ion-fab-button>
                         <ion-icon :icon="helpCircleOutline"></ion-icon>
                     </ion-fab-button>
-                    <ion-fab-button>
+                    <ion-fab-button @click="redirectToSavedWorksheets">
                         <ion-icon :icon="bookmarksOutline"></ion-icon>
                     </ion-fab-button>
                     <ion-fab-button @click="redirectToEula">
@@ -54,6 +54,10 @@ const router = useRouter();
 
 const redirectToEula = () => {
     router.push('/eula');
+}
+
+const redirectToSavedWorksheets = () => {
+    router.push('/saved-worksheets');
 }
 </script>
 

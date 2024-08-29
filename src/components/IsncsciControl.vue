@@ -229,6 +229,7 @@
 
 
 <script setup lang="ts">
+import { close } from 'ionicons/icons';
 import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import {
     AppStoreProvider,

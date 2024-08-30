@@ -48,6 +48,7 @@
 </template>
 
 
+
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList } from '@ionic/vue';
@@ -61,3 +62,5 @@ const redirectToEula = () => {
     router.push('/eula');
 }
 </script>
+
+

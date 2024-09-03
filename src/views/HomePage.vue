@@ -6,7 +6,10 @@
     <IsncsciControl ref="isncsciControlRef"></IsncsciControl>
 
     <template #footer-buttons>
-      <AppNavbar :calculateOnClick="calculate_onClick" :saveOnClick="save_onClick">
+      <AppNavbar 
+        :calculateOnClick="calculate_onClick" 
+        :saveOnClick="save_onClick"
+      >
       </AppNavbar>
     </template>
   </MainLayout>
@@ -18,26 +21,29 @@ import IsncsciControl from '@/components/IsncsciControl.vue';
 import AppNavbar from '@/components/AppNavbar.vue';
 import { ref, reactive, onMounted } from 'vue';
 import { alertController } from '@ionic/vue';
+import { appStore } from 'isncsci-ui/dist/esm/app/store';
+import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
+import { IAppState } from 'isncsci-ui/dist/esm/core/boundaries';
 
 const isncsciControlRef = ref<InstanceType<typeof IsncsciControl> | null>(null);
 
 const worksheetData = reactive({
   worksheetName: '',
-  hasExamData: false, // Track if examData exists
-  hasUnsavedData: false, // Track if there is any unsaved data from inputs
+  hasExamData: false, 
+  hasUnsavedData: false,
 });
 
 const calculate_onClick = async () => {
   const isSuccess = await isncsciControlRef.value?.calculate();
   if (isSuccess) {
-    worksheetData.hasExamData = true; // Set to true when calculation is successful
-    worksheetData.hasUnsavedData = true; // Mark data as unsaved
+    worksheetData.hasExamData = true;
+    worksheetData.hasUnsavedData = true;
   } else {
     console.log('Error in ISNCSCI calculation');
   }
 };
 
-const generateWorksheetName = () => {
+const generateWorksheetName = (): string => {
   const metaKey = 'isncsci_meta';
   const savedMeta = JSON.parse(localStorage.getItem(metaKey) || '[]');
 
@@ -56,92 +62,91 @@ const generateWorksheetName = () => {
 };
 
 const save_onClick = async () => {
-  // To do - add raw data inputs values!!!!!!!!!!!!
+  const state: IAppState = appStore.getState();
+  const examData: ExamData | null = isncsciControlRef.value?.data() ?? null;
+
   if (!worksheetData.hasUnsavedData && !worksheetData.hasExamData) {
     return;
   }
 
-  const now = new Date();
-
   if (!worksheetData.worksheetName) {
-    // If there's no worksheet name, ask the user for one
-    const suggestedWorksheetName = generateWorksheetName();
-
     const alert = await alertController.create({
       header: 'Enter worksheet name here:',
+      inputs: [{ value: generateWorksheetName() }],
       buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-        },
-        {
-          text: 'OK',
-          role: 'confirm',
-        },
-      ],
-      inputs: [
-        {
-          value: suggestedWorksheetName,
-        },
+        { text: 'Cancel', role: 'cancel' },
+        { text: 'OK', role: 'confirm' },
       ],
     });
 
     await alert.present();
-
     const result = await alert.onDidDismiss();
 
     if (result.role === 'confirm') {
-      const metaKey = 'isncsci_meta';
-      const savedMeta = JSON.parse(localStorage.getItem(metaKey) || '[]');
+      const worksheetId = new Date().getTime().toString();
+      worksheetData.worksheetName = result.data.values[0];
 
-      const worksheetId = now.getTime().toString();
+      saveWorksheet(worksheetId, worksheetData.worksheetName, examData, state);
 
-      const savedItem = {
-        id: worksheetId,
-        name: result.data.values[0],
-        savedAt: now.toLocaleString(),
-      };
-
-      savedMeta.push(savedItem);
-      localStorage.setItem(metaKey, JSON.stringify(savedMeta));
-      localStorage.setItem(`isncsci_${worksheetId}`, JSON.stringify(isncsciControlRef.value?.data() || {}));
-
-      worksheetData.worksheetName = savedItem.name;
-
-      // Mark data as saved
-      worksheetData.hasUnsavedData = false;
-
-      // Set the current worksheet ID in session storage
       sessionStorage.setItem('currentWorksheetId', worksheetId);
+      worksheetData.hasUnsavedData = false;
     }
   } else {
-    // If worksheet name already exists, update the existing data
-    const metaKey = 'isncsci_meta';
-    const savedMeta = JSON.parse(localStorage.getItem(metaKey) || '[]');
-    const worksheetId = sessionStorage.getItem('currentWorksheetId');
-
-    let savedItem = savedMeta.find((item: any) => item.id === worksheetId);
-
-    if (savedItem) {
-      savedItem.savedAt = now.toLocaleString();
-      localStorage.setItem(metaKey, JSON.stringify(savedMeta)); // Update meta data with the new save time
-      localStorage.setItem(`isncsci_${worksheetId}`, JSON.stringify(isncsciControlRef.value?.data() || {}));
-      // Mark data as saved
-      worksheetData.hasUnsavedData = false;
-    } else {
-      console.error('Worksheet not found in local storage');
-    }
+    const worksheetId = sessionStorage.getItem('currentWorksheetId') || '';
+    saveWorksheet(worksheetId, worksheetData.worksheetName, examData, state);
+    worksheetData.hasUnsavedData = false;
   }
 };
 
-// Initialize a new worksheet on page load
+const saveWorksheet = (
+  id: string, 
+  name: string, 
+  examData: ExamData | null, 
+  state: IAppState
+) => {
+  const metaKey = 'isncsci_meta';
+  const savedMeta: any[] = JSON.parse(localStorage.getItem(metaKey) || '[]');
+
+  const savedItem = {
+    id,
+    name,
+    savedAt: new Date().toLocaleString(),
+    data: examData || {
+      gridModel: state.gridModel, 
+      vac: state.vac,  
+      dap: state.dap,  
+      rightLowestNonKeyMuscleWithMotorFunction: state.rightLowestNonKeyMuscleWithMotorFunction, 
+      leftLowestNonKeyMuscleWithMotorFunction: state.leftLowestNonKeyMuscleWithMotorFunction, 
+      comments: state.comments,
+    },
+  };
+
+  const existingWorksheetIndex = savedMeta.findIndex((item) => item.id === id);
+
+  if (existingWorksheetIndex === -1) {
+    savedMeta.push(savedItem);
+  } else {
+    savedMeta[existingWorksheetIndex] = savedItem;
+  }
+
+  localStorage.setItem(metaKey, JSON.stringify(savedMeta));
+  localStorage.setItem(`isncsci_${id}`, JSON.stringify(savedItem.data));
+};
+
+
 onMounted(() => {
   sessionStorage.removeItem('currentWorksheetId');
   worksheetData.worksheetName = '';
   worksheetData.hasExamData = false;
   worksheetData.hasUnsavedData = false;
-});
 
+  // Listen to the appStore for changes
+  appStore.subscribe((state: IAppState) => {
+    if (state.gridModel) {
+      worksheetData.hasUnsavedData = true;
+    }
+  });
+});
 </script>
 
 <style scoped>
@@ -150,11 +155,3 @@ onMounted(() => {
   margin-bottom: 10px;
 }
 </style>
-
-
-
-
-
-
-
-

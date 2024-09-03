@@ -24,6 +24,7 @@ import { alertController } from '@ionic/vue';
 import { appStore } from 'isncsci-ui/dist/esm/app/store';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { IAppState } from 'isncsci-ui/dist/esm/core/boundaries';
+import { APP_PREFIX } from '@/config';
 
 const isncsciControlRef = ref<InstanceType<typeof IsncsciControl> | null>(null);
 
@@ -44,7 +45,7 @@ const calculate_onClick = async () => {
 };
 
 const generateWorksheetName = (): string => {
-  const metaKey = 'isncsci_meta';
+  const metaKey = `${APP_PREFIX}meta`;
   const savedMeta = JSON.parse(localStorage.getItem(metaKey) || '[]');
 
   let worksheetNumber = 1;
@@ -104,7 +105,7 @@ const saveWorksheet = (
   examData: ExamData | null, 
   state: IAppState
 ) => {
-  const metaKey = 'isncsci_meta';
+  const metaKey =  `${APP_PREFIX}meta`;
   const savedMeta: any[] = JSON.parse(localStorage.getItem(metaKey) || '[]');
 
   const savedItem = {
@@ -130,9 +131,8 @@ const saveWorksheet = (
   }
 
   localStorage.setItem(metaKey, JSON.stringify(savedMeta));
-  localStorage.setItem(`isncsci_${id}`, JSON.stringify(savedItem.data));
+  localStorage.setItem(`${APP_PREFIX}${id}`, JSON.stringify(savedItem.data));
 };
-
 
 onMounted(() => {
   sessionStorage.removeItem('currentWorksheetId');

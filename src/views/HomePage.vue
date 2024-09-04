@@ -1,4 +1,5 @@
 <template>
+
   <MainLayout title="ISNCSCI" :showFooter="true">
     <div v-if="worksheetData.worksheetName" class="worksheet-name">
       Worksheet Name: {{ worksheetData.worksheetName }}
@@ -21,6 +22,7 @@ import IsncsciControl from '@/components/IsncsciControl.vue';
 import AppNavbar from '@/components/AppNavbar.vue';
 import { ref, reactive, onMounted } from 'vue';
 import { alertController } from '@ionic/vue';
+
 import { appStore } from 'isncsci-ui/dist/esm/app/store';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { IAppState } from 'isncsci-ui/dist/esm/core/boundaries';
@@ -147,6 +149,7 @@ onMounted(() => {
     }
   });
 });
+
 </script>
 
 <style scoped>

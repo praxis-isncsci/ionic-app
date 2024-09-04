@@ -72,7 +72,7 @@ onMounted(() => {
 });
 
 const close_onClick = () => {
-    router.push('/home');
+    router.replace('/home');
 };
 
 // Rename Worksheet

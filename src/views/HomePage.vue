@@ -82,6 +82,8 @@ const isFormEmpty = (state: IAppState): boolean => {
 const save_onClick = async () => {
   const state: IAppState = appStore.getState();
   const examData: ExamData | null = isncsciControlRef.value?.data() ?? null;
+  const metaKey = `${APP_PREFIX}meta`;
+  const savedMeta = JSON.parse(localStorage.getItem(metaKey) || '[]');
 
   // Prevent saving if the form is empty
   if (isFormEmpty(state)) {
@@ -93,7 +95,8 @@ const save_onClick = async () => {
     return;
   }
 
-  if (!worksheetData.worksheetName) {
+  // Function to prompt for a unique name
+  const promptForWorksheetName = async (): Promise<string | null> => {
     const alert = await alertController.create({
       header: 'Enter worksheet name here:',
       inputs: [{ value: generateWorksheetName() }],
@@ -102,16 +105,44 @@ const save_onClick = async () => {
         { text: 'OK', role: 'confirm' },
       ],
     });
-
     await alert.present();
     const result = await alert.onDidDismiss();
+    return result.role === 'confirm' ? result.data.values[0] : null;
+  };
 
-    if (result.role === 'confirm') {
+  if (!worksheetData.worksheetName) {
+    let worksheetName: string | null = null;
+    let uniqueName = false;
+
+    while (!uniqueName) {
+      worksheetName = await promptForWorksheetName();
+
+      if (!worksheetName) {
+        // User canceled the name input, exit saving process
+        return;
+      }
+
+      // Check if the name already exists
+      const nameExists = savedMeta.some((item: any) => item.name === worksheetName);
+
+      if (nameExists) {
+        const errorAlert = await alertController.create({
+          header: 'Error',
+          message: 'A worksheet with this name already exists. Please enter a unique name.',
+          buttons: ['OK'],
+        });
+        await errorAlert.present();
+        await errorAlert.onDidDismiss();
+      } else {
+        uniqueName = true;
+      }
+    }
+
+    if (worksheetName) {
       const worksheetId = new Date().getTime().toString();
-      worksheetData.worksheetName = result.data.values[0];
+      worksheetData.worksheetName = worksheetName;
 
       saveWorksheet(worksheetId, worksheetData.worksheetName, examData, state);
-
       sessionStorage.setItem('currentWorksheetId', worksheetId);
       worksheetData.hasUnsavedData = false;
     }

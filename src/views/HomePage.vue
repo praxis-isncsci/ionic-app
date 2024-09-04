@@ -64,9 +64,30 @@ const generateWorksheetName = (): string => {
   return worksheetName;
 };
 
+const isFormEmpty = (state: IAppState): boolean => {
+  // Check if all fields in in form are empty
+  if (
+    !state.gridModel.some(row => row.some(cell => cell && cell.value)) && 
+    !state.vac && 
+    !state.dap && 
+    !state.rightLowestNonKeyMuscleWithMotorFunction && 
+    !state.leftLowestNonKeyMuscleWithMotorFunction && 
+    !state.comments 
+  ) {
+    return true; // form is empty
+  }
+  return false; // form has data
+};
+
 const save_onClick = async () => {
   const state: IAppState = appStore.getState();
   const examData: ExamData | null = isncsciControlRef.value?.data() ?? null;
+
+  // Prevent saving if the form is empty
+  if (isFormEmpty(state)) {
+    console.log("Form is empty, nothing to save");
+    return;
+  }
 
   if (!worksheetData.hasUnsavedData && !worksheetData.hasExamData) {
     return;
@@ -110,31 +131,34 @@ const saveWorksheet = (
   const metaKey =  `${APP_PREFIX}meta`;
   const savedMeta: any[] = JSON.parse(localStorage.getItem(metaKey) || '[]');
 
-  const savedItem = {
+  const savedItemMeta = {
     id,
     name,
     savedAt: new Date().toLocaleString(),
-    data: examData || {
-      gridModel: state.gridModel, 
-      vac: state.vac,  
-      dap: state.dap,  
-      rightLowestNonKeyMuscleWithMotorFunction: state.rightLowestNonKeyMuscleWithMotorFunction, 
-      leftLowestNonKeyMuscleWithMotorFunction: state.leftLowestNonKeyMuscleWithMotorFunction, 
-      comments: state.comments,
-    },
   };
 
   const existingWorksheetIndex = savedMeta.findIndex((item) => item.id === id);
 
   if (existingWorksheetIndex === -1) {
-    savedMeta.push(savedItem);
+    savedMeta.push(savedItemMeta);
   } else {
-    savedMeta[existingWorksheetIndex] = savedItem;
+    savedMeta[existingWorksheetIndex] = savedItemMeta;
   }
 
   localStorage.setItem(metaKey, JSON.stringify(savedMeta));
-  localStorage.setItem(`${APP_PREFIX}${id}`, JSON.stringify(savedItem.data));
+
+  const savedItemData = examData || {
+    gridModel: state.gridModel, 
+    vac: state.vac,  
+    dap: state.dap,  
+    rightLowestNonKeyMuscleWithMotorFunction: state.rightLowestNonKeyMuscleWithMotorFunction, 
+    leftLowestNonKeyMuscleWithMotorFunction: state.leftLowestNonKeyMuscleWithMotorFunction, 
+    comments: state.comments,
+  };
+
+  localStorage.setItem(`${APP_PREFIX}${id}`, JSON.stringify(savedItemData));
 };
+
 
 onMounted(() => {
   sessionStorage.removeItem('currentWorksheetId');

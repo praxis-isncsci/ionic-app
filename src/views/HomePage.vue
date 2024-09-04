@@ -22,7 +22,6 @@ import IsncsciControl from '@/components/IsncsciControl.vue';
 import AppNavbar from '@/components/AppNavbar.vue';
 import { ref, reactive, onMounted } from 'vue';
 import { alertController } from '@ionic/vue';
-
 import { appStore } from 'isncsci-ui/dist/esm/app/store';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { IAppState } from 'isncsci-ui/dist/esm/core/boundaries';
@@ -34,13 +33,23 @@ const worksheetData = reactive({
   worksheetName: '',
   hasExamData: false, 
   hasUnsavedData: false,
+  isPostCalculation: false, // track if the data is post-calculation
 });
+
+// function to handle form changes
+const handleFormChange = () => {
+  worksheetData.hasUnsavedData = true;
+  if (worksheetData.isPostCalculation) {
+    worksheetData.isPostCalculation = false; // reset to raw input state when examData is out of date
+  }
+};
 
 const calculate_onClick = async () => {
   const isSuccess = await isncsciControlRef.value?.calculate();
   if (isSuccess) {
     worksheetData.hasExamData = true;
     worksheetData.hasUnsavedData = true;
+    worksheetData.isPostCalculation = true; // mark as post-calculation, examData is available
   } else {
     console.log('Error in ISNCSCI calculation');
   }
@@ -65,18 +74,14 @@ const generateWorksheetName = (): string => {
 };
 
 const isFormEmpty = (state: IAppState): boolean => {
-  // Check if all fields in the form are empty
-  if (
+  return (
     !state.gridModel.some(row => row.some(cell => cell && cell.value)) && 
     !state.vac && 
     !state.dap && 
     !state.rightLowestNonKeyMuscleWithMotorFunction && 
     !state.leftLowestNonKeyMuscleWithMotorFunction && 
-    !state.comments 
-  ) {
-    return true; // form is empty
-  }
-  return false; // form has data
+    !state.comments
+  );
 };
 
 const save_onClick = async () => {
@@ -85,80 +90,29 @@ const save_onClick = async () => {
   const metaKey = `${APP_PREFIX}meta`;
   const savedMeta = JSON.parse(localStorage.getItem(metaKey) || '[]');
 
-  // Prevent saving if the form is empty
   if (isFormEmpty(state)) {
     console.log("Form is empty, nothing to save");
     return;
   }
 
-  if (!worksheetData.hasUnsavedData && !worksheetData.hasExamData) {
+  if (!worksheetData.hasUnsavedData) {
     return;
   }
 
-  // Function to prompt for a unique name
-  const promptForWorksheetName = async (): Promise<string | null> => {
-    const alert = await alertController.create({
-      header: 'Enter worksheet name here:',
-      inputs: [{ value: generateWorksheetName() }],
-      buttons: [
-        { text: 'Cancel', role: 'cancel' },
-        { text: 'OK', role: 'confirm' },
-      ],
-    });
-    await alert.present();
-    const result = await alert.onDidDismiss();
-    return result.role === 'confirm' ? result.data.values[0] : null;
-  };
-
   if (!worksheetData.worksheetName) {
-    let worksheetName: string | null = null;
-    let uniqueName = false;
+    const worksheetName = await promptForWorksheetName(savedMeta);
+    if (!worksheetName) return;
 
-    while (!uniqueName) {
-      worksheetName = await promptForWorksheetName();
-
-      if (!worksheetName) {
-        // User canceled the name input, exit saving process
-        return;
-      }
-
-      // Check if the name already exists
-      const nameExists = savedMeta.some((item: any) => item.name === worksheetName);
-
-      if (nameExists) {
-        const errorAlert = await alertController.create({
-          header: 'Error',
-          message: 'A worksheet with this name already exists. Please enter a unique name.',
-          buttons: ['OK'],
-        });
-        await errorAlert.present();
-        await errorAlert.onDidDismiss();
-      } else {
-        uniqueName = true;
-      }
-    }
-
-    if (worksheetName) {
-      const worksheetId = new Date().getTime().toString();
-      worksheetData.worksheetName = worksheetName;
-
-      saveWorksheet(worksheetId, worksheetData.worksheetName, examData, state);
-      sessionStorage.setItem('currentWorksheetId', worksheetId);
-      worksheetData.hasUnsavedData = false;
-    }
-  } else {
-    const worksheetId = sessionStorage.getItem('currentWorksheetId') || '';
-    saveWorksheet(worksheetId, worksheetData.worksheetName, examData, state);
-    worksheetData.hasUnsavedData = false;
+    worksheetData.worksheetName = worksheetName;
   }
+
+  const worksheetId = sessionStorage.getItem('currentWorksheetId') || new Date().getTime().toString();
+  saveWorksheet(worksheetId, worksheetData.worksheetName, worksheetData.isPostCalculation ? examData : null, state);
+  sessionStorage.setItem('currentWorksheetId', worksheetId);
+  worksheetData.hasUnsavedData = false;
 };
 
-const saveWorksheet = (
-  id: string, 
-  name: string, 
-  examData: ExamData | null, 
-  state: IAppState
-) => {
+const saveWorksheet = (id: string, name: string, examData: ExamData | null, state: IAppState) => {
   const metaKey =  `${APP_PREFIX}meta`;
   const savedMeta: any[] = JSON.parse(localStorage.getItem(metaKey) || '[]');
 
@@ -190,6 +144,43 @@ const saveWorksheet = (
   localStorage.setItem(`${APP_PREFIX}${id}`, JSON.stringify(savedItemData));
 };
 
+// Prompt for worksheet name if none exists
+const promptForWorksheetName = async (savedMeta: any[]): Promise<string | null> => {
+  let worksheetName: string | null = null;
+  let uniqueName = false;
+
+  while (!uniqueName) {
+    const alert = await alertController.create({
+      header: 'Enter worksheet name here:',
+      inputs: [{ value: generateWorksheetName() }],
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        { text: 'OK', role: 'confirm' },
+      ],
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+
+    worksheetName = result.role === 'confirm' ? result.data.values[0] : null;
+    if (!worksheetName) return null;
+
+    const nameExists = savedMeta.some((item: any) => item.name === worksheetName);
+
+    if (nameExists) {
+      const errorAlert = await alertController.create({
+        header: 'Error',
+        message: 'A worksheet with this name already exists. Please enter a unique name.',
+        buttons: ['OK'],
+      });
+      await errorAlert.present();
+      await errorAlert.onDidDismiss();
+    } else {
+      uniqueName = true;
+    }
+  }
+
+  return worksheetName;
+};
 
 onMounted(() => {
   sessionStorage.removeItem('currentWorksheetId');
@@ -197,11 +188,8 @@ onMounted(() => {
   worksheetData.hasExamData = false;
   worksheetData.hasUnsavedData = false;
 
-  // Listen to the appStore for changes
-  appStore.subscribe((state: IAppState) => {
-    if (state.gridModel) {
-      worksheetData.hasUnsavedData = true;
-    }
+  appStore.subscribe(() => {
+    handleFormChange(); // calling function when form inputs change
   });
 });
 

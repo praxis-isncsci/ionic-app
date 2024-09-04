@@ -11,10 +11,9 @@
       <slot></slot>
     </ion-content>
 
-    <ion-footer>
-      <ion-toolbar>
-        <div class="footer-text">Copyright Praxis Institute</div>
-      </ion-toolbar>
+    <ion-footer v-if="showFooter">
+      <slot name="footer-buttons"></slot>
+      <!-- <div class="footer-text">Copyright Praxis Institute</div> -->
     </ion-footer>
   </ion-page>
 </template>
@@ -30,8 +29,10 @@ import {
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { defineProps } from 'vue';
+
 const props = defineProps<{
   title: string;
+  showFooter: boolean;
 }>();
 
 const router = useRouter();
@@ -50,6 +51,7 @@ const handleTitleClick = () => {
 <style scoped>
 .footer-text {
   text-align: center;
-  padding: 10px;
+  padding: 5px;
+  font-size: x-small;
 }
 </style>

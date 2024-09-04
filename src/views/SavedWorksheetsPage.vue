@@ -117,7 +117,6 @@ if (examData && Object.keys(examData).length > 0) {
 }
 };
 
-
 // Remove Worksheet from local storage
 const removeWorksheet = (worksheet: Worksheet) => {
     // Filter out the worksheet with the selected id

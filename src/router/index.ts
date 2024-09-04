@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import HomePage from '../views/HomePage.vue';
 import EulaPage from '../views/EulaPage.vue';
+import SavedWorksheetsPage from '../views/SavedWorksheetsPage.vue';
 
 const routes = [
   {
@@ -16,6 +17,11 @@ const routes = [
     path: '/eula',
     name: 'EULA',
     component: EulaPage
+  },
+  {
+    path: '/saved-worksheets',
+    name: 'Saved Worksheets',
+    component: SavedWorksheetsPage
   }
 ]
 

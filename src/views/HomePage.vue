@@ -65,7 +65,7 @@ const generateWorksheetName = (): string => {
 };
 
 const isFormEmpty = (state: IAppState): boolean => {
-  // Check if all fields in in form are empty
+  // Check if all fields in the form are empty
   if (
     !state.gridModel.some(row => row.some(cell => cell && cell.value)) && 
     !state.vac && 

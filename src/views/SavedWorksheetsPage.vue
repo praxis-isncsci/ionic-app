@@ -46,13 +46,12 @@
 </template>
 
 <script setup lang="ts">
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonItem, IonLabel, IonList } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import { closeOutline, createOutline, pencilOutline, trashOutline, checkmarkOutline } from 'ionicons/icons';
 import { APP_PREFIX } from '@/config';
-import { loadExternalExamDataUseCase } from 'isncsci-ui/dist/esm/core/useCases';
 import { appStore } from 'isncsci-ui/dist/esm/app/store';
-import { AppStoreProvider } from 'isncsci-ui/dist/esm/app/providers';
 
 interface Worksheet {
     id: string;
@@ -96,25 +95,119 @@ const cancelRename = () => {
 };
 
 
-const appStoreProvider = new AppStoreProvider(appStore);
-
 // Edit Worksheet
 const editWorksheet = async (worksheet: Worksheet) => {
-const examData = JSON.parse(localStorage.getItem(`${APP_PREFIX}${worksheet.id}`) || '{}');
+    const examData = JSON.parse(localStorage.getItem(`${APP_PREFIX}${worksheet.id}`) || '{}');
+    
+    if (examData && Object.keys(examData).length > 0) {
+        // Check if the data is post-calculation
+        if (examData.asiaImpairmentScale) {
+            // Post-calculation data
+            appStore.dispatch({
+                type: 'SET_TOTALS',
+                payload: {
+                    asiaImpairmentScale: examData.asiaImpairmentScale,
+                    injuryComplete: examData.injuryComplete,
+                    neurologicalLevelOfInjury: examData.neurologicalLevelOfInjury,
+                    //!!!!check later if all needed here
+                }
+            });
 
-console.log("data to pull", examData)
-if (examData && Object.keys(examData).length > 0) {
-    // Load the exam data into the app store
-    await loadExternalExamDataUseCase(appStoreProvider, examData);
+            // Set VAC and DAP
+            appStore.dispatch({
+                type: 'SET_VAC_DAP',
+                payload: { 
+                    vac: examData.voluntaryAnalContraction, 
+                    dap: examData.deepAnalPressure 
+                }
+            });
 
-    // Set the worksheet name in session storage to display it on the home page
-    sessionStorage.setItem('currentWorksheetId', worksheet.id);
+            // Set extra inputs
+            appStore.dispatch({
+                type: 'SET_EXTRA_INPUTS',
+                payload: {
+                    rightLowestNonKeyMuscleWithMotorFunction: examData.rightLowestNonKeyMuscleWithMotorFunction,
+                    leftLowestNonKeyMuscleWithMotorFunction: examData.leftLowestNonKeyMuscleWithMotorFunction,
+                    comments: examData.comments,
+                }
+            });
 
-    // Redirect to the editing page
-    router.replace(`/home/${worksheet.id}`)
-} else {
-    console.error('No exam data found for this worksheet');
-}
+            // Set grid model
+            const gridModel = convertExamDataToGridModel(examData);
+            appStore.dispatch({
+                type: 'SET_GRID_MODEL',
+                payload: gridModel
+            });
+        } else {
+            // Pre-calculation data
+            appStore.dispatch({
+                type: 'SET_GRID_MODEL',
+                payload: examData.gridModel || []
+            });
+
+            appStore.dispatch({
+                type: 'SET_VAC_DAP',
+                payload: { vac: examData.vac, dap: examData.dap }
+            });
+
+            appStore.dispatch({
+                type: 'SET_EXTRA_INPUTS',
+                payload: {
+                    rightLowestNonKeyMuscleWithMotorFunction: examData.rightLowestNonKeyMuscleWithMotorFunction,
+                    leftLowestNonKeyMuscleWithMotorFunction: examData.leftLowestNonKeyMuscleWithMotorFunction,
+                    comments: examData.comments,
+                }
+            });
+        }
+
+        // Set worksheet name and ID in session storage
+        sessionStorage.setItem('worksheetName', worksheet.name);
+        sessionStorage.setItem('currentWorksheetId', worksheet.id);
+
+        // Redirect to home to continue editing
+        router.replace('/home');
+    } else {
+        console.error('No exam data found for this worksheet');
+    }
+};
+
+// Helper function to convert exam data to grid model
+const convertExamDataToGridModel = (examData: any) => {
+    const gridModel = [];
+    const levels = ['C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12', 'L1', 'L2', 'L3', 'L4', 'L5', 'S1', 'S2', 'S3', 'S4_5'];
+
+    for (const level of levels) {
+        const row = [
+            null,
+            createCell(examData[`rightLightTouch${level}`], `right-light-touch-${level.toLowerCase()}`),
+            createCell(examData[`rightPinPrick${level}`], `right-pin-prick-${level.toLowerCase()}`),
+            createCell(examData[`leftLightTouch${level}`], `left-light-touch-${level.toLowerCase()}`),
+            createCell(examData[`leftPinPrick${level}`], `left-pin-prick-${level.toLowerCase()}`),
+            null
+        ];
+
+        // Add motor cells for specific levels
+        if (['C5', 'C6', 'C7', 'C8', 'T1', 'L2', 'L3', 'L4', 'L5', 'S1'].includes(level)) {
+            row[0] = createCell(examData[`rightMotor${level}`], `right-motor-${level.toLowerCase()}`);
+            row[5] = createCell(examData[`leftMotor${level}`], `left-motor-${level.toLowerCase()}`);
+        }
+
+        gridModel.push(row);
+    }
+
+    return gridModel;
+};
+
+const createCell = (value: string, name: string) => {
+    return {
+        value,
+        label: value,
+        name,
+        considerNormal: null,
+        reasonImpairmentNotDueToSci: null,
+        reasonImpairmentNotDueToSciSpecify: null,
+        error: null
+    };
 };
 
 // Remove Worksheet from local storage

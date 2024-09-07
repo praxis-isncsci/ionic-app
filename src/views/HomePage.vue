@@ -1,5 +1,4 @@
 <template>
-
   <MainLayout title="ISNCSCI" :showFooter="true">
     <div v-if="worksheetData.worksheetName" class="worksheet-name">
       Worksheet Name: {{ worksheetData.worksheetName }}
@@ -90,6 +89,7 @@ const save_onClick = async () => {
   const metaKey = `${APP_PREFIX}meta`;
   const savedMeta = JSON.parse(localStorage.getItem(metaKey) || '[]');
 
+  console.log("examData:",examData)
   if (isFormEmpty(state)) {
     console.log("Form is empty, nothing to save");
     return;
@@ -183,6 +183,36 @@ const promptForWorksheetName = async (savedMeta: any[]): Promise<string | null> 
 };
 
 onMounted(() => {
+  const worksheetId = sessionStorage.getItem('currentWorksheetId');
+  if (worksheetId) {
+    const examData = JSON.parse(localStorage.getItem(`${APP_PREFIX}${worksheetId}`) || '{}');
+    
+    // Post-calculation, handle VAC/DAP and extra inputs
+    if (examData.deepAnalPressure || examData.comments) {
+      appStore.dispatch({
+        type: 'SET_VAC_DAP',
+        payload: { vac: examData.deepAnalPressure, dap: examData.voluntaryAnalContraction },
+      });
+      appStore.dispatch({
+        type: 'SET_EXTRA_INPUTS',
+        payload: {
+          rightLowestNonKeyMuscleWithMotorFunction: examData.rightLowestNonKeyMuscleWithMotorFunction,
+          leftLowestNonKeyMuscleWithMotorFunction: examData.leftLowestNonKeyMuscleWithMotorFunction,
+          comments: examData.comments,
+        },
+      });
+    } else {
+      // Pre-calculation: load grid model
+      const sensoryData = extractSensoryDataFromExam(examData);
+      const motorData = extractMotorDataFromExam(examData);
+
+      appStore.dispatch({
+        type: 'SET_GRID_MODEL',
+        payload: [...sensoryData, ...motorData],
+      });
+    }
+  }
+
   sessionStorage.removeItem('currentWorksheetId');
   worksheetData.worksheetName = '';
   worksheetData.hasExamData = false;
@@ -192,7 +222,6 @@ onMounted(() => {
     handleFormChange(); // calling function when form inputs change
   });
 });
-
 </script>
 
 <style scoped>

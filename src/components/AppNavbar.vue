@@ -47,11 +47,9 @@
     </ion-grid>
 </template>
 
-
-
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList } from '@ionic/vue';
+import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList, IonButton } from '@ionic/vue';
 import { manOutline, backspaceOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, helpCircleOutline } from 'ionicons/icons';
 
 const { calculateOnClick, saveOnClick } = defineProps<{ calculateOnClick: () => void, saveOnClick: () => void }>();

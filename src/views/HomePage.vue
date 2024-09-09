@@ -26,6 +26,7 @@ import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { IAppState } from 'isncsci-ui/dist/esm/core/boundaries';
 import { APP_PREFIX } from '@/config';
 import { convertExamDataToGridModel } from '@/utils/examDataHelpers';
+import { promptForUniqueWorksheetName } from '@/utils/worksheetUtils';
 
 const isncsciControlRef = ref<InstanceType<typeof IsncsciControl> | null>(null);
 
@@ -107,7 +108,7 @@ const save_onClick = async () => {
   if (!worksheetId) {
     //new worksheet
     if (!worksheetName) {
-      worksheetName = await promptForWorksheetName(savedMeta) || '';
+      worksheetName = await promptForUniqueWorksheetName(generateWorksheetName()) || '';
       if (!worksheetName) return;
     }
     worksheetId = new Date().getTime().toString();
@@ -178,45 +179,20 @@ const saveWorksheet = (id: string, name: string, examData: ExamData | null, stat
   sessionStorage.setItem('worksheetName', name);
 };
 
-// Prompt for worksheet name if none exists
-const promptForWorksheetName = async (savedMeta: any[]): Promise<string | null> => {
-  let worksheetName: string | null = null;
-  let uniqueName = false;
+// Function to reset the state
+const resetState = () => {
+  worksheetData.worksheetName = '';
+  worksheetData.hasExamData = false;
+  worksheetData.hasUnsavedData = false;
+  worksheetData.isPostCalculation = false;
 
-  while (!uniqueName) {
-    const alert = await alertController.create({
-      header: 'Enter worksheet name here:',
-      inputs: [{ value: generateWorksheetName() }],
-      buttons: [
-        { text: 'Cancel', role: 'cancel' },
-        { text: 'OK', role: 'confirm' },
-      ],
-    });
-    await alert.present();
-    const result = await alert.onDidDismiss();
-
-    worksheetName = result.role === 'confirm' ? result.data.values[0] : null;
-    if (!worksheetName) return null;
-
-    const nameExists = savedMeta.some((item: any) => item.name === worksheetName);
-
-    if (nameExists) {
-      const errorAlert = await alertController.create({
-        header: 'Error',
-        message: 'A worksheet with this name already exists. Please enter a unique name.',
-        buttons: ['OK'],
-      });
-      await errorAlert.present();
-      await errorAlert.onDidDismiss();
-    } else {
-      uniqueName = true;
-    }
-  }
-
-  return worksheetName;
+  // Clear session storage
+  sessionStorage.removeItem('currentWorksheetId');
+  sessionStorage.removeItem('worksheetName');
 };
 
 onMounted(() => {
+  resetState();
   const worksheetId = sessionStorage.getItem('currentWorksheetId');
   if (worksheetId) {
     const sessionWorksheetName = sessionStorage.getItem('worksheetName');
@@ -283,11 +259,8 @@ onMounted(() => {
     worksheetData.hasExamData = true;
     worksheetData.hasUnsavedData = false;
   } else {
-    // New worksheet
-    worksheetData.worksheetName = '';
-    worksheetData.hasExamData = false;
-    worksheetData.hasUnsavedData = false;
-    worksheetData.isPostCalculation = false;
+    //new worksheet
+    resetState();
   }
 
   appStore.subscribe(() => {

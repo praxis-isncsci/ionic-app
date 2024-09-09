@@ -53,6 +53,7 @@ import { closeOutline, createOutline, pencilOutline, trashOutline, checkmarkOutl
 import { APP_PREFIX } from '@/config';
 import { appStore } from 'isncsci-ui/dist/esm/app/store';
 import { convertExamDataToGridModel } from '@/utils/examDataHelpers';
+import { promptForUniqueWorksheetName } from '@/utils/worksheetUtils';
 
 interface Worksheet {
     id: string;
@@ -76,9 +77,13 @@ const close_onClick = () => {
 };
 
 // Rename Worksheet
-const renameWorksheet = (worksheet: Worksheet) => {
-    editingWorksheetId.value = worksheet.id;
-    editingWorksheetName.value = worksheet.name;
+const renameWorksheet = async (worksheet: Worksheet) => {
+    const newName = await promptForUniqueWorksheetName(worksheet.name);
+    if (newName) {
+        editingWorksheetId.value = worksheet.id;
+        editingWorksheetName.value = newName;
+        await saveWorksheetName(worksheet);
+    }
 };
 
 const saveWorksheetName = (worksheet: Worksheet) => {

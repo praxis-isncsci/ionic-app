@@ -19,12 +19,13 @@
 import MainLayout from './MainLayout.vue';
 import IsncsciControl from '@/components/IsncsciControl.vue';
 import AppNavbar from '@/components/AppNavbar.vue';
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, watch } from 'vue';
 import { alertController } from '@ionic/vue';
 import { appStore } from 'isncsci-ui/dist/esm/app/store';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { IAppState } from 'isncsci-ui/dist/esm/core/boundaries';
 import { APP_PREFIX } from '@/config';
+import { convertExamDataToGridModel } from '@/utils/examDataHelpers';
 
 const isncsciControlRef = ref<InstanceType<typeof IsncsciControl> | null>(null);
 
@@ -96,19 +97,45 @@ const save_onClick = async () => {
   }
 
   if (!worksheetData.hasUnsavedData) {
+    console.log("No changes to save");
     return;
   }
 
-  if (!worksheetData.worksheetName) {
-    const worksheetName = await promptForWorksheetName(savedMeta);
-    if (!worksheetName) return;
+  let worksheetId = sessionStorage.getItem('currentWorksheetId');
+  let worksheetName = worksheetData.worksheetName;
 
+  if (!worksheetId) {
+    //new worksheet
+    if (!worksheetName) {
+      worksheetName = await promptForWorksheetName(savedMeta) || '';
+      if (!worksheetName) return;
+    }
+    worksheetId = new Date().getTime().toString();
     worksheetData.worksheetName = worksheetName;
+  } else {
+    //existing worksheet
+    const existingWorksheet = savedMeta.find((item: any) => item.id === worksheetId);
+    if (existingWorksheet) {
+      worksheetName = existingWorksheet.name; // Preserve the existing name
+    }
+    //confirm overwrite if existing worksheet
+    const alert = await alertController.create({
+      header: 'Confirm Save',
+      message: 'Do you want to overwrite the existing worksheet?',
+      buttons: [
+        { text: 'Cancel', role: 'cancel'},
+        { text: 'Overwrite', role: 'confirm'}
+      ]
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+    if (result.role !== 'confirm') return;
   }
-
-  const worksheetId = sessionStorage.getItem('currentWorksheetId') || new Date().getTime().toString();
-  saveWorksheet(worksheetId, worksheetData.worksheetName, worksheetData.isPostCalculation ? examData : null, state);
+  
+  saveWorksheet(worksheetId, worksheetName, worksheetData.isPostCalculation ? examData : null, state);
   sessionStorage.setItem('currentWorksheetId', worksheetId);
+  sessionStorage.setItem('worksheetName', worksheetName);
+  worksheetData.worksheetName = worksheetName;
   worksheetData.hasUnsavedData = false;
 };
 
@@ -127,7 +154,10 @@ const saveWorksheet = (id: string, name: string, examData: ExamData | null, stat
   if (existingWorksheetIndex === -1) {
     savedMeta.push(savedItemMeta);
   } else {
-    savedMeta[existingWorksheetIndex] = savedItemMeta;
+    savedMeta[existingWorksheetIndex] = {
+      ...savedMeta[existingWorksheetIndex],
+      savedAt: savedItemMeta.savedAt,
+    };
   }
 
   localStorage.setItem(metaKey, JSON.stringify(savedMeta));
@@ -142,6 +172,10 @@ const saveWorksheet = (id: string, name: string, examData: ExamData | null, stat
   };
 
   localStorage.setItem(`${APP_PREFIX}${id}`, JSON.stringify(savedItemData));
+  
+  // Update reactive data and session storage
+  worksheetData.worksheetName = name;
+  sessionStorage.setItem('worksheetName', name);
 };
 
 // Prompt for worksheet name if none exists
@@ -185,42 +219,89 @@ const promptForWorksheetName = async (savedMeta: any[]): Promise<string | null> 
 onMounted(() => {
   const worksheetId = sessionStorage.getItem('currentWorksheetId');
   if (worksheetId) {
+    const sessionWorksheetName = sessionStorage.getItem('worksheetName');
+    // If not found in session storage, check local storage
+    if (sessionWorksheetName) {
+      worksheetData.worksheetName = sessionWorksheetName;
+    } else {
+      // If not in session storage, try to get it from local storage
+      const metaData = JSON.parse(localStorage.getItem(`${APP_PREFIX}meta`) || '[]');
+      const currentWorksheet = metaData.find((item: any) => item.id === worksheetId);
+      if (currentWorksheet) {
+        worksheetData.worksheetName = currentWorksheet.name;
+        // Store in session storage for future use
+        sessionStorage.setItem('worksheetName', currentWorksheet.name);
+      }
+    }
+
     const examData = JSON.parse(localStorage.getItem(`${APP_PREFIX}${worksheetId}`) || '{}');
     
-    // Post-calculation, handle VAC/DAP and extra inputs
-    if (examData.deepAnalPressure || examData.comments) {
+    if (examData.asiaImpairmentScale !== undefined) {
+      // Post-calculation data
       appStore.dispatch({
-        type: 'SET_VAC_DAP',
-        payload: { vac: examData.deepAnalPressure, dap: examData.voluntaryAnalContraction },
-      });
-      appStore.dispatch({
-        type: 'SET_EXTRA_INPUTS',
+        type: 'SET_TOTALS',
         payload: {
-          rightLowestNonKeyMuscleWithMotorFunction: examData.rightLowestNonKeyMuscleWithMotorFunction,
-          leftLowestNonKeyMuscleWithMotorFunction: examData.leftLowestNonKeyMuscleWithMotorFunction,
-          comments: examData.comments,
-        },
+          asiaImpairmentScale: examData.asiaImpairmentScale,
+          injuryComplete: examData.injuryComplete,
+          neurologicalLevelOfInjury: examData.neurologicalLevelOfInjury,
+          // Add other totals as needed
+        }
       });
-    } else {
-      // Pre-calculation: load grid model
-      const sensoryData = extractSensoryDataFromExam(examData);
-      const motorData = extractMotorDataFromExam(examData);
+      worksheetData.isPostCalculation = true;
+    }
 
+    appStore.dispatch({
+      type: 'SET_VAC_DAP',
+      payload: { 
+        vac: examData.voluntaryAnalContraction, 
+        dap: examData.deepAnalPressure 
+      }
+    });
+
+    appStore.dispatch({
+      type: 'SET_EXTRA_INPUTS',
+      payload: {
+        rightLowestNonKeyMuscleWithMotorFunction: examData.rightLowestNonKeyMuscleWithMotorFunction,
+        leftLowestNonKeyMuscleWithMotorFunction: examData.leftLowestNonKeyMuscleWithMotorFunction,
+        comments: examData.comments,
+      }
+    });
+
+    if (examData.gridModel) {
       appStore.dispatch({
         type: 'SET_GRID_MODEL',
-        payload: [...sensoryData, ...motorData],
+        payload: examData.gridModel,
+      });
+    } else if (worksheetData.isPostCalculation) {
+      const gridModel = convertExamDataToGridModel(examData);
+      appStore.dispatch({
+        type: 'SET_GRID_MODEL',
+        payload: gridModel
       });
     }
+
+    worksheetData.hasExamData = true;
+    worksheetData.hasUnsavedData = false;
+  } else {
+    // New worksheet
+    worksheetData.worksheetName = '';
+    worksheetData.hasExamData = false;
+    worksheetData.hasUnsavedData = false;
+    worksheetData.isPostCalculation = false;
   }
 
-  sessionStorage.removeItem('currentWorksheetId');
-  worksheetData.worksheetName = '';
-  worksheetData.hasExamData = false;
-  worksheetData.hasUnsavedData = false;
-
   appStore.subscribe(() => {
-    handleFormChange(); // calling function when form inputs change
+    handleFormChange();
   });
+});
+
+// Add a watch on worksheetData.worksheetName
+watch(() => worksheetData.worksheetName, (newName) => {
+  if (newName) {
+    sessionStorage.setItem('worksheetName', newName);
+  } else {
+    sessionStorage.removeItem('worksheetName');
+  }
 });
 </script>
 

@@ -52,6 +52,7 @@ import { ref, onMounted } from 'vue';
 import { closeOutline, createOutline, pencilOutline, trashOutline, checkmarkOutline } from 'ionicons/icons';
 import { APP_PREFIX } from '@/config';
 import { appStore } from 'isncsci-ui/dist/esm/app/store';
+import { convertExamDataToGridModel } from '@/utils/examDataHelpers';
 
 interface Worksheet {
     id: string;
@@ -164,50 +165,17 @@ const editWorksheet = async (worksheet: Worksheet) => {
         sessionStorage.setItem('worksheetName', worksheet.name);
         sessionStorage.setItem('currentWorksheetId', worksheet.id);
 
+        // Update the app store with the worksheet name
+        appStore.dispatch({
+            type: 'SET_WORKSHEET_NAME',
+            payload: worksheet.name
+        });
+        
         // Redirect to home to continue editing
         router.replace('/home');
     } else {
         console.error('No exam data found for this worksheet');
     }
-};
-
-// Helper function to convert exam data to grid model
-const convertExamDataToGridModel = (examData: any) => {
-    const gridModel = [];
-    const levels = ['C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12', 'L1', 'L2', 'L3', 'L4', 'L5', 'S1', 'S2', 'S3', 'S4_5'];
-
-    for (const level of levels) {
-        const row = [
-            null,
-            createCell(examData[`rightLightTouch${level}`], `right-light-touch-${level.toLowerCase()}`),
-            createCell(examData[`rightPinPrick${level}`], `right-pin-prick-${level.toLowerCase()}`),
-            createCell(examData[`leftLightTouch${level}`], `left-light-touch-${level.toLowerCase()}`),
-            createCell(examData[`leftPinPrick${level}`], `left-pin-prick-${level.toLowerCase()}`),
-            null
-        ];
-
-        // Add motor cells for specific levels
-        if (['C5', 'C6', 'C7', 'C8', 'T1', 'L2', 'L3', 'L4', 'L5', 'S1'].includes(level)) {
-            row[0] = createCell(examData[`rightMotor${level}`], `right-motor-${level.toLowerCase()}`);
-            row[5] = createCell(examData[`leftMotor${level}`], `left-motor-${level.toLowerCase()}`);
-        }
-
-        gridModel.push(row);
-    }
-
-    return gridModel;
-};
-
-const createCell = (value: string, name: string) => {
-    return {
-        value,
-        label: value,
-        name,
-        considerNormal: null,
-        reasonImpairmentNotDueToSci: null,
-        reasonImpairmentNotDueToSciSpecify: null,
-        error: null
-    };
 };
 
 // Remove Worksheet from local storage

@@ -193,7 +193,6 @@ const removeWorksheet = (worksheet: Worksheet) => {
 
     // Remove the specific worksheet data from local storage
     localStorage.removeItem(`${APP_PREFIX}${worksheet.id}`);
-
 };
 </script>
 

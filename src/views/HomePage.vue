@@ -9,6 +9,7 @@
       <AppNavbar 
         :calculateOnClick="calculate_onClick" 
         :saveOnClick="save_onClick"
+        :clearExam="clearExam"
       >
       </AppNavbar>
     </template>
@@ -27,6 +28,9 @@ import { IAppState } from 'isncsci-ui/dist/esm/core/boundaries';
 import { APP_PREFIX } from '@/config';
 import { convertExamDataToGridModel } from '@/utils/examDataHelpers';
 import { promptForUniqueWorksheetName } from '@/utils/worksheetUtils';
+import { clearExamUseCase } from 'isncsci-ui/dist/esm/core/useCases';
+import { IExternalMessageProvider } from 'isncsci-ui/dist/esm/core/boundaries';
+import { AppStoreProvider } from 'isncsci-ui/dist/esm/app/providers';
 
 const isncsciControlRef = ref<InstanceType<typeof IsncsciControl> | null>(null);
 
@@ -179,20 +183,31 @@ const saveWorksheet = (id: string, name: string, examData: ExamData | null, stat
   sessionStorage.setItem('worksheetName', name);
 };
 
-// Function to reset the state
-const resetState = () => {
-  worksheetData.worksheetName = '';
+const clearExam = async () => {
+  const appStoreProvider = new AppStoreProvider(appStore);
+  
+  const externalMessageProvider: IExternalMessageProvider = {
+    sendOutExamData: async (examData: ExamData) => {
+      console.log('Exam cleared:', examData);
+    }
+  };
+
+  await clearExamUseCase(appStoreProvider, externalMessageProvider);
+
   worksheetData.hasExamData = false;
   worksheetData.hasUnsavedData = false;
   worksheetData.isPostCalculation = false;
+  worksheetData.worksheetName = '';
 
-  // Clear session storage
   sessionStorage.removeItem('currentWorksheetId');
   sessionStorage.removeItem('worksheetName');
+
+  console.log('Exam cleared');
 };
 
+
 onMounted(() => {
-  resetState();
+  clearExam();
   const worksheetId = sessionStorage.getItem('currentWorksheetId');
   if (worksheetId) {
     const sessionWorksheetName = sessionStorage.getItem('worksheetName');
@@ -220,7 +235,7 @@ onMounted(() => {
           asiaImpairmentScale: examData.asiaImpairmentScale,
           injuryComplete: examData.injuryComplete,
           neurologicalLevelOfInjury: examData.neurologicalLevelOfInjury,
-          // Add other totals as needed
+          // can add other totals if needed later
         }
       });
       worksheetData.isPostCalculation = true;
@@ -259,8 +274,8 @@ onMounted(() => {
     worksheetData.hasExamData = true;
     worksheetData.hasUnsavedData = false;
   } else {
-    //new worksheet
-    resetState();
+    // new worksheet
+    clearExam();
   }
 
   appStore.subscribe(() => {

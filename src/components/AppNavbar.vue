@@ -8,7 +8,7 @@
                 </ion-button>
             </ion-col>
             <ion-col class="ion-text-center">
-                <ion-button size="small">
+                <ion-button size="small" @click="handleClearExam">
                     <ion-icon slot="start" :icon="backspaceOutline"></ion-icon>
                     Clear
                 </ion-button>
@@ -52,7 +52,7 @@ import { useRouter } from 'vue-router';
 import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList, IonButton } from '@ionic/vue';
 import { manOutline, backspaceOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, helpCircleOutline } from 'ionicons/icons';
 
-const { calculateOnClick, saveOnClick } = defineProps<{ calculateOnClick: () => void, saveOnClick: () => void }>();
+const props = defineProps<{ calculateOnClick: () => void, saveOnClick: () => void, clearExam: () => void }>();
 
 const router = useRouter();
 
@@ -63,6 +63,10 @@ const redirectToEula = () => {
 const redirectToSavedWorksheets = () => {
     router.push('/saved-worksheets');
 }
+const handleClearExam = () => {
+  console.log("Clear button clicked");
+  props.clearExam();
+};
 
 </script>
 

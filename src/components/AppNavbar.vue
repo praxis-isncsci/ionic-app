@@ -64,8 +64,7 @@ const redirectToSavedWorksheets = () => {
     router.push('/saved-worksheets');
 }
 const handleClearExam = () => {
-  console.log("Clear button clicked");
-  props.clearExam();
+    props.clearExam();
 };
 
 </script>

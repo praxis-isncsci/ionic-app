@@ -59,6 +59,7 @@ interface Worksheet {
     id: string;
     name: string;
     savedAt: string;
+    examDate: string;
 }
 const router = useRouter();
 
@@ -169,6 +170,8 @@ const editWorksheet = async (worksheet: Worksheet) => {
         // Set worksheet name and ID in session storage
         sessionStorage.setItem('worksheetName', worksheet.name);
         sessionStorage.setItem('currentWorksheetId', worksheet.id);
+        sessionStorage.setItem('examDate', worksheet.examDate || '');
+
 
         // Update the app store with the worksheet name
         appStore.dispatch({

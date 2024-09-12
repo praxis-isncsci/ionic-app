@@ -1,8 +1,10 @@
 <template>
   <MainLayout title="ISNCSCI" :showFooter="true">
-    <div v-if="worksheetData.worksheetName" class="worksheet-name">
-      Worksheet Name: {{ worksheetData.worksheetName }}
+    <div v-if="worksheetData.worksheetName" class="worksheet-info">
+      <div class="worksheet-name">Worksheet Name: {{ worksheetData.worksheetName }} </div>
+      <div v-if="worksheetData.examDate" class="worksheet-exam-date">Exam Date: {{ worksheetData.examDate }} </div>
     </div>
+
     <IsncsciControl ref="isncsciControlRef"></IsncsciControl>
 
     <template #footer-buttons>
@@ -36,6 +38,7 @@ const isncsciControlRef = ref<InstanceType<typeof IsncsciControl> | null>(null);
 
 const worksheetData = reactive({
   worksheetName: '',
+  examDate: '',
   hasExamData: false, 
   hasUnsavedData: false,
   isPostCalculation: false, // track if the data is post-calculation
@@ -148,20 +151,22 @@ const saveWorksheet = (id: string, name: string, examData: ExamData | null, stat
   const metaKey =  `${APP_PREFIX}meta`;
   const savedMeta: any[] = JSON.parse(localStorage.getItem(metaKey) || '[]');
 
-  const savedItemMeta = {
-    id,
-    name,
-    savedAt: new Date().toLocaleString(),
-  };
-
+  const currentDate = new Date().toLocaleString();
   const existingWorksheetIndex = savedMeta.findIndex((item) => item.id === id);
 
   if (existingWorksheetIndex === -1) {
-    savedMeta.push(savedItemMeta);
+
+  savedMeta.push({
+    id,
+    name,
+    savedAt: currentDate,
+    examDate: currentDate
+  });
   } else {
     savedMeta[existingWorksheetIndex] = {
       ...savedMeta[existingWorksheetIndex],
-      savedAt: savedItemMeta.savedAt,
+      name,
+      savedAt: currentDate,
     };
   }
 
@@ -180,7 +185,10 @@ const saveWorksheet = (id: string, name: string, examData: ExamData | null, stat
   
   // Update reactive data and session storage
   worksheetData.worksheetName = name;
+  worksheetData.examDate = savedMeta.find(item => item.id === id)?.examDate || '';
   sessionStorage.setItem('worksheetName', name);
+  sessionStorage.setItem('examDate', worksheetData.examDate);
+  worksheetData.hasUnsavedData = false;
 };
 
 const clearExam = async () => {
@@ -198,31 +206,36 @@ const clearExam = async () => {
   worksheetData.hasUnsavedData = false;
   worksheetData.isPostCalculation = false;
   worksheetData.worksheetName = '';
+  worksheetData.examDate = '';
 
   sessionStorage.removeItem('currentWorksheetId');
   sessionStorage.removeItem('worksheetName');
+  sessionStorage.removeItem('examDate');
 
   console.log('Exam cleared');
 };
-
 
 onMounted(() => {
   clearExam();
   const worksheetId = sessionStorage.getItem('currentWorksheetId');
   if (worksheetId) {
     const sessionWorksheetName = sessionStorage.getItem('worksheetName');
-    // If not found in session storage, check local storage
-    if (sessionWorksheetName) {
+    const sessionExamDate = sessionStorage.getItem('examDate');
+    
+    const metaData = JSON.parse(localStorage.getItem(`${APP_PREFIX}meta`) || '[]');
+    const currentWorksheet = metaData.find((item: any) => item.id === worksheetId);
+
+    if (currentWorksheet) {
+      worksheetData.worksheetName = currentWorksheet.name;
+      worksheetData.examDate = currentWorksheet.examDate || '';
+      
+      // Update session storage
+      sessionStorage.setItem('worksheetName', currentWorksheet.name);
+      sessionStorage.setItem('examDate', currentWorksheet.examDate || '');
+    } else if (sessionWorksheetName) {
+      // Fallback to session storage if not found in local storage
       worksheetData.worksheetName = sessionWorksheetName;
-    } else {
-      // If not in session storage, try to get it from local storage
-      const metaData = JSON.parse(localStorage.getItem(`${APP_PREFIX}meta`) || '[]');
-      const currentWorksheet = metaData.find((item: any) => item.id === worksheetId);
-      if (currentWorksheet) {
-        worksheetData.worksheetName = currentWorksheet.name;
-        // Store in session storage for future use
-        sessionStorage.setItem('worksheetName', currentWorksheet.name);
-      }
+      worksheetData.examDate = sessionExamDate || '';
     }
 
     const examData = JSON.parse(localStorage.getItem(`${APP_PREFIX}${worksheetId}`) || '{}');
@@ -294,8 +307,10 @@ watch(() => worksheetData.worksheetName, (newName) => {
 </script>
 
 <style scoped>
-.worksheet-name {
-  font-weight: bold;
+.worksheet-info {
   margin-bottom: 10px;
+}
+.worksheet-name, .worksheet-exam-date {
+  font-weight: bold;
 }
 </style>

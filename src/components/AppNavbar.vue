@@ -22,10 +22,10 @@
                         <ion-fab-button>
                             <ion-icon :icon="helpCircleOutline"></ion-icon>
                         </ion-fab-button>
-                        <ion-fab-button @click="redirectToSavedWorksheets">
+                        <ion-fab-button @click="onNavigate('/saved-worksheets')">
                             <ion-icon :icon="bookmarksOutline"></ion-icon>
                         </ion-fab-button>
-                        <ion-fab-button @click="redirectToEula">
+                        <ion-fab-button @click="onNavigate('/eula')">
                             <ion-icon :icon="newspaperOutline"></ion-icon>
                         </ion-fab-button>
                     </ion-fab-list>
@@ -48,25 +48,19 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+
 import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList, IonButton } from '@ionic/vue';
 import { manOutline, backspaceOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, helpCircleOutline } from 'ionicons/icons';
 
-const props = defineProps<{ calculateOnClick: () => void, saveOnClick: () => void, clearExam: () => void }>();
+const props = defineProps<{ 
+    calculateOnClick: () => void, 
+    saveOnClick: () => void, 
+    clearExam: () => void,
+    onNavigate: (path: string) => void
+}>();
 
-const router = useRouter();
-
-const redirectToEula = () => {
-    router.push('/eula');
-}
-
-const redirectToSavedWorksheets = () => {
-    router.push('/saved-worksheets');
-}
 const handleClearExam = () => {
     props.clearExam();
 };
 
 </script>
-
-

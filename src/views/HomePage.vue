@@ -12,6 +12,7 @@
         :calculateOnClick="calculate_onClick" 
         :saveOnClick="save_onClick"
         :clearExam="clearExam"
+        :onNavigate="handleNavigation"
       >
       </AppNavbar>
     </template>
@@ -23,7 +24,6 @@ import MainLayout from './MainLayout.vue';
 import IsncsciControl from '@/components/IsncsciControl.vue';
 import AppNavbar from '@/components/AppNavbar.vue';
 import { ref, reactive, onMounted, watch, toRefs } from 'vue';
-import { alertController } from '@ionic/vue';
 import { appStore } from 'isncsci-ui/dist/esm/app/store';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { IAppState } from 'isncsci-ui/dist/esm/core/boundaries';
@@ -34,6 +34,8 @@ import { clearExamUseCase } from 'isncsci-ui/dist/esm/core/useCases';
 import { IExternalMessageProvider } from 'isncsci-ui/dist/esm/core/boundaries';
 import { AppStoreProvider } from 'isncsci-ui/dist/esm/app/providers';
 import { useRoute } from 'vue-router';
+import router from '@/router';
+import { showUnsavedDataAlert } from '@/utils/unsavedDataAlert';
 
 const route = useRoute();
 
@@ -46,6 +48,19 @@ const worksheetData = reactive({
   hasUnsavedData: false,
   isPostCalculation: false, // track if the data is post-calculation
 });
+
+const handleNavigation = async (path: string) => {
+  if (worksheetData.hasUnsavedData) {
+    const shouldSave = await showUnsavedDataAlert();
+    if (shouldSave) {
+      await save_onClick();
+    } else {
+      // discard changes
+      worksheetData.hasUnsavedData = false;
+    }
+  }
+  router.push(path);
+};
 
 const { worksheetName, examDate } = toRefs(worksheetData);
 
@@ -333,7 +348,6 @@ watch(
     }
   }
 );
-
 
 </script>
 

@@ -167,11 +167,11 @@ const editWorksheet = async (worksheet: Worksheet) => {
             });
         }
 
-        // Set worksheet name and ID in session storage
+        // Set worksheet name and ID, exam date and a flag to track editing mode in session storage
         sessionStorage.setItem('worksheetName', worksheet.name);
         sessionStorage.setItem('currentWorksheetId', worksheet.id);
         sessionStorage.setItem('examDate', worksheet.examDate || '');
-
+        sessionStorage.setItem('isEditing', 'true');
 
         // Update the app store with the worksheet name
         appStore.dispatch({

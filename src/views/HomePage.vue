@@ -1,8 +1,8 @@
 <template>
   <MainLayout title="ISNCSCI" :showFooter="true">
-    <div v-if="worksheetData.worksheetName" class="worksheet-info">
-      <div class="worksheet-name">Worksheet Name: {{ worksheetData.worksheetName }} </div>
-      <div v-if="worksheetData.examDate" class="worksheet-exam-date">Exam Date: {{ worksheetData.examDate }} </div>
+    <div v-if="worksheetName" class="worksheet-info">
+      <div class="worksheet-name">Worksheet Name: {{ worksheetName }}</div>
+      <div v-if="examDate" class="worksheet-exam-date">Exam Date: {{ examDate }}</div>
     </div>
 
     <IsncsciControl ref="isncsciControlRef"></IsncsciControl>
@@ -22,7 +22,7 @@
 import MainLayout from './MainLayout.vue';
 import IsncsciControl from '@/components/IsncsciControl.vue';
 import AppNavbar from '@/components/AppNavbar.vue';
-import { ref, reactive, onMounted, watch } from 'vue';
+import { ref, reactive, onMounted, watch, toRefs } from 'vue';
 import { alertController } from '@ionic/vue';
 import { appStore } from 'isncsci-ui/dist/esm/app/store';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
@@ -33,6 +33,9 @@ import { promptForUniqueWorksheetName } from '@/utils/worksheetUtils';
 import { clearExamUseCase } from 'isncsci-ui/dist/esm/core/useCases';
 import { IExternalMessageProvider } from 'isncsci-ui/dist/esm/core/boundaries';
 import { AppStoreProvider } from 'isncsci-ui/dist/esm/app/providers';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
 
 const isncsciControlRef = ref<InstanceType<typeof IsncsciControl> | null>(null);
 
@@ -43,6 +46,8 @@ const worksheetData = reactive({
   hasUnsavedData: false,
   isPostCalculation: false, // track if the data is post-calculation
 });
+
+const { worksheetName, examDate } = toRefs(worksheetData);
 
 // function to handle form changes
 const handleFormChange = () => {
@@ -124,20 +129,8 @@ const save_onClick = async () => {
     //existing worksheet
     const existingWorksheet = savedMeta.find((item: any) => item.id === worksheetId);
     if (existingWorksheet) {
-      worksheetName = existingWorksheet.name; // Preserve the existing name
+      worksheetName = existingWorksheet.name; // preserve the existing name
     }
-    //confirm overwrite if existing worksheet
-    const alert = await alertController.create({
-      header: 'Confirm Save',
-      message: 'Do you want to overwrite the existing worksheet?',
-      buttons: [
-        { text: 'Cancel', role: 'cancel'},
-        { text: 'Overwrite', role: 'confirm'}
-      ]
-    });
-    await alert.present();
-    const result = await alert.onDidDismiss();
-    if (result.role !== 'confirm') return;
   }
   
   saveWorksheet(worksheetId, worksheetName, worksheetData.isPostCalculation ? examData : null, state);
@@ -215,20 +208,28 @@ const clearExam = async () => {
   console.log('Exam cleared');
 };
 
-onMounted(() => {
-  clearExam();
+const loadWorksheetData = () => {
+  console.log('loadWorksheetData is called');
   const worksheetId = sessionStorage.getItem('currentWorksheetId');
+  console.log('worksheetId:', worksheetId, typeof worksheetId);
+
   if (worksheetId) {
     const sessionWorksheetName = sessionStorage.getItem('worksheetName');
     const sessionExamDate = sessionStorage.getItem('examDate');
-    
+    console.log('sessionExamDate:', sessionExamDate);
+
     const metaData = JSON.parse(localStorage.getItem(`${APP_PREFIX}meta`) || '[]');
-    const currentWorksheet = metaData.find((item: any) => item.id === worksheetId);
+    console.log('metaData:', metaData);
+
+    const currentWorksheet = metaData.find(
+      (item: any) => item.id.toString() === worksheetId
+    );
+    console.log('currentWorksheet:', currentWorksheet);
 
     if (currentWorksheet) {
       worksheetData.worksheetName = currentWorksheet.name;
       worksheetData.examDate = currentWorksheet.examDate || '';
-      
+
       // Update session storage
       sessionStorage.setItem('worksheetName', currentWorksheet.name);
       sessionStorage.setItem('examDate', currentWorksheet.examDate || '');
@@ -238,8 +239,9 @@ onMounted(() => {
       worksheetData.examDate = sessionExamDate || '';
     }
 
+    // Load exam data and update store
     const examData = JSON.parse(localStorage.getItem(`${APP_PREFIX}${worksheetId}`) || '{}');
-    
+
     if (examData.asiaImpairmentScale !== undefined) {
       // Post-calculation data
       appStore.dispatch({
@@ -290,13 +292,23 @@ onMounted(() => {
     // new worksheet
     clearExam();
   }
+};
 
+onMounted(() => {
+  const isEditing = sessionStorage.getItem('isEditing') === 'true';
+  sessionStorage.removeItem('isEditing'); // remove the flag after loading
+
+  if (isEditing) {
+    loadWorksheetData();
+  } else {
+    clearExam();
+  }
   appStore.subscribe(() => {
     handleFormChange();
   });
 });
 
-// Add a watch on worksheetData.worksheetName
+// watcher to sync the worksheetName reactive property with sessionStorage
 watch(() => worksheetData.worksheetName, (newName) => {
   if (newName) {
     sessionStorage.setItem('worksheetName', newName);
@@ -304,6 +316,25 @@ watch(() => worksheetData.worksheetName, (newName) => {
     sessionStorage.removeItem('worksheetName');
   }
 });
+
+// watcher to determine if exiting worksheet data to load or to clear an exam
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath === '/home') {
+      const isEditing = sessionStorage.getItem('isEditing') === 'true';
+      sessionStorage.removeItem('isEditing');
+
+      if (isEditing) {
+        loadWorksheetData();
+      } else {
+        clearExam();
+      }
+    }
+  }
+);
+
+
 </script>
 
 <style scoped>

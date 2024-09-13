@@ -353,9 +353,23 @@ watch(
 
 <style scoped>
 .worksheet-info {
-  margin-bottom: 10px;
+  background-color: #F9F9F9;
+  padding: 10px 16px;
 }
-.worksheet-name, .worksheet-exam-date {
+
+.worksheet-name {
   font-weight: bold;
+  /* margin: 0 0 8px 0; */
+  color: #3B3B3B;
+  display: flex;
+  align-items: center;
 }
+
+.worksheet-exam-date {
+  color: #5E5E5E;
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+}
+
 </style>

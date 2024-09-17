@@ -9,7 +9,7 @@ const routes = [
     redirect: '/home'
   },
   {
-    path: '/home',
+    path: '/home/:id?',
     name: 'Home',
     component: HomePage
   },

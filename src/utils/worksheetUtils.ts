@@ -1,68 +1,93 @@
 import { alertController } from '@ionic/vue';
 import { APP_PREFIX } from '@/config';
+import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 
-export const generateWorksheetName = (): string => {
-    const metaKey = `${APP_PREFIX}meta`;
-    const savedMeta = JSON.parse(localStorage.getItem(metaKey) || '[]');
+export interface IWorksheetMetaItem {
+    id: string,
+    examDate: Date,
+    name: string,
+    lastUpdateDate: Date
+}
+export interface IWorksheet {
+    id: string,
+    examData: ExamData,
+}
 
-    let worksheetNumber = 1;
-    let worksheetName = `Worksheet ${worksheetNumber}`;
+export class Worksheets {
+    private static instnace: Worksheets
+    private meta: [IWorksheetMetaItem];
+    private metaKey = `${APP_PREFIX}meta`;
 
-    const worksheetExists = (name: string) =>
-        savedMeta.some((item: any) => item.name === name);
-
-    while (worksheetExists(worksheetName)) {
-        worksheetNumber += 1;
-        worksheetName = `Worksheet ${worksheetNumber}`;
+    private updateMetaLocalStorage() {
+        localStorage.setItem(this.metaKey, JSON.stringify(this.meta));
     }
 
-    return worksheetName;
-};
+    private updateWorksheetLocalStorage(worksheet: IWorksheet) {
+        localStorage.setItem(`${APP_PREFIX}${worksheet.id}`, JSON.stringify(worksheet));
+    }
 
-export const promptForUniqueWorksheetName = async (initialName: string): Promise<string | null> => {
-    let worksheetName = initialName || generateWorksheetName();
-    let uniqueName = false;
-
-    const metaKey = `${APP_PREFIX}meta`;
-    const savedMeta = JSON.parse(localStorage.getItem(metaKey) || '[]');
-
-    while (!uniqueName) {
-        const alert = await alertController.create({
-        header: 'Enter worksheet name',
-        inputs: [{ 
-            type: 'text',
-            value: worksheetName,
-            placeholder: 'Worksheet name'
-        }],
-        buttons: [
-            { text: 'Cancel', role: 'cancel' },
-            { text: 'OK', role: 'confirm' },
-        ],
-    });
-    await alert.present();
-    const result = await alert.onDidDismiss();
-
-    if (result.role === 'cancel') return null;
-
-    worksheetName = result.data.values[0];
-    if (!worksheetName) worksheetName = generateWorksheetName();
-
-    const nameExists = savedMeta.some((item: any) => item.name === worksheetName);
-
-    if (nameExists) {
-        const errorAlert = await alertController.create({
-            header: 'Name already exists',
-            message: 'A worksheet with this name already exists. Please enter a unique name.',
-            buttons: ['OK'],
+    private constructor() {
+        this.meta = JSON.parse(localStorage.getItem(this.metaKey) || '[]');
+        this.meta.forEach((m) => {
+            m.examDate = new Date(m.examDate);
+            m.lastUpdateDate = new Date(m.lastUpdateDate);
         });
-        await errorAlert.present();
-        await errorAlert.onDidDismiss();
-
-        worksheetName = generateWorksheetName();
-        } else {
-        uniqueName = true;
-        }
     }
 
-    return worksheetName;
-};
+    public isNameExist(name: string): boolean {
+        return this.meta.some(m => m.name.trim().toLowerCase() == name.trim().toLowerCase());
+    }
+
+    public nextWorksheetName(): string {
+        const suffex = 'Worksheet ';
+        let index = 1;
+        let name = `${suffex}${index}`;
+        while (this.isNameExist(name)) {
+            name = `${suffex}${++index}`;
+        }
+        return name;
+    }
+
+    public newWorksheet(name: string, examData: ExamData): IWorksheetMetaItem {
+        if (this.isNameExist(name)) {
+            throw "Worksheet name exists";
+        }
+        const id = new Date().getTime().toString();
+        const now = new Date();
+        const metaItem = {
+            id, name, examDate: now, lastUpdateDate: now
+        };
+        this.meta.push(metaItem);
+        this.updateMetaLocalStorage();
+        this.updateWorksheetLocalStorage({
+            id,
+            examData
+        });
+        return metaItem;
+    }
+
+    public saveWorksheet(worksheet: IWorksheet) {
+        const worksheetMeta = this.meta.find(m => m.id == worksheet.id);
+        if (!worksheetMeta) {
+            throw "Worksheet not found";
+        }
+        worksheetMeta.lastUpdateDate = new Date();
+        this.updateMetaLocalStorage();
+        this.updateWorksheetLocalStorage(worksheet);
+    }
+
+    public getWorksheet(id: string): IWorksheet {
+        return JSON.parse(localStorage.getItem(`${APP_PREFIX}${id}`) || '{}') as IWorksheet
+    }
+
+    public getMeta(id: string): IWorksheetMetaItem | undefined {
+        return this.meta.find(m => m.id.trim().toLowerCase() == id.trim().toLowerCase());
+    }
+
+    public static getInstance(): Worksheets {
+        if (!Worksheets.instnace) {
+            Worksheets.instnace = new Worksheets();
+        }
+        return Worksheets.instnace;
+    }
+}

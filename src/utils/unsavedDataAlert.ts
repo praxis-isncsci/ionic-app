@@ -1,6 +1,6 @@
 import { alertController } from '@ionic/vue';
 
-export function showUnsavedDataAlert(): Promise<boolean> {
+export const showUnsavedDataAlert = (): Promise<boolean> => {
     return new Promise((resolve) => {
         alertController.create({
             header: 'Unsaved Changes',
@@ -22,4 +22,33 @@ export function showUnsavedDataAlert(): Promise<boolean> {
             ]
         }).then(alert => alert.present());
     });
+}
+
+export const promptForUniqueWorksheetName = async (initialName: string): Promise<string | null> => {
+    const alert = await alertController.create({
+        header: 'Enter worksheet name',
+        inputs: [{
+            type: 'text',
+            value: initialName,
+            placeholder: 'Worksheet name'
+        }],
+        buttons: [
+            { text: 'Cancel', role: 'cancel' },
+            { text: 'OK', role: 'confirm' },
+        ],
+    });
+    await alert.present();
+    const result = await alert.onDidDismiss();
+
+    return (result.role === 'cancel') ? null : result.data.values[0];
+};
+
+export const promptFoNameExist = async () => {
+    const errorAlert = await alertController.create({
+        header: 'Name already exists',
+        message: 'A worksheet with this name already exists. Please enter a unique name.',
+        buttons: ['OK'],
+    });
+    await errorAlert.present();
+    await errorAlert.onDidDismiss();
 }

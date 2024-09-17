@@ -231,6 +231,7 @@
 <script setup lang="ts">
 import { close } from 'ionicons/icons';
 import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue';
+import { bindExamDataToGridModel, bindExamDataToTotals, getEmptyExamData, getExamDataFromGridModel } from 'isncsci-ui/dist/esm/core/helpers'
 import {
     AppStoreProvider,
     IsncsciExamProvider,
@@ -318,7 +319,7 @@ onBeforeUnmount(() => {
 
 initializeAppUseCase(appStoreProvider);
 
-const currentExamData = ref<ExamData | null>(null)
+const currentExamData = ref<ExamData | undefined>(undefined)
 
 const closeClassification_onClick = () => {
     classificationStyle.value = '';
@@ -359,9 +360,64 @@ const calculate = async () => {
     return examData;
 };
 
+const clear = async () => {
+    const emptyExamData = getEmptyExamData();
+    const gridModel = bindExamDataToGridModel(emptyExamData);
+    const totals = bindExamDataToTotals(emptyExamData);
+
+    try {
+        await appStoreProvider.setActiveCell(null, []);
+        await appStoreProvider.setGridModel(gridModel);
+        await appStoreProvider.setTotals(totals);
+        await appStoreProvider.setVacDap(null, null);
+        await appStoreProvider.setExtraInputs(null, null, '');
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const load = async (examData: ExamData) => {
+    await appStoreProvider.setCalculationError('');
+
+    // 2. Bind exam data to a new grid model
+    const gridModel = bindExamDataToGridModel(examData);
+
+    // 3. Bind exam data to the totals
+    const totals = bindExamDataToTotals(examData);
+
+    // 4. Update state
+    await appStoreProvider.setActiveCell(null, []);
+    await appStoreProvider.setGridModel(gridModel);
+    await appStoreProvider.setTotals(totals);
+    await appStoreProvider.setVacDap(
+        examData.voluntaryAnalContraction,
+        examData.deepAnalPressure,
+    );
+    await appStoreProvider.setExtraInputs(
+        examData.rightLowestNonKeyMuscleWithMotorFunction,
+        examData.leftLowestNonKeyMuscleWithMotorFunction,
+        examData.comments || '',
+    );
+}
+
 defineExpose({
+    load,
+    clear,
     calculate,
     data: () => {
+        if (!currentExamData.value) {
+            //Get the exam data from the interface
+            const state = appStore.getState();
+            const { examData, missingValues } = getExamDataFromGridModel(
+                state.gridModel ?? [],
+                state.vac,
+                state.dap,
+                state.rightLowestNonKeyMuscleWithMotorFunction,
+                state.leftLowestNonKeyMuscleWithMotorFunction,
+                state.comments
+            );
+            currentExamData.value = examData;
+        }
         return currentExamData.value;
     }
 });

@@ -1,4 +1,3 @@
-import { alertController } from '@ionic/vue';
 import { APP_PREFIX } from '@/config';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 
@@ -14,8 +13,8 @@ export interface IWorksheet {
 }
 
 export class Worksheets {
-    private static instnace: Worksheets
-    private meta: [IWorksheetMetaItem];
+    private static instance: Worksheets;
+    private meta: IWorksheetMetaItem[];
     private metaKey = `${APP_PREFIX}meta`;
 
     private updateMetaLocalStorage() {
@@ -34,6 +33,17 @@ export class Worksheets {
         });
     }
 
+    public updateWorksheetName(id: string, newName: string): void {
+        const worksheetMeta = this.meta.find(m => m.id === id);
+        if (worksheetMeta) {
+            worksheetMeta.name = newName;
+            worksheetMeta.lastUpdateDate = new Date();
+            this.updateMetaLocalStorage();
+        } else {
+            throw new Error('Worksheet not found');
+        }
+    }
+
     public isNameExist(name: string): boolean {
         return this.meta.some(m => m.name.trim().toLowerCase() == name.trim().toLowerCase());
     }
@@ -46,7 +56,7 @@ export class Worksheets {
             name = `${suffex}${++index}`;
         }
         return name;
-    }
+    } 
 
     public newWorksheet(name: string, examData: ExamData): IWorksheetMetaItem {
         if (this.isNameExist(name)) {
@@ -76,6 +86,21 @@ export class Worksheets {
         this.updateWorksheetLocalStorage(worksheet);
     }
 
+    public getAllMeta(): IWorksheetMetaItem[] {
+        return this.meta;
+    }
+
+    public removeWorksheet(id: string): void {
+        // Filter out the worksheet with the selected id
+        this.meta = this.meta.filter(m => m.id !== id);
+
+        // Update the meta data in local storage
+        this.updateMetaLocalStorage();
+
+        // Remove the specific worksheet data from local storage
+        localStorage.removeItem(`${APP_PREFIX}${id}`);
+    }
+
     public getWorksheet(id: string): IWorksheet {
         return JSON.parse(localStorage.getItem(`${APP_PREFIX}${id}`) || '{}') as IWorksheet
     }
@@ -85,9 +110,9 @@ export class Worksheets {
     }
 
     public static getInstance(): Worksheets {
-        if (!Worksheets.instnace) {
-            Worksheets.instnace = new Worksheets();
+        if (!Worksheets.instance) {
+            Worksheets.instance = new Worksheets();
         }
-        return Worksheets.instnace;
+        return Worksheets.instance;
     }
 }

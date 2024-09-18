@@ -26,7 +26,7 @@
                         </div>
                         <div v-else>
                             <h2>{{ worksheet.name }}</h2>
-                            <p>{{ worksheet.savedAt }}</p>
+                            <p>{{ worksheet.lastUpdateDate }}</p>
                         </div>
                         <div class="button-group">
                             <ion-button size="small" fill="clear" @click="renameWorksheet(worksheet.id)"
@@ -55,15 +55,13 @@ import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import { closeOutline, createOutline, pencilOutline, trashOutline, checkmarkOutline } from 'ionicons/icons';
 import { APP_PREFIX } from '@/config';
-import { appStore } from 'isncsci-ui/dist/esm/app/store';
-import { convertExamDataToGridModel } from '@/utils/examDataHelpers';
 import { IWorksheetMetaItem, Worksheets } from '@/utils/worksheetUtils';
-import { promptFoNameExist, promptForUniqueWorksheetName } from '@/utils/unsavedDataAlert';
+import { promptFoNameExist, promptForUniqueWorksheetName, showConfirmDeleteAlert } from '@/utils/unsavedDataAlert';
 // import { promptForUniqueWorksheetName } from '@/utils/worksheetUtils';
 const worksheets = Worksheets.getInstance();
 const router = useRouter();
 
-// Load saved worksheets from local storage
+// Load saved worksheets from local storage (reactive variables)
 const savedWorksheets = ref<IWorksheetMetaItem[]>([]);
 const editingWorksheetId = ref<string | null>(null);
 const editingWorksheetName = ref<string>('');
@@ -78,8 +76,9 @@ const close_onClick = () => {
 };
 
 const saveWorksheetName = (meta: IWorksheetMetaItem) => {
-    //update the meta data to local storage
-    //add update meta function on WorksheetUtil
+    worksheets.updateWorksheetName(meta.id, editingWorksheetName.value);
+    savedWorksheets.value = worksheets.getAllMeta();
+    cancelRename();
 };
 
 const cancelRename = () => {
@@ -111,18 +110,14 @@ const editWorksheet = async (id: string) => {
 };
 
 // Remove Worksheet from local storage
-const removeWorksheet = (id: string) => {
-    //Move the delete logic to worksheet Util
-
-    // // Filter out the worksheet with the selected id
-    // savedWorksheets.value = savedWorksheets.value.filter(el => el.id !== worksheet.id);
-
-    // // Update the isncsci_meta in local storage
-    // localStorage.setItem(`${APP_PREFIX}meta`, JSON.stringify(savedWorksheets.value));
-
-    // // Remove the specific worksheet data from local storage
-    // localStorage.removeItem(`${APP_PREFIX}${worksheet.id}`);
+const removeWorksheet = async (id: string) => {
+    const confirm = await showConfirmDeleteAlert();
+    if (confirm) {
+        worksheets.removeWorksheet(id);
+        savedWorksheets.value = worksheets.getAllMeta();
+    }
 };
+
 </script>
 
 <style scoped>

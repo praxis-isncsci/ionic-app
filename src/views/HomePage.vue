@@ -20,7 +20,7 @@
 import MainLayout from './MainLayout.vue';
 import IsncsciControl from '@/components/IsncsciControl.vue';
 import AppNavbar from '@/components/AppNavbar.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { appStore } from 'isncsci-ui/dist/esm/app/store';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { IWorksheetMetaItem, Worksheets } from '@/utils/worksheetUtils';
@@ -97,9 +97,9 @@ const clearExam = async () => {
 
 onMounted(() => {
   if (route.params.id) {
-    const worksheet = worksheets.getWorksheet(route.params.id);
+    const worksheet = worksheets.getWorksheet(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id);
     isncsciControlRef.value?.load(worksheet.examData);
-    const meta = worksheets.getMeta(route.params.id);
+    const meta = worksheets.getMeta(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id);
     if (meta) {
       currentMeta.value = meta;
     }

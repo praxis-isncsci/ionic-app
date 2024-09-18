@@ -28,9 +28,6 @@ import { useRoute } from 'vue-router';
 import router from '@/router';
 import { promptFoNameExist, promptForUniqueWorksheetName, showUnsavedDataAlert } from '@/utils/unsavedDataAlert';
 
-
-defineProps({ id: String });
-
 const worksheets = Worksheets.getInstance();
 const route = useRoute();
 const isncsciControlRef = ref<InstanceType<typeof IsncsciControl> | null>(null);
@@ -69,6 +66,8 @@ const calculate_onClick = async () => {
 
 const save_onClick = async () => {
   const examData: ExamData | undefined = isncsciControlRef.value?.data();
+
+    //TODO: replace isDirty with compare examData with the worksheet.getWorksheet(id)
   if (!examData) {
     return;
   }

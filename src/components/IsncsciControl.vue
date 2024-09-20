@@ -401,6 +401,29 @@ const load = async (examData: ExamData) => {
     );
 }
 
+const isFormEmpty = () => {
+    const state = appStore.getState();
+
+    // Flatten the gridModel to get all cells
+    const gridCells = state.gridModel?.flat();
+    const gridNotEmpty = gridCells?.some((cell) => cell && cell.value && cell.value !== '');
+    const vacNotEmpty = state.vac !== null && state.vac !== undefined;
+    const dapNotEmpty = state.dap !== null && state.dap !== undefined;
+    const commentsNotEmpty = state.comments && state.comments.trim() !== '';
+    const nonKeyMusclesNotEmpty =
+        state.rightLowestNonKeyMuscleWithMotorFunction !== null ||
+        state.leftLowestNonKeyMuscleWithMotorFunction !== null;
+    const isEmpty = !(
+        gridNotEmpty ||
+        vacNotEmpty ||
+        dapNotEmpty ||
+        commentsNotEmpty ||
+        nonKeyMusclesNotEmpty
+    );
+
+    return isEmpty;
+}
+
 defineExpose({
     load,
     clear,
@@ -422,29 +445,6 @@ defineExpose({
         return examData;
         }
     },
+    isFormEmpty,
 });
 </script>
-
-
-
-<!-- defineExpose({
-    load,
-    clear,
-    calculate,
-    data: () => {
-        if (!currentExamData.value) {
-            //Get the exam data from the interface
-            const state = appStore.getState();
-            const { examData, missingValues } = getExamDataFromGridModel(
-                state.gridModel ?? [],
-                state.vac,
-                state.dap,
-                state.rightLowestNonKeyMuscleWithMotorFunction,
-                state.leftLowestNonKeyMuscleWithMotorFunction,
-                state.comments
-            );
-            currentExamData.value = examData;
-        }
-        return currentExamData.value;
-    }
-}); -->

@@ -2,21 +2,15 @@
   <MainLayout title="ISNCSCI" :showFooter="true">
     <div v-if="currentMeta" class="worksheet-info">
       <div class="worksheet-name">Worksheet Name: {{ currentMeta.name }}</div>
-      <div class="worksheet-exam-date">
-        Exam Date: {{ currentMeta.examDate.toISOString().slice(0, 10) }}
-      </div>
-      <input type="hidden" id="worksheet-id" name="worksheet-id" :value="currentMeta.id" />
+      <div class="worksheet-exam-date">Exam Date: {{ currentMeta.examDate.toISOString().slice(0, 10) }}</div>
+      <input type="hidden" id="worksheet-id" name="worksheet-id" value="{{ currentMeta.id }}" />
     </div>
 
     <IsncsciControl ref="isncsciControlRef"></IsncsciControl>
 
     <template #footer-buttons>
-      <AppNavbar
-        :calculateOnClick="calculate_onClick"
-        :saveOnClick="save_onClick"
-        :clearExam="clearExam"
-        :onNavigate="handleNavigation"
-      >
+      <AppNavbar :calculateOnClick="calculate_onClick" :saveOnClick="save_onClick" :clearExam="clearExam"
+        :onNavigate="handleNavigation">
       </AppNavbar>
     </template>
   </MainLayout>
@@ -32,11 +26,7 @@ import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { IWorksheetMetaItem, Worksheets } from '@/utils/worksheetUtils';
 import { useRoute } from 'vue-router';
 import router from '@/router';
-import {
-  promptFoNameExist,
-  promptForUniqueWorksheetName,
-  showUnsavedDataAlert,
-} from '@/utils/unsavedDataAlert';
+import { promptFoNameExist, promptForUniqueWorksheetName, showUnsavedDataAlert } from '@/utils/unsavedDataAlert';
 
 const worksheets = Worksheets.getInstance();
 const route = useRoute();
@@ -44,18 +34,30 @@ const isncsciControlRef = ref<InstanceType<typeof IsncsciControl> | null>(null);
 const currentMeta = ref<IWorksheetMetaItem | null>(null);
 
 let isDirty = false;
-let loadingData = false;
+
+function shallowEqual(obj1: any, obj2: any): boolean {
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+  if (keys1.length !== keys2.length) return false;
+  for (let key of keys1) {
+    if (obj1[key] !== obj2[key]) return false;
+  }
+  return true;
+}
 
 const handleFormChange = () => {
-  if (loadingData) return; // ignore changes during data loading
   if (!isncsciControlRef.value) return;
 
-  const isFormEmpty = isncsciControlRef.value.isFormEmpty();
+  const currentExamData: ExamData | undefined = isncsciControlRef.value.data();
 
-  if (isFormEmpty) {
-    isDirty = false; // form is empty, no unsaved changes
+  if (currentMeta.value) {
+    // saved worksheet => compare the current data with the saved data
+    const savedWorksheet = worksheets.getWorksheet(currentMeta.value.id);
+    const savedExamData = savedWorksheet.examData;
+    isDirty = !shallowEqual(currentExamData, savedExamData);
   } else {
-    isDirty = true; // form has data, mark as dirty
+    // no saved worksheet, but form has data => unsaved changes
+    isDirty = true;
   }
 };
 
@@ -74,7 +76,7 @@ const handleNavigation = async (path: string) => {
 const calculate_onClick = async () => {
   const isSuccess = await isncsciControlRef.value?.calculate();
   if (isSuccess) {
-    // true if user made changes
+    handleFormChange();
   } else {
     console.log('Error in ISNCSCI calculation');
   }
@@ -82,12 +84,6 @@ const calculate_onClick = async () => {
 
 const save_onClick = async () => {
   if (!isncsciControlRef.value) return;
-
-  const isFormEmpty = isncsciControlRef.value.isFormEmpty();
-  if (isFormEmpty) {
-    console.log('Nothing to save');
-    return;
-  }
 
   const examData: ExamData | undefined = isncsciControlRef.value.data();
   if (!examData) {
@@ -101,8 +97,6 @@ const save_onClick = async () => {
     while (!nameIsValid) {
       name = await promptForUniqueWorksheetName(worksheets.nextWorksheetName());
       if (!name) {
-        // User canceled the prompt
-        console.log('Save operation canceled by the user.');
         return;
       }
       if (worksheets.isNameExist(name)) {
@@ -117,8 +111,9 @@ const save_onClick = async () => {
     worksheets.saveWorksheet({ id: currentMeta.value.id, examData });
   }
 
-  isDirty = false; 
+  isDirty = false;
 };
+
 
 const clearExam = async () => {
   await isncsciControlRef.value?.clear();
@@ -130,21 +125,16 @@ const clearExam = async () => {
 
 onMounted(() => {
   if (route.params.id) {
-    loadingData = true;
     const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
     const worksheet = worksheets.getWorksheet(id);
     if (worksheet && worksheet.examData) {
-      isncsciControlRef.value?.load(worksheet.examData).then(() => {
-        loadingData = false;
-      });
-      currentMeta.value = worksheets.getMeta(id) || null;
-    } else {
-      loadingData = false;
+      isncsciControlRef.value?.load(worksheet.examData);
     }
-  } else {
-    loadingData = false;
+    const meta = worksheets.getMeta(id);
+    if (meta) {
+      currentMeta.value = meta;
+    }
   }
-
   isDirty = false;
 
   appStore.subscribe(() => {
@@ -173,5 +163,3 @@ onMounted(() => {
   margin-top: 2px;
 }
 </style>
-
-

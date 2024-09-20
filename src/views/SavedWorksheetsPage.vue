@@ -16,17 +16,17 @@
                     <ion-label class="worksheet-row">
                         <div v-if="editingWorksheetId === worksheet.id">
                             <input v-model="editingWorksheetName" />
-                            <ion-button size="small" fill="clear" @click="saveWorksheetName(worksheet)"
+                            <!-- <ion-button size="small" fill="clear" @click="saveWorksheetName(worksheet)"
                                 class="icon-button">
                                 <ion-icon :icon="checkmarkOutline"></ion-icon>
                             </ion-button>
                             <ion-button size="small" fill="clear" @click="cancelRename" class="icon-button">
                                 <ion-icon :icon="closeOutline"></ion-icon>
-                            </ion-button>
+                            </ion-button> -->
                         </div>
                         <div v-else>
                             <h2>{{ worksheet.name }}</h2>
-                            <p>{{ worksheet.lastUpdateDate }}</p>
+                            <p>{{ new Date(worksheet.lastUpdateDate).toLocaleString() }}</p>
                         </div>
                         <div class="button-group">
                             <ion-button size="small" fill="clear" @click="renameWorksheet(worksheet.id)"
@@ -53,7 +53,7 @@
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonItem, IonLabel, IonList } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
-import { closeOutline, createOutline, pencilOutline, trashOutline, checkmarkOutline } from 'ionicons/icons';
+import { closeOutline, createOutline, pencilOutline, trashOutline } from 'ionicons/icons';
 import { APP_PREFIX } from '@/config';
 import { IWorksheetMetaItem, Worksheets } from '@/utils/worksheetUtils';
 import { promptFoNameExist, promptForUniqueWorksheetName, showConfirmDeleteAlert } from '@/utils/unsavedDataAlert';
@@ -75,32 +75,47 @@ const close_onClick = () => {
     router.replace('/home');
 };
 
-const saveWorksheetName = (meta: IWorksheetMetaItem) => {
-    worksheets.updateWorksheetName(meta.id, editingWorksheetName.value);
-    savedWorksheets.value = worksheets.getAllMeta();
-    cancelRename();
-};
+// const saveWorksheetName = (meta: IWorksheetMetaItem) => {
+//     worksheets.updateWorksheetName(meta.id, editingWorksheetName.value);
+//     savedWorksheets.value = worksheets.getAllMeta();
+//     cancelRename();
+// };
 
-const cancelRename = () => {
-    editingWorksheetId.value = null;
-    editingWorksheetName.value = '';
-};
+// const cancelRename = () => {
+//     editingWorksheetId.value = null;
+//     editingWorksheetName.value = '';
+// };
 
 // Rename Worksheet
 const renameWorksheet = async (id: string) => {
     let name: string | null = null;
-    while (!name || worksheets.isNameExist(name)) {
-        if (name) {
+    let isValidName = false;
+
+    // Loop until a unique name is provided or the user cancels
+    while (!isValidName) {
+        // Prompt the user for a worksheet name
+        name = await promptForUniqueWorksheetName(worksheets.nextWorksheetName());
+
+        // If the user cancels, exit the function
+        if (!name) {
+            return;
+        }
+
+        // Check if the name already exists
+        if (!worksheets.isNameExist(name)) {
+            isValidName = true; // Name is valid, exit loop
+        } else {
+            // Alert the user if the name exists and loop again
             await promptFoNameExist();
         }
-        name = await promptForUniqueWorksheetName(worksheets.nextWorksheetName());
     }
 
     if (name) {
-        editingWorksheetId.value = id;
-        editingWorksheetName.value = name;
-        //TODO
-        //update meta only
+        // Update the worksheet name in the Worksheets utility
+        worksheets.updateWorksheetName(id, name);
+
+        // Refresh the savedWorksheets array (for the vue to detect the change)
+        savedWorksheets.value = worksheets.getAllMeta().map(item => ({ ...item }));
     }
 };
 

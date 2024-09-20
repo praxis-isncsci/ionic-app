@@ -35,30 +35,51 @@ const currentMeta = ref<IWorksheetMetaItem | null>(null);
 
 let isDirty = false;
 
+function shallowEqual(obj1: any, obj2: any): boolean {
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+  if (keys1.length !== keys2.length) return false;
+  for (let key of keys1) {
+    if (obj1[key] !== obj2[key]) return false;
+  }
+  return true;
+}
+
 const handleNavigation = async (path: string) => {
   if (isDirty) {
     const shouldSave = await showUnsavedDataAlert();
     if (shouldSave) {
       await save_onClick();
     } else {
-      // discard changes
+      // Discard changes
       isDirty = false;
     }
   }
   router.push(path);
 };
 
-// function to handle form changes
 const handleFormChange = () => {
-  //TODO: by just clicking the cell will trigger that callack as well!!
-  //The set of isDirty isnt 100% accurate
-  isDirty = true;
+  const currentExamData: ExamData | undefined = isncsciControlRef.value?.data();
+  if (!currentExamData) {
+    isDirty = false;
+    return;
+  }
+
+  if (currentMeta.value) {
+    // saved worksheet => compare the current data with the saved data
+    const savedWorksheet = worksheets.getWorksheet(currentMeta.value.id);
+    const savedExamData = savedWorksheet.examData;
+    isDirty = !shallowEqual(currentExamData, savedExamData);
+  } else {
+    // No saved worksheet => any data means unsaved changes
+    isDirty = true;
+  }
 };
 
 const calculate_onClick = async () => {
   const isSuccess = await isncsciControlRef.value?.calculate();
   if (isSuccess) {
-    isDirty = true;
+    handleFormChange();
   } else {
     console.log('Error in ISNCSCI calculation');
   }
@@ -67,7 +88,6 @@ const calculate_onClick = async () => {
 const save_onClick = async () => {
   const examData: ExamData | undefined = isncsciControlRef.value?.data();
 
-    //TODO: replace isDirty with compare examData with the worksheet.getWorksheet(id)
   if (!examData) {
     return;
   }
@@ -96,9 +116,12 @@ const clearExam = async () => {
 
 onMounted(() => {
   if (route.params.id) {
-    const worksheet = worksheets.getWorksheet(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id);
-    isncsciControlRef.value?.load(worksheet.examData);
-    const meta = worksheets.getMeta(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id);
+    const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
+    const worksheet = worksheets.getWorksheet(id);
+    if (worksheet && worksheet.examData) {
+      isncsciControlRef.value?.load(worksheet.examData);
+    }
+    const meta = worksheets.getMeta(id);
     if (meta) {
       currentMeta.value = meta;
     }
@@ -119,7 +142,6 @@ onMounted(() => {
 
 .worksheet-name {
   font-weight: bold;
-  /* margin: 0 0 8px 0; */
   color: #3B3B3B;
   display: flex;
   align-items: center;
@@ -132,3 +154,5 @@ onMounted(() => {
   margin-top: 2px;
 }
 </style>
+
+

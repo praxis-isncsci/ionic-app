@@ -59,8 +59,8 @@ export const showConfirmDeleteAlert = async (): Promise<boolean> => {
             header: 'Confirm Delete',
             message: 'Are you sure you want to delete this worksheet?',
             buttons: [
-            { text: 'Cancel', role: 'cancel', handler: () => resolve(false) },
-            { text: 'Delete', role: 'confirm', handler: () => resolve(true) },
+                { text: 'Cancel', role: 'cancel', handler: () => resolve(false) },
+                { text: 'Delete', role: 'confirm', handler: () => resolve(true) },
             ],
         }).then(alert => alert.present());
     });

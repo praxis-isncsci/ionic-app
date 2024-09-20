@@ -429,21 +429,20 @@ defineExpose({
     clear,
     calculate,
     data: () => {
-        if (currentExamData.value) {
-        return currentExamData.value;
-        } else {
-        // Get the latest exam data from the app state
-        const state = appStore.getState();
-        const { examData, missingValues } = getExamDataFromGridModel(
-            state.gridModel ?? [],
-            state.vac,
-            state.dap,
-            state.rightLowestNonKeyMuscleWithMotorFunction,
-            state.leftLowestNonKeyMuscleWithMotorFunction,
-            state.comments
-        );
-        return examData;
+        if (!currentExamData.value) {
+            //Get the exam data from the interface
+            const state = appStore.getState();
+            const { examData, missingValues } = getExamDataFromGridModel(
+                state.gridModel ?? [],
+                state.vac,
+                state.dap,
+                state.rightLowestNonKeyMuscleWithMotorFunction,
+                state.leftLowestNonKeyMuscleWithMotorFunction,
+                state.comments
+            );
+            currentExamData.value = examData;
         }
+        return currentExamData.value;
     },
     isFormEmpty,
 });

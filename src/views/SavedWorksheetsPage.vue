@@ -16,13 +16,6 @@
                     <ion-label class="worksheet-row">
                         <div v-if="editingWorksheetId === worksheet.id">
                             <input v-model="editingWorksheetName" />
-                            <!-- <ion-button size="small" fill="clear" @click="saveWorksheetName(worksheet)"
-                                class="icon-button">
-                                <ion-icon :icon="checkmarkOutline"></ion-icon>
-                            </ion-button>
-                            <ion-button size="small" fill="clear" @click="cancelRename" class="icon-button">
-                                <ion-icon :icon="closeOutline"></ion-icon>
-                            </ion-button> -->
                         </div>
                         <div v-else>
                             <h2>{{ worksheet.name }}</h2>
@@ -74,17 +67,6 @@ onMounted(() => {
 const close_onClick = () => {
     router.replace('/home');
 };
-
-// const saveWorksheetName = (meta: IWorksheetMetaItem) => {
-//     worksheets.updateWorksheetName(meta.id, editingWorksheetName.value);
-//     savedWorksheets.value = worksheets.getAllMeta();
-//     cancelRename();
-// };
-
-// const cancelRename = () => {
-//     editingWorksheetId.value = null;
-//     editingWorksheetName.value = '';
-// };
 
 // Rename Worksheet
 const renameWorksheet = async (id: string) => {

@@ -112,6 +112,7 @@ const save_onClick = async () => {
       }
     }
     currentMeta.value = worksheets.newWorksheet(name as string, examData);
+    router.replace(`/home/${currentMeta.value.id}`);
   } else {
     worksheets.saveWorksheet({ id: currentMeta.value.id, examData });
   }
@@ -124,6 +125,7 @@ const clearExam = async () => {
   isDirty = false;
   currentMeta.value = null;
   console.log('Exam cleared');
+  router.replace('/home');
 };
 
 onMounted(() => {
@@ -171,3 +173,5 @@ onMounted(() => {
   margin-top: 2px;
 }
 </style>
+
+

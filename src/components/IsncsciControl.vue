@@ -429,6 +429,33 @@ defineExpose({
     clear,
     calculate,
     data: () => {
+        if (currentExamData.value) {
+        return currentExamData.value;
+        } else {
+        // Get the latest exam data from the app state
+        const state = appStore.getState();
+        const { examData, missingValues } = getExamDataFromGridModel(
+            state.gridModel ?? [],
+            state.vac,
+            state.dap,
+            state.rightLowestNonKeyMuscleWithMotorFunction,
+            state.leftLowestNonKeyMuscleWithMotorFunction,
+            state.comments
+        );
+        return examData;
+        }
+    },
+    isFormEmpty,
+});
+</script>
+
+
+
+<!-- defineExpose({
+    load,
+    clear,
+    calculate,
+    data: () => {
         if (!currentExamData.value) {
             //Get the exam data from the interface
             const state = appStore.getState();
@@ -445,5 +472,31 @@ defineExpose({
         return currentExamData.value;
     },
     isFormEmpty,
+}); 
+
+
+defineExpose({
+    load,
+    clear,
+    calculate,
+    data: () => {
+        if (currentExamData.value) {
+        return currentExamData.value;
+        } else {
+        // Get the latest exam data from the app state
+        const state = appStore.getState();
+        const { examData, missingValues } = getExamDataFromGridModel(
+            state.gridModel ?? [],
+            state.vac,
+            state.dap,
+            state.rightLowestNonKeyMuscleWithMotorFunction,
+            state.leftLowestNonKeyMuscleWithMotorFunction,
+            state.comments
+        );
+        return examData;
+        }
+    },
+    isFormEmpty,
 });
-</script>
+
+-->

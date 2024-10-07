@@ -87,8 +87,9 @@
                 <option value="S1">S1 - Hallux: Adduction</option>
             </select>
             <label for="comments" slot="comments-label">Comments:</label>
+            <div name="cell-comments-display" id="cell-comments-display" slot="cell-comments-display"></div>
             <textarea name="comments" id="comments" slot="comments"></textarea>
-            <praxis-isncsci-key-points-diagram slot="key-points-diagram"
+            <praxis-isncsci-key-points-diagram id="dermatome-chart" slot="key-points-diagram"
                 ref="keyPointsDiagramRef"></praxis-isncsci-key-points-diagram>
         </praxis-isncsci-input-layout>
         <praxis-isncsci-input slot="input-controls" disabled ref="inputButtonsRef">

@@ -10,7 +10,7 @@
 
     <template #footer-buttons>
       <AppNavbar :calculateOnClick="calculate_onClick" :saveOnClick="save_onClick" :clearExam="clearExam"
-        :onNavigate="handleNavigation">
+        :exportToPDF="exportToPDF" :onNavigate="handleNavigation">
       </AppNavbar>
     </template>
   </MainLayout>
@@ -27,6 +27,8 @@ import { IWorksheetMetaItem, Worksheets } from '@/utils/worksheetUtils';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { promptFoNameExist, promptForUniqueWorksheetName, showUnsavedDataAlert } from '@/utils/unsavedDataAlert';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const worksheets = Worksheets.getInstance();
 const route = useRoute();
@@ -122,6 +124,66 @@ const clearExam = async () => {
   console.log('Exam cleared');
   router.replace('/home');
 };
+
+async function exportToPDF() {
+  // Create a new jsPDF instance
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'pt',
+    format: 'letter',
+  });
+
+  // Set font size and type
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'normal');
+
+  // Add a title or heading
+  doc.text('ISNCSCI Exam Report', 40, 50);
+
+  // Add additional text (e.g., date, patient info)
+  const examDate = currentMeta.value
+    ? currentMeta.value.examDate.toLocaleDateString()
+    : new Date().toLocaleDateString();
+  doc.text(`Date: ${examDate}`, 40, 70);
+
+  // Capture the dermatome chart
+  const chartElement = document.getElementById('dermatome-chart');
+  if (chartElement) {
+    try {
+      // Use html2canvas to capture the chart
+      const canvas = await html2canvas(chartElement as HTMLElement, {
+        backgroundColor: null, // To preserve transparency
+        scale: 2, // Increase scale for better quality
+      });
+
+      // Get image data from the canvas
+      const imgData = canvas.toDataURL('image/png');
+
+      // Calculate image dimensions to fit the PDF
+      const imgProps = doc.getImageProperties(imgData);
+      const pdfWidth = doc.internal.pageSize.getWidth() - 80; // 40pt margin on each side
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      // Add the image to the PDF
+      doc.addImage(
+        imgData,
+        'PNG',
+        40, // x position
+        100, // y position
+        pdfWidth,
+        pdfHeight
+      );
+    } catch (error) {
+      console.error('Error capturing dermatome chart:', error);
+    }
+  } else {
+    console.error('Dermatome chart element not found');
+  }
+
+  // Save the PDF
+  doc.save('exam_report.pdf');
+}
+
 
 onMounted(() => {
   if (route.params.id) {

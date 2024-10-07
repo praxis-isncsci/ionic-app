@@ -116,7 +116,6 @@ const save_onClick = async () => {
   isDirty = false;
 };
 
-
 const clearExam = async () => {
   await isncsciControlRef.value?.clear();
   isDirty = false;
@@ -183,7 +182,6 @@ async function exportToPDF() {
   // Save the PDF
   doc.save('exam_report.pdf');
 }
-
 
 onMounted(() => {
   if (route.params.id) {

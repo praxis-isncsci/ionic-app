@@ -87,6 +87,7 @@
                 <option value="S1">S1 - Hallux: Adduction</option>
             </select>
             <label for="comments" slot="comments-label">Comments:</label>
+            <div name="cell-comments-display" id="cell-comments-display" slot="cell-comments-display"></div>
             <textarea name="comments" id="comments" slot="comments"></textarea>
             <praxis-isncsci-key-points-diagram slot="key-points-diagram"
                 ref="keyPointsDiagramRef"></praxis-isncsci-key-points-diagram>
@@ -259,6 +260,7 @@ import {
 } from 'isncsci-ui/dist/esm/app/controllers';
 
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
+import { inputFieldNames } from '@/utils/inputFieldNames';
 
 const classificationStyle = ref('');
 const inputLayoutRef = ref<HTMLElement | null>(null);
@@ -268,13 +270,13 @@ const keyPointsDiagramRef = ref<HTMLElement | null>(null);
 const externalMessagePortProvider: IExternalMessageProvider = {
     sendOutExamData: () => {
         console.log('externalMessagePortProvider called');
-
     },
 };
 
 const appStoreProvider = new AppStoreProvider(appStore);
 const isncsciExamProvider = new IsncsciExamProvider();
 let ready = false;
+const isLoading = ref(false);
 
 const stateChanged = (state: IAppState, actionType: string) => {
     if (!ready && state.status === StatusCodes.Ready) {
@@ -312,8 +314,8 @@ onMounted(() => {
     initializeAppUseCase(appStoreProvider);
 
     appStore.subscribe(() => {
-    handleFormChange();
-  })
+        handleFormChange();
+    })
 });
 
 onBeforeUnmount(() => {
@@ -331,12 +333,79 @@ const closeClassification_onClick = () => {
     return false;
 };
 
+const isFormEmpty = () => {
+    // Get the latest exam data from the app state
+    const state = appStore.getState();
+    const { examData } = getExamDataFromGridModel(
+        state.gridModel ?? [],
+        state.vac,
+        state.dap,
+        state.rightLowestNonKeyMuscleWithMotorFunction,
+        state.leftLowestNonKeyMuscleWithMotorFunction,
+        state.comments
+    );
+
+    // If all fields are null, empty string, or undefined, the form is empty
+    const isEmpty = inputFieldNames.every((fieldName) => {
+        const value = examData[fieldName];
+        return value === null || value === '' || value === undefined;
+    });
+
+    return isEmpty;
+};
+
+const load = async (examData: ExamData) => {
+    isLoading.value = true;
+
+    await appStoreProvider.setCalculationError('');
+
+    // Bind exam data to a new grid model
+    const gridModel = bindExamDataToGridModel(examData);
+
+    // Bind exam data to the totals
+    const totals = bindExamDataToTotals(examData);
+
+    // Update state
+    await appStoreProvider.setActiveCell(null, []);
+    await appStoreProvider.setGridModel(gridModel);
+    await appStoreProvider.setTotals(totals);
+    await appStoreProvider.setVacDap(
+        examData.voluntaryAnalContraction,
+        examData.deepAnalPressure,
+    );
+    await appStoreProvider.setExtraInputs(
+        examData.rightLowestNonKeyMuscleWithMotorFunction,
+        examData.leftLowestNonKeyMuscleWithMotorFunction,
+        examData.comments || '',
+    );
+    currentExamData.value = examData;
+    isLoading.value = false;
+}
+
+const clear = async () => {
+    const emptyExamData = getEmptyExamData();
+    const gridModel = bindExamDataToGridModel(emptyExamData);
+    const totals = bindExamDataToTotals(emptyExamData);
+
+    try {
+        await appStoreProvider.setActiveCell(null, []);
+        await appStoreProvider.setGridModel(gridModel);
+        await appStoreProvider.setTotals(totals);
+        await appStoreProvider.setVacDap(null, null);
+        await appStoreProvider.setExtraInputs(null, null, '');
+    } catch (error) {
+        console.log(error);
+    }
+    currentExamData.value = getEmptyExamData();
+}
+
 const handleFormChange = () => {
-    if (!currentExamData.value) {
-        // No previous exam data, nothing to compare
+    if (isLoading.value) {
+        // Do not process form changes during loading
         return;
     }
-    const prevExamData = currentExamData.value;
+
+    const prevExamData = currentExamData.value || getEmptyExamData();
 
     // Get the current inputs from the app state
     const state = appStore.getState();
@@ -349,168 +418,13 @@ const handleFormChange = () => {
         state.comments
     );
 
-    const inputFieldNames: Array<keyof ExamData> = [
-        // Right Light Touch
-        'rightLightTouchC2',
-        'rightLightTouchC3',
-        'rightLightTouchC4',
-        'rightLightTouchC5',
-        'rightLightTouchC6',
-        'rightLightTouchC7',
-        'rightLightTouchC8',
-        'rightLightTouchT1',
-        'rightLightTouchT2',
-        'rightLightTouchT3',
-        'rightLightTouchT4',
-        'rightLightTouchT5',
-        'rightLightTouchT6',
-        'rightLightTouchT7',
-        'rightLightTouchT8',
-        'rightLightTouchT9',
-        'rightLightTouchT10',
-        'rightLightTouchT11',
-        'rightLightTouchT12',
-        'rightLightTouchL1',
-        'rightLightTouchL2',
-        'rightLightTouchL3',
-        'rightLightTouchL4',
-        'rightLightTouchL5',
-        'rightLightTouchS1',
-        'rightLightTouchS2',
-        'rightLightTouchS3',
-        'rightLightTouchS4_5',
-
-        // Right Pin Prick
-        'rightPinPrickC2',
-        'rightPinPrickC3',
-        'rightPinPrickC4',
-        'rightPinPrickC5',
-        'rightPinPrickC6',
-        'rightPinPrickC7',
-        'rightPinPrickC8',
-        'rightPinPrickT1',
-        'rightPinPrickT2',
-        'rightPinPrickT3',
-        'rightPinPrickT4',
-        'rightPinPrickT5',
-        'rightPinPrickT6',
-        'rightPinPrickT7',
-        'rightPinPrickT8',
-        'rightPinPrickT9',
-        'rightPinPrickT10',
-        'rightPinPrickT11',
-        'rightPinPrickT12',
-        'rightPinPrickL1',
-        'rightPinPrickL2',
-        'rightPinPrickL3',
-        'rightPinPrickL4',
-        'rightPinPrickL5',
-        'rightPinPrickS1',
-        'rightPinPrickS2',
-        'rightPinPrickS3',
-        'rightPinPrickS4_5',
-
-        // Left Light Touch
-        'leftLightTouchC2',
-        'leftLightTouchC3',
-        'leftLightTouchC4',
-        'leftLightTouchC5',
-        'leftLightTouchC6',
-        'leftLightTouchC7',
-        'leftLightTouchC8',
-        'leftLightTouchT1',
-        'leftLightTouchT2',
-        'leftLightTouchT3',
-        'leftLightTouchT4',
-        'leftLightTouchT5',
-        'leftLightTouchT6',
-        'leftLightTouchT7',
-        'leftLightTouchT8',
-        'leftLightTouchT9',
-        'leftLightTouchT10',
-        'leftLightTouchT11',
-        'leftLightTouchT12',
-        'leftLightTouchL1',
-        'leftLightTouchL2',
-        'leftLightTouchL3',
-        'leftLightTouchL4',
-        'leftLightTouchL5',
-        'leftLightTouchS1',
-        'leftLightTouchS2',
-        'leftLightTouchS3',
-        'leftLightTouchS4_5',
-
-        // Left Pin Prick
-        'leftPinPrickC2',
-        'leftPinPrickC3',
-        'leftPinPrickC4',
-        'leftPinPrickC5',
-        'leftPinPrickC6',
-        'leftPinPrickC7',
-        'leftPinPrickC8',
-        'leftPinPrickT1',
-        'leftPinPrickT2',
-        'leftPinPrickT3',
-        'leftPinPrickT4',
-        'leftPinPrickT5',
-        'leftPinPrickT6',
-        'leftPinPrickT7',
-        'leftPinPrickT8',
-        'leftPinPrickT9',
-        'leftPinPrickT10',
-        'leftPinPrickT11',
-        'leftPinPrickT12',
-        'leftPinPrickL1',
-        'leftPinPrickL2',
-        'leftPinPrickL3',
-        'leftPinPrickL4',
-        'leftPinPrickL5',
-        'leftPinPrickS1',
-        'leftPinPrickS2',
-        'leftPinPrickS3',
-        'leftPinPrickS4_5',
-
-        // Right Motor
-        'rightMotorC5',
-        'rightMotorC6',
-        'rightMotorC7',
-        'rightMotorC8',
-        'rightMotorT1',
-        'rightMotorL2',
-        'rightMotorL3',
-        'rightMotorL4',
-        'rightMotorL5',
-        'rightMotorS1',
-
-        // Left Motor
-        'leftMotorC5',
-        'leftMotorC6',
-        'leftMotorC7',
-        'leftMotorC8',
-        'leftMotorT1',
-        'leftMotorL2',
-        'leftMotorL3',
-        'leftMotorL4',
-        'leftMotorL5',
-        'leftMotorS1',
-
-        // Additional Fields
-        'voluntaryAnalContraction',
-        'deepAnalPressure',
-        'rightLowestNonKeyMuscleWithMotorFunction',
-        'leftLowestNonKeyMuscleWithMotorFunction',
-        'comments',
-    ];
-
-
     // Compare the values
     const inputsChanged = inputFieldNames.some((fieldName) => {
         return prevExamData[fieldName] !== currentInput[fieldName];
     });
 
     if (inputsChanged) {
-        // Inputs changed, currentExamData invalid
-        currentExamData.value = undefined;
+        currentExamData.value = currentInput;
     }
 };
 
@@ -549,50 +463,11 @@ const calculate = async () => {
     return examData;
 };
 
-const clear = async () => {
-    const emptyExamData = getEmptyExamData();
-    const gridModel = bindExamDataToGridModel(emptyExamData);
-    const totals = bindExamDataToTotals(emptyExamData);
-
-    try {
-        await appStoreProvider.setActiveCell(null, []);
-        await appStoreProvider.setGridModel(gridModel);
-        await appStoreProvider.setTotals(totals);
-        await appStoreProvider.setVacDap(null, null);
-        await appStoreProvider.setExtraInputs(null, null, '');
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const load = async (examData: ExamData) => {
-    await appStoreProvider.setCalculationError('');
-
-    // 2. Bind exam data to a new grid model
-    const gridModel = bindExamDataToGridModel(examData);
-
-    // 3. Bind exam data to the totals
-    const totals = bindExamDataToTotals(examData);
-
-    // 4. Update state
-    await appStoreProvider.setActiveCell(null, []);
-    await appStoreProvider.setGridModel(gridModel);
-    await appStoreProvider.setTotals(totals);
-    await appStoreProvider.setVacDap(
-        examData.voluntaryAnalContraction,
-        examData.deepAnalPressure,
-    );
-    await appStoreProvider.setExtraInputs(
-        examData.rightLowestNonKeyMuscleWithMotorFunction,
-        examData.leftLowestNonKeyMuscleWithMotorFunction,
-        examData.comments || '',
-    );
-}
-
 defineExpose({
     load,
     clear,
     calculate,
+    isFormEmpty,
     data: () => {
         if (currentExamData.value) {
         return currentExamData.value;

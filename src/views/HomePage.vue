@@ -20,44 +20,70 @@
 import MainLayout from './MainLayout.vue';
 import IsncsciControl from '@/components/IsncsciControl.vue';
 import AppNavbar from '@/components/AppNavbar.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick, watch } from 'vue';
 import { appStore } from 'isncsci-ui/dist/esm/app/store';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { IWorksheetMetaItem, Worksheets } from '@/utils/worksheetUtils';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { promptFoNameExist, promptForUniqueWorksheetName, showUnsavedDataAlert } from '@/utils/unsavedDataAlert';
+import { inputFieldNames } from '@/utils/inputFieldNames';
 
 const worksheets = Worksheets.getInstance();
 const route = useRoute();
-const isncsciControlRef = ref<InstanceType<typeof IsncsciControl> | null>(null);
+// const isncsciControlRef = ref<InstanceType<typeof IsncsciControl> | null>(null);
 const currentMeta = ref<IWorksheetMetaItem | null>(null);
+interface IsncsciControlMethods {
+  load: (examData: ExamData) => Promise<void>;
+  clear: () => Promise<void>;
+  calculate: () => Promise<ExamData | undefined>;
+  isFormEmpty: () => boolean;
+  data: () => ExamData | undefined;
+}
+
+const isncsciControlRef = ref<IsncsciControlMethods | null>(null);
 
 let isDirty = false;
+const isLoading = ref(false);
 
-function shallowEqual(obj1: any, obj2: any): boolean {
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-  if (keys1.length !== keys2.length) return false;
-  for (let key of keys1) {
-    if (obj1[key] !== obj2[key]) return false;
-  }
-  return true;
+function examDataEqual(examData1: ExamData, examData2: ExamData): boolean {
+  return inputFieldNames.every((field) => {
+    const val1 = examData1[field];
+    const val2 = examData2[field];
+
+    if (val1 === val2) return true;
+
+    if (
+      (val1 === null || val1 === undefined || val1 === '') &&
+      (val2 === null || val2 === undefined || val2 === '')
+    ) {
+      return true; // Treat null, undefined, and empty string as equal
+    }
+
+    return false;
+  });
 }
 
 const handleFormChange = () => {
   if (!isncsciControlRef.value) return;
 
-  const currentExamData: ExamData | undefined = isncsciControlRef.value.data();
+  const currentExamData = isncsciControlRef.value.data();
+  if (!currentExamData) {
+    isDirty = false;
+    return;
+  }
 
   if (currentMeta.value) {
-    // saved worksheet => compare the current data with the saved data
     const savedWorksheet = worksheets.getWorksheet(currentMeta.value.id);
     const savedExamData = savedWorksheet.examData;
-    isDirty = !shallowEqual(currentExamData, savedExamData);
+    if (!savedExamData) {
+      isDirty = false;
+      return;
+    }
+    isDirty = !examDataEqual(currentExamData, savedExamData);
   } else {
-    // no saved worksheet, but form has data => unsaved changes
-    isDirty = true;
+    const isFormEmpty = isncsciControlRef.value.isFormEmpty();
+    isDirty = !isFormEmpty;
   }
 };
 
@@ -123,24 +149,42 @@ const clearExam = async () => {
   router.replace('/home');
 };
 
-onMounted(() => {
+const loadWorksheet = async () => {
   if (route.params.id) {
     const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
     const worksheet = worksheets.getWorksheet(id);
     if (worksheet && worksheet.examData) {
-      isncsciControlRef.value?.load(worksheet.examData);
+      isLoading.value = true;
+      await isncsciControlRef.value?.load(worksheet.examData);
+      isLoading.value = false;
     }
     const meta = worksheets.getMeta(id);
     if (meta) {
       currentMeta.value = meta;
     }
+  } else {
+    await isncsciControlRef.value?.clear();
+    currentMeta.value = null;
   }
-  isDirty = false;
 
+  isDirty = false;
+  await nextTick();
+  handleFormChange();
+};
+
+onMounted(async () => {
+  await loadWorksheet();
   appStore.subscribe(() => {
     handleFormChange();
   });
 });
+
+watch(
+  () => route.params.id,
+  async () => {
+    await loadWorksheet();
+  }
+);
 </script>
 
 <style scoped>

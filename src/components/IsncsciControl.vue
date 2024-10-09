@@ -312,10 +312,6 @@ onMounted(() => {
     }
 
     initializeAppUseCase(appStoreProvider);
-
-    appStore.subscribe(() => {
-        handleFormChange();
-    })
 });
 
 onBeforeUnmount(() => {
@@ -326,17 +322,15 @@ onBeforeUnmount(() => {
 
 initializeAppUseCase(appStoreProvider);
 
-const currentExamData = ref<ExamData | undefined>(undefined)
-
 const closeClassification_onClick = () => {
     classificationStyle.value = '';
     return false;
 };
 
-const isFormEmpty = () => {
+const getExamData = (): ExamData => {
     // Get the latest exam data from the app state
     const state = appStore.getState();
-    const { examData } = getExamDataFromGridModel(
+    const { examData, missingValues } = getExamDataFromGridModel(
         state.gridModel ?? [],
         state.vac,
         state.dap,
@@ -344,15 +338,15 @@ const isFormEmpty = () => {
         state.leftLowestNonKeyMuscleWithMotorFunction,
         state.comments
     );
+    return examData;
+}
 
-    // If all fields are null, empty string, or undefined, the form is empty
-    const isEmpty = inputFieldNames.every((fieldName) => {
-        const value = examData[fieldName];
-        return value === null || value === '' || value === undefined;
+const isFormEmpty = (): boolean => {
+    const examData = getExamData();
+    return inputFieldNames.every((field) => {
+        return !examData[field];
     });
-
-    return isEmpty;
-};
+}
 
 const load = async (examData: ExamData) => {
     isLoading.value = true;
@@ -378,7 +372,6 @@ const load = async (examData: ExamData) => {
         examData.leftLowestNonKeyMuscleWithMotorFunction,
         examData.comments || '',
     );
-    currentExamData.value = examData;
     isLoading.value = false;
 }
 
@@ -396,38 +389,7 @@ const clear = async () => {
     } catch (error) {
         console.log(error);
     }
-    currentExamData.value = getEmptyExamData();
 }
-
-const handleFormChange = () => {
-    if (isLoading.value) {
-        // Do not process form changes during loading
-        return;
-    }
-
-    const prevExamData = currentExamData.value || getEmptyExamData();
-
-    // Get the current inputs from the app state
-    const state = appStore.getState();
-    const { examData: currentInput } = getExamDataFromGridModel(
-        state.gridModel ?? [],
-        state.vac,
-        state.dap,
-        state.rightLowestNonKeyMuscleWithMotorFunction,
-        state.leftLowestNonKeyMuscleWithMotorFunction,
-        state.comments
-    );
-
-    // Compare the values
-    const inputsChanged = inputFieldNames.some((fieldName) => {
-        return prevExamData[fieldName] !== currentInput[fieldName];
-    });
-
-    if (inputsChanged) {
-        currentExamData.value = currentInput;
-    }
-};
-
 
 const calculate = async () => {
     classificationStyle.value = 'visible';
@@ -468,22 +430,6 @@ defineExpose({
     clear,
     calculate,
     isFormEmpty,
-    data: () => {
-        if (currentExamData.value) {
-        return currentExamData.value;
-        } else {
-        // Get the latest exam data from the app state
-        const state = appStore.getState();
-        const { examData, missingValues } = getExamDataFromGridModel(
-            state.gridModel ?? [],
-            state.vac,
-            state.dap,
-            state.rightLowestNonKeyMuscleWithMotorFunction,
-            state.leftLowestNonKeyMuscleWithMotorFunction,
-            state.comments
-        );
-        return examData;
-        }
-    }
+    examData: getExamData,
 });
 </script>

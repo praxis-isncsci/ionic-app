@@ -20,8 +20,7 @@
 import MainLayout from './MainLayout.vue';
 import IsncsciControl from '@/components/IsncsciControl.vue';
 import AppNavbar from '@/components/AppNavbar.vue';
-import { ref, onMounted, nextTick, watch } from 'vue';
-import { appStore } from 'isncsci-ui/dist/esm/app/store';
+import { ref, onMounted, watch } from 'vue';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { IWorksheetMetaItem, Worksheets } from '@/utils/worksheetUtils';
 import { useRoute } from 'vue-router';
@@ -31,19 +30,17 @@ import { inputFieldNames } from '@/utils/inputFieldNames';
 
 const worksheets = Worksheets.getInstance();
 const route = useRoute();
-// const isncsciControlRef = ref<InstanceType<typeof IsncsciControl> | null>(null);
+
 const currentMeta = ref<IWorksheetMetaItem | null>(null);
 interface IsncsciControlMethods {
   load: (examData: ExamData) => Promise<void>;
   clear: () => Promise<void>;
   calculate: () => Promise<ExamData | undefined>;
   isFormEmpty: () => boolean;
-  data: () => ExamData | undefined;
+  examData: () => ExamData | undefined;
 }
-
 const isncsciControlRef = ref<IsncsciControlMethods | null>(null);
 
-let isDirty = false;
 const isLoading = ref(false);
 
 function examDataEqual(examData1: ExamData, examData2: ExamData): boolean {
@@ -64,54 +61,33 @@ function examDataEqual(examData1: ExamData, examData2: ExamData): boolean {
   });
 }
 
-const handleFormChange = () => {
-  if (!isncsciControlRef.value) return;
-
-  const currentExamData = isncsciControlRef.value.data();
-  if (!currentExamData) {
-    isDirty = false;
-    return;
-  }
-
-  if (currentMeta.value) {
-    const savedWorksheet = worksheets.getWorksheet(currentMeta.value.id);
-    const savedExamData = savedWorksheet.examData;
-    if (!savedExamData) {
-      isDirty = false;
-      return;
-    }
-    isDirty = !examDataEqual(currentExamData, savedExamData);
-  } else {
-    const isFormEmpty = isncsciControlRef.value.isFormEmpty();
-    isDirty = !isFormEmpty;
-  }
-};
-
 const handleNavigation = async (path: string) => {
-  if (isDirty) {
-    const shouldSave = await showUnsavedDataAlert();
-    if (shouldSave) {
+  if (!currentMeta.value && !isncsciControlRef.value?.isFormEmpty()) {
+    if (await showUnsavedDataAlert()) {
       await save_onClick();
-    } else {
-      isDirty = false;
+    }
+  } else if (currentMeta.value && isncsciControlRef.value) {
+    const savedWorksheet = worksheets.getWorksheet(currentMeta.value.id);
+    const currentExamData = isncsciControlRef.value.examData();
+    const savedExamData = savedWorksheet.examData;
+    if (!examDataEqual(currentExamData, savedExamData)) {
+      if (await showUnsavedDataAlert()) {
+        await save_onClick();
+      }
     }
   }
+
   router.push(path);
 };
 
 const calculate_onClick = async () => {
-  const isSuccess = await isncsciControlRef.value?.calculate();
-  if (isSuccess) {
-    handleFormChange();
-  } else {
-    console.log('Error in ISNCSCI calculation');
-  }
+  await isncsciControlRef.value?.calculate();
 };
 
 const save_onClick = async () => {
   if (!isncsciControlRef.value) return;
 
-  const examData: ExamData | undefined = isncsciControlRef.value.data();
+  const examData: ExamData | undefined = isncsciControlRef.value.examData();
   if (!examData) {
     return;
   }
@@ -128,7 +104,7 @@ const save_onClick = async () => {
       if (worksheets.isNameExist(name)) {
         await promptFoNameExist();
       } else {
-        nameIsValid = true; 
+        nameIsValid = true;
       }
     }
     currentMeta.value = worksheets.newWorksheet(name as string, examData);
@@ -136,14 +112,11 @@ const save_onClick = async () => {
   } else {
     worksheets.saveWorksheet({ id: currentMeta.value.id, examData });
   }
-
-  isDirty = false;
 };
 
 
 const clearExam = async () => {
   await isncsciControlRef.value?.clear();
-  isDirty = false;
   currentMeta.value = null;
   console.log('Exam cleared');
   router.replace('/home');
@@ -166,17 +139,10 @@ const loadWorksheet = async () => {
     await isncsciControlRef.value?.clear();
     currentMeta.value = null;
   }
-
-  isDirty = false;
-  await nextTick();
-  handleFormChange();
 };
 
 onMounted(async () => {
   await loadWorksheet();
-  appStore.subscribe(() => {
-    handleFormChange();
-  });
 });
 
 watch(

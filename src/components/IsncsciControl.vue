@@ -416,12 +416,6 @@ const calculate = async () => {
         isncsciExamProvider,
         externalMessagePortProvider,
     );
-
-    if (examData) {
-        currentExamData.value = examData;
-    } else {
-        console.error('No exam data returned.');
-    }
     return examData;
 };
 

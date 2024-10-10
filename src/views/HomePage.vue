@@ -70,7 +70,7 @@ const handleNavigation = async (path: string) => {
     const savedWorksheet = worksheets.getWorksheet(currentMeta.value.id);
     const currentExamData = isncsciControlRef.value.examData();
     const savedExamData = savedWorksheet.examData;
-    if (!examDataEqual(currentExamData, savedExamData)) {
+    if (currentExamData && !examDataEqual(currentExamData, savedExamData)) {
       if (await showUnsavedDataAlert()) {
         await save_onClick();
       }

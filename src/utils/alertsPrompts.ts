@@ -82,7 +82,7 @@ export const promptForExamDate = async (defaultDate: Date): Promise<Date | null>
             role: 'cancel',
             },
             {
-            text: 'Save',
+            text: 'OK',
             role: 'confirm',
             },
         ],

@@ -2,7 +2,7 @@
   <MainLayout title="ISNCSCI" :showFooter="true">
     <div v-if="currentMeta" class="worksheet-info">
       <div class="worksheet-name">Worksheet Name: {{ currentMeta.name }}</div>
-      <div class="worksheet-exam-date">Exam Date: {{ currentMeta.examDate.toISOString().slice(0, 10) }}</div>
+      <div class="worksheet-exam-date">Exam Date: {{ new Date(currentMeta.examDate).toLocaleString() }}</div>
       <input type="hidden" id="worksheet-id" name="worksheet-id" value="{{ currentMeta.id }}" />
     </div>
 
@@ -25,7 +25,7 @@ import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { IWorksheetMetaItem, Worksheets } from '@/utils/worksheetUtils';
 import { useRoute } from 'vue-router';
 import router from '@/router';
-import { promptFoNameExist, promptForUniqueWorksheetName, showUnsavedDataAlert } from '@/utils/unsavedDataAlert';
+import { promptFoNameExist, promptForExamDate, promptForUniqueWorksheetName, showUnsavedDataAlert } from '@/utils/alertsPrompts';
 import { inputFieldNames } from '@/utils/inputFieldNames';
 
 const worksheets = Worksheets.getInstance();
@@ -37,7 +37,7 @@ interface IsncsciControlMethods {
   clear: () => Promise<void>;
   calculate: () => Promise<ExamData | undefined>;
   isFormEmpty: () => boolean;
-  examData: () => ExamData | undefined;
+  examData: () => ExamData;
 }
 const isncsciControlRef = ref<IsncsciControlMethods | null>(null);
 
@@ -107,7 +107,14 @@ const save_onClick = async () => {
         nameIsValid = true;
       }
     }
-    currentMeta.value = worksheets.newWorksheet(name as string, examData);
+    const defaultDate = new Date();
+    const examDate = await promptForExamDate(defaultDate);
+
+    if (examDate === null) {
+      return;
+    }
+
+    currentMeta.value = worksheets.newWorksheet(name as string, examData, examDate);
     router.replace(`/home/${currentMeta.value.id}`);
   } else {
     worksheets.saveWorksheet({ id: currentMeta.value.id, examData });

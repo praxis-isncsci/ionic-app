@@ -49,7 +49,7 @@ import { ref, onMounted } from 'vue';
 import { closeOutline, createOutline, pencilOutline, trashOutline } from 'ionicons/icons';
 import { APP_PREFIX } from '@/config';
 import { IWorksheetMetaItem, Worksheets } from '@/utils/worksheetUtils';
-import { promptFoNameExist, promptForUniqueWorksheetName, showConfirmDeleteAlert } from '@/utils/unsavedDataAlert';
+import { promptFoNameExist, promptForUniqueWorksheetName, showConfirmDeleteAlert } from '@/utils/alertsPrompts';
 
 const worksheets = Worksheets.getInstance();
 const router = useRouter();

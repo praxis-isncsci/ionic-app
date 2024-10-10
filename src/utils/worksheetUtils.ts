@@ -58,14 +58,14 @@ export class Worksheets {
         return name;
     } 
 
-    public newWorksheet(name: string, examData: ExamData): IWorksheetMetaItem {
+    public newWorksheet(name: string, examData: ExamData, examDate: Date): IWorksheetMetaItem {
         if (this.isNameExist(name)) {
             throw "Worksheet name exists";
         }
         const id = new Date().getTime().toString();
         const now = new Date();
         const metaItem = {
-            id, name, examDate: now, lastUpdateDate: now
+            id, name, examDate, lastUpdateDate: now
         };
         this.meta.push(metaItem);
         this.updateMetaLocalStorage();

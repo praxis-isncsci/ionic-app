@@ -65,3 +65,40 @@ export const showConfirmDeleteAlert = async (): Promise<boolean> => {
         }).then(alert => alert.present());
     });
 };
+
+export const promptForExamDate = async (defaultDate: Date): Promise<Date | null> => {
+    const alert = await alertController.create({
+        header: 'Enter Exam Date',
+        inputs: [
+            {
+            name: 'examDate',
+            type: 'datetime-local',
+            value: defaultDate.toISOString().substring(0, 16),
+            },
+        ],
+        buttons: [
+            {
+            text: 'Cancel',
+            role: 'cancel',
+            },
+            {
+            text: 'Save',
+            role: 'confirm',
+            },
+        ],
+        });
+    
+        await alert.present();
+        const result = await alert.onDidDismiss();
+    
+        if (result.role === 'cancel') {
+        return null;
+        } else {
+        const data = result.data.values;
+        if (data && data.examDate) {
+            return new Date(data.examDate);
+        } else {
+            return null;
+        }
+    }
+};

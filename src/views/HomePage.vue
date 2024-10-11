@@ -26,7 +26,6 @@ import { IWorksheetMetaItem, WorksheetDetails, Worksheets } from '@/utils/worksh
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { promptFoNameExist, promptForWorksheetDetails, showToast, showUnsavedDataAlert } from '@/utils/alertsPrompts';
-import { inputFieldNames } from '@/utils/inputFieldNames';
 
 const worksheets = Worksheets.getInstance();
 const route = useRoute();
@@ -85,8 +84,14 @@ const handleNavigation = async (path: string) => {
       }
     }
   }
-
-  router.push(path);
+  if (path === '/clear') {
+    await isncsciControlRef.value?.clear();
+    currentMeta.value = null;
+    console.log('Exam cleared');
+    router.replace('/home');
+  } else {
+    router.push(path);
+  }
 };
 
 const calculate_onClick = async () => {

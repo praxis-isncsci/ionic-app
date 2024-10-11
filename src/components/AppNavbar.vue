@@ -60,7 +60,7 @@ const props = defineProps<{
 }>();
 
 const handleClearExam = () => {
-    props.clearExam();
+    props.onNavigate('/clear');
 };
 
 </script>

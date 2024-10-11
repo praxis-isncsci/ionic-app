@@ -22,10 +22,10 @@ import IsncsciControl from '@/components/IsncsciControl.vue';
 import AppNavbar from '@/components/AppNavbar.vue';
 import { ref, onMounted, watch } from 'vue';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
-import { IWorksheetMetaItem, Worksheets } from '@/utils/worksheetUtils';
+import { IWorksheetMetaItem, WorksheetDetails, Worksheets } from '@/utils/worksheetUtils';
 import { useRoute } from 'vue-router';
 import router from '@/router';
-import { promptFoNameExist, promptForExamDate, promptForUniqueWorksheetName, showUnsavedDataAlert } from '@/utils/alertsPrompts';
+import { promptFoNameExist, promptForWorksheetDetails, showToast, showUnsavedDataAlert } from '@/utils/alertsPrompts';
 import { inputFieldNames } from '@/utils/inputFieldNames';
 
 const worksheets = Worksheets.getInstance();
@@ -70,7 +70,7 @@ const handleNavigation = async (path: string) => {
     const savedWorksheet = worksheets.getWorksheet(currentMeta.value.id);
     const currentExamData = isncsciControlRef.value.examData();
     const savedExamData = savedWorksheet.examData;
-    if (!examDataEqual(currentExamData, savedExamData)) {
+    if (!currentExamData || !examDataEqual(currentExamData, savedExamData)) {
       if (await showUnsavedDataAlert()) {
         await save_onClick();
       }
@@ -87,37 +87,43 @@ const calculate_onClick = async () => {
 const save_onClick = async () => {
   if (!isncsciControlRef.value) return;
 
-  const examData: ExamData | undefined = isncsciControlRef.value.examData();
+  const examData: ExamData = isncsciControlRef.value.examData();
   if (!examData) {
     return;
   }
 
   if (!currentMeta.value) {
-    let name: string | null = null;
+    let worksheetDetails: WorksheetDetails | null = null;
     let nameIsValid = false;
 
     while (!nameIsValid) {
-      name = await promptForUniqueWorksheetName(worksheets.nextWorksheetName());
-      if (!name) {
+      worksheetDetails = await promptForWorksheetDetails(
+        worksheets.nextWorksheetName(),
+        new Date()
+      );
+      if (!worksheetDetails) {
         return;
       }
-      if (worksheets.isNameExist(name)) {
+      if (worksheets.isNameExist(worksheetDetails.name)) {
         await promptFoNameExist();
       } else {
         nameIsValid = true;
       }
     }
-    const defaultDate = new Date();
-    const examDate = await promptForExamDate(defaultDate);
 
-    if (examDate === null) {
-      return;
-    }
-
-    currentMeta.value = worksheets.newWorksheet(name as string, examData, examDate);
+    currentMeta.value = worksheets.newWorksheet(
+      worksheetDetails!.name,
+      examData,
+      worksheetDetails!.examDate
+    );
     router.replace(`/home/${currentMeta.value.id}`);
+
+    await showToast('Saved successfully.');
   } else {
-    worksheets.saveWorksheet({ id: currentMeta.value.id, examData });
+    worksheets.saveWorksheet({
+      id: currentMeta.value.id,
+      examData,
+    });
   }
 };
 
@@ -160,7 +166,7 @@ watch(
 );
 </script>
 
-<style scoped>
+<style>
 .worksheet-info {
   background-color: #F9F9F9;
   padding: 10px 16px;
@@ -178,5 +184,15 @@ watch(
   display: flex;
   align-items: center;
   margin-top: 2px;
+}
+
+.custom-toast {
+  --width: auto;
+  max-width: 80%;
+  min-width: 0;
+  margin: 0 auto;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
 }
 </style>

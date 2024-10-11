@@ -12,6 +12,11 @@ export interface IWorksheet {
     examData: ExamData,
 }
 
+export interface WorksheetDetails {
+    name: string;
+    examDate: Date;
+}
+
 export class Worksheets {
     private static instance: Worksheets;
     private meta: IWorksheetMetaItem[];
@@ -33,13 +38,14 @@ export class Worksheets {
         });
     }
 
-    public updateWorksheetName(id: string, newName: string): void {
+    public updateWorksheetDetails(id: string, newName: string, newExamDate: Date): void {
         const worksheetMeta = this.meta.find(m => m.id === id);
         if (worksheetMeta) {
             worksheetMeta.name = newName;
+            worksheetMeta.examDate = newExamDate;
             worksheetMeta.lastUpdateDate = new Date();
             this.updateMetaLocalStorage();
-        } else {
+            } else {
             throw new Error('Worksheet not found');
         }
     }

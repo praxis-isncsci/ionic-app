@@ -277,6 +277,7 @@ const appStoreProvider = new AppStoreProvider(appStore);
 const isncsciExamProvider = new IsncsciExamProvider();
 let ready = false;
 const isLoading = ref(false);
+const lastCalculatedExamData = ref<ExamData | undefined>(undefined)
 
 const stateChanged = (state: IAppState, actionType: string) => {
     if (!ready && state.status === StatusCodes.Ready) {
@@ -284,6 +285,11 @@ const stateChanged = (state: IAppState, actionType: string) => {
             `The application has been initialized and is ready :: ${actionType}`,
         );
         ready = true;
+    }
+
+    if (actionType == 'SET_CELLS_VALUE') {
+        //reset last calculated exam data to undefined because the cell value has been changed
+        lastCalculatedExamData.value = undefined;
     }
 };
 
@@ -312,6 +318,8 @@ onMounted(() => {
     }
 
     initializeAppUseCase(appStoreProvider);
+
+    appStore.subscribe(() => { handleFormChange(); })
 });
 
 onBeforeUnmount(() => {
@@ -322,12 +330,20 @@ onBeforeUnmount(() => {
 
 initializeAppUseCase(appStoreProvider);
 
+const handleFormChange = () => {
+
+}
+
 const closeClassification_onClick = () => {
     classificationStyle.value = '';
     return false;
 };
 
 const getExamData = (): ExamData => {
+    if (lastCalculatedExamData.value != undefined) {
+        return lastCalculatedExamData.value;
+    }
+
     // Get the latest exam data from the app state
     const state = appStore.getState();
     const { examData, missingValues } = getExamDataFromGridModel(
@@ -416,6 +432,7 @@ const calculate = async () => {
         isncsciExamProvider,
         externalMessagePortProvider,
     );
+    lastCalculatedExamData.value = examData;
     return examData;
 };
 

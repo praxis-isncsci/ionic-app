@@ -69,29 +69,37 @@ function examDataEqual(examData1: ExamData, examData2: ExamData): boolean {
   return deepEqual(examData1, examData2);
 }
 
-const handleNavigation = async (path: string) => {
+const checkUnsavedChanges = async (): Promise<boolean> => {
   if (!currentMeta.value && !isncsciControlRef.value?.isFormEmpty()) {
-    if (await showUnsavedDataAlert()) {
+    // new unsaved exam
+    const shouldSave = await showUnsavedDataAlert();
+    if (shouldSave) {
       await save_onClick();
     }
+    // proceed whether the user chose to save or discard
+    return true;
   } else if (currentMeta.value && isncsciControlRef.value) {
+    // exist. exam with unsaved changes
     const savedWorksheet = worksheets.getWorksheet(currentMeta.value.id);
     const currentExamData = isncsciControlRef.value.examData();
     const savedExamData = savedWorksheet.examData;
-    if (!currentExamData || !examDataEqual(currentExamData, savedExamData)) {
-      if (await showUnsavedDataAlert()) {
+    if (!examDataEqual(currentExamData, savedExamData)) {
+      const shouldSave = await showUnsavedDataAlert();
+      if (shouldSave) {
         await save_onClick();
       }
+      // proceed whether the user chose to save or discard
+      return true;
     }
   }
-  if (path === '/clear') {
-    await isncsciControlRef.value?.clear();
-    currentMeta.value = null;
-    console.log('Exam cleared');
-    router.replace('/home');
-  } else {
-    router.push(path);
+  return true;
+};
+
+const handleNavigation = async (path: string) => {
+  if (!(await checkUnsavedChanges())) {
+    return;
   }
+  router.push(path);
 };
 
 const calculate_onClick = async () => {
@@ -149,9 +157,12 @@ const save_onClick = async () => {
 };
 
 const clearExam = async () => {
+  if (!(await checkUnsavedChanges())) {
+    return;
+  }
+
   await isncsciControlRef.value?.clear();
   currentMeta.value = null;
-  console.log('Exam cleared');
   router.replace('/home');
 };
 

@@ -1,4 +1,6 @@
 import { alertController } from '@ionic/vue';
+import { WorksheetDetails } from './worksheetUtils';
+import { toastController } from '@ionic/vue';
 
 export const showUnsavedDataAlert = (): Promise<boolean> => {
     return new Promise((resolve) => {
@@ -65,3 +67,70 @@ export const showConfirmDeleteAlert = async (): Promise<boolean> => {
         }).then(alert => alert.present());
     });
 };
+
+function formatDateTimeLocal(date: Date): string {
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const YYYY = date.getFullYear();
+    const MM = pad(date.getMonth() + 1);
+    const DD = pad(date.getDate());
+    const HH = pad(date.getHours());
+    const mm = pad(date.getMinutes());
+    return `${YYYY}-${MM}-${DD}T${HH}:${mm}`;
+}
+
+export const promptForWorksheetDetails = (
+    initialName: string,
+    defaultExamDate: Date
+    ): Promise<WorksheetDetails | null> => {
+        return new Promise((resolve) => {
+        alertController
+            .create({
+            header: 'Worksheet Details',
+            inputs: [
+                {
+                name: 'worksheetName',
+                type: 'text',
+                value: initialName,
+                placeholder: 'Worksheet Name',
+                },
+                {
+                name: 'examDate',
+                type: 'datetime-local',
+                value: formatDateTimeLocal(defaultExamDate),
+                },
+            ],
+            buttons: [
+                { text: 'Cancel', role: 'cancel', handler: () => resolve(null) },
+                {
+                text: 'OK',
+                role: 'confirm',
+                handler: (data) => {
+                    if (data && data.worksheetName && data.examDate) {
+                    resolve({
+                        name: data.worksheetName.trim(),
+                        examDate: new Date(data.examDate),
+                    });
+                    } else {
+                    // Prevent closing the modal if fields are empty
+                    return false;
+                    }
+                },
+                },
+            ],
+            })
+            .then((alert) => {
+            alert.present();
+            });
+        });
+};
+
+
+export const showToast = async (message: string): Promise<void> => {
+    const toast = await toastController.create({
+        message,
+        duration: 2000, 
+        position: 'middle',
+        cssClass: 'custom-toast',
+        });
+    await toast.present();
+}

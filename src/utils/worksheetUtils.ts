@@ -12,6 +12,11 @@ export interface IWorksheet {
     examData: ExamData,
 }
 
+export interface WorksheetDetails {
+    name: string;
+    examDate: Date;
+}
+
 export class Worksheets {
     private static instance: Worksheets;
     private meta: IWorksheetMetaItem[];
@@ -33,10 +38,11 @@ export class Worksheets {
         });
     }
 
-    public updateWorksheetName(id: string, newName: string): void {
+    public updateWorksheetDetails(id: string, newName: string, newExamDate: Date): void {
         const worksheetMeta = this.meta.find(m => m.id === id);
         if (worksheetMeta) {
             worksheetMeta.name = newName;
+            worksheetMeta.examDate = newExamDate;
             worksheetMeta.lastUpdateDate = new Date();
             this.updateMetaLocalStorage();
         } else {
@@ -58,14 +64,14 @@ export class Worksheets {
         return name;
     } 
 
-    public newWorksheet(name: string, examData: ExamData): IWorksheetMetaItem {
+    public newWorksheet(name: string, examData: ExamData, examDate: Date): IWorksheetMetaItem {
         if (this.isNameExist(name)) {
             throw "Worksheet name exists";
         }
         const id = new Date().getTime().toString();
         const now = new Date();
         const metaItem = {
-            id, name, examDate: now, lastUpdateDate: now
+            id, name, examDate, lastUpdateDate: now
         };
         this.meta.push(metaItem);
         this.updateMetaLocalStorage();

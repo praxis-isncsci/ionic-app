@@ -27,6 +27,7 @@ import { useRoute } from 'vue-router';
 import router from '@/router';
 import { promptFoNameExist, promptForUniqueWorksheetName, showUnsavedDataAlert } from '@/utils/unsavedDataAlert';
 import { inputFieldNames } from '@/utils/inputFieldNames';
+import { exportPdf } from '@/utils/examDataHelpers';
 
 const worksheets = Worksheets.getInstance();
 const route = useRoute();
@@ -116,10 +117,11 @@ const save_onClick = async () => {
 
 
 const clearExam = async () => {
-  await isncsciControlRef.value?.clear();
-  currentMeta.value = null;
-  console.log('Exam cleared');
-  router.replace('/home');
+  await exportPdf(({} as ExamData), 'test');
+
+  // await isncsciControlRef.value?.clear();
+  // currentMeta.value = null;
+  // console.log('Exam cleared');
 };
 
 const loadWorksheet = async () => {

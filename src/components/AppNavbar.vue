@@ -8,7 +8,7 @@
                 </ion-button>
             </ion-col>
             <ion-col class="ion-text-center">
-                <ion-button size="small" @click="handleClearExam">
+                <ion-button size="small" @click="clearExam()">
                     <ion-icon slot="start" :icon="backspaceOutline"></ion-icon>
                     Clear
                 </ion-button>
@@ -52,15 +52,11 @@
 import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList, IonButton } from '@ionic/vue';
 import { manOutline, backspaceOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, helpCircleOutline } from 'ionicons/icons';
 
-const props = defineProps<{ 
-    calculateOnClick: () => void, 
-    saveOnClick: () => void, 
+defineProps<{
+    calculateOnClick: () => void,
+    saveOnClick: () => void,
     clearExam: () => void,
     onNavigate: (path: string) => void
 }>();
-
-const handleClearExam = () => {
-    props.clearExam();
-};
 
 </script>

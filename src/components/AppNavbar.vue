@@ -55,8 +55,7 @@
 import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList, IonButton } from '@ionic/vue';
 import { manOutline, backspaceOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, helpCircleOutline, downloadOutline } from 'ionicons/icons';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps<{ 
+defineProps<{ 
     calculateOnClick: () => void, 
     saveOnClick: () => void, 
     clearExam: () => void,

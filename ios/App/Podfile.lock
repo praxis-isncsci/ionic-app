@@ -1,8 +1,8 @@
 PODS:
-  - Capacitor (5.7.8):
+  - Capacitor (6.1.2):
     - CapacitorCordova
-  - CapacitorCordova (5.7.8)
-  - CapacitorFilesystem (5.2.2):
+  - CapacitorCordova (6.1.2)
+  - CapacitorFilesystem (6.0.1):
     - Capacitor
 
 DEPENDENCIES:
@@ -19,9 +19,9 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/filesystem"
 
 SPEC CHECKSUMS:
-  Capacitor: 747aadb4fa786f460d8cd9d0557cb81440a13747
-  CapacitorCordova: 31ab98dca2ddcee051027a1afe7e8c85c82f7297
-  CapacitorFilesystem: 202b158a878462ab4f401d0eb4d9644c67927333
+  Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
+  CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
+  CapacitorFilesystem: 37fb3aa5c945b4539ab11c74a5c57925a302bf24
 
 PODFILE CHECKSUM: 73437dea079dd6c5718d3902ebf782137e5496d2
 

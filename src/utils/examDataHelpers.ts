@@ -1,37 +1,70 @@
-// export const convertExamDataToGridModel = (examData: any) => {
-//     const gridModel = [];
-//     const levels = ['C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12', 'L1', 'L2', 'L3', 'L4', 'L5', 'S1', 'S2', 'S3', 'S4_5'];
+import { ExamData } from "isncsci-ui/dist/esm/core/domain";
+import { jsPDF } from 'jspdf';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Capacitor } from '@capacitor/core';
 
-//     for (const level of levels) {
-//         const row = [
-//             null,
-//             createCell(examData[`rightLightTouch${level}`], `right-light-touch-${level.toLowerCase()}`),
-//             createCell(examData[`rightPinPrick${level}`], `right-pin-prick-${level.toLowerCase()}`),
-//             createCell(examData[`leftLightTouch${level}`], `left-light-touch-${level.toLowerCase()}`),
-//             createCell(examData[`leftPinPrick${level}`], `left-pin-prick-${level.toLowerCase()}`),
-//             null
-//         ];
+export const exportPDF = async (examData: ExamData, name: string) => {
+    // Create a new jsPDF instance
+    const doc = new jsPDF();
 
-//         // Add motor cells for specific levels
-//         if (['C5', 'C6', 'C7', 'C8', 'T1', 'L2', 'L3', 'L4', 'L5', 'S1'].includes(level)) {
-//             row[0] = createCell(examData[`rightMotor${level}`], `right-motor-${level.toLowerCase()}`);
-//             row[5] = createCell(examData[`leftMotor${level}`], `left-motor-${level.toLowerCase()}`);
-//         }
+    // Add content to the PDF
+    doc.setFontSize(16);
+    doc.text('Exam Data', 10, 20);
 
-//         gridModel.push(row);
-//     }
+    let yPosition = 30;
+    doc.setFontSize(12);
 
-//     return gridModel;
-// };
-
-// const createCell = (value: string, name: string) => {
-//     return {
-//         value,
-//         label: value,
-//         name,
-//         considerNormal: null,
-//         reasonImpairmentNotDueToSci: null,
-//         reasonImpairmentNotDueToSciSpecify: null,
-//         error: null
-//     };
-// };
+    // Add exam data content
+    for (const [key, value] of Object.entries(examData)) {
+        doc.text(`${key}: ${value}`, 10, yPosition);
+        yPosition += 10;
+    
+      // Check if a new page is needed
+        if (yPosition > 280) {
+            doc.addPage();
+            yPosition = 20;
+        }
+        }
+    
+    if (Capacitor.isNativePlatform()) {
+      // Running on iOS or Android
+      // Generate the PDF as a Blob
+        const pdfBlob = doc.output('blob');
+    
+        // Convert the Blob to Base64
+        const base64Data = await convertBlobToBase64(pdfBlob);
+    
+        // Save the PDF file using Capacitor Filesystem
+        try {
+            const fileName = `${name}.pdf`;
+            const result = await Filesystem.writeFile({
+            path: fileName,
+            data: base64Data,
+            directory: Directory.Documents,
+            recursive: true,
+            });
+            console.log('PDF saved at:', result.uri);
+            alert('PDF saved successfully!');
+        } catch (error) {
+            console.error('Error saving PDF:', error);
+            alert('Failed to save PDF.');
+        }
+        } else {
+        // Running in a web browser
+        doc.save(`${name}.pdf`);
+        }
+    };
+    
+  // Helper function to convert Blob to Base64
+const convertBlobToBase64 = (blob: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onloadend = () => {
+        const dataUrl = reader.result as string;
+        const base64 = dataUrl.split(',')[1];
+        resolve(base64);
+        };
+        reader.readAsDataURL(blob);
+    });
+};

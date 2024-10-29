@@ -42,6 +42,33 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
 
     await addLogo();
 
+    // --------------- BODY DIAGRAM --------------------
+    const addBodyDiagram = async () => {
+        const diagramX = 112; 
+        const diagramY = 30;
+        const diagramWidth = 60;
+        const diagramHeight = 135;
+
+        try {
+            let diagramUrl = Capacitor.isNativePlatform()
+                ? Capacitor.convertFileSrc('assets/body-diagram.jpg')
+                : 'assets/body-diagram.jpg';
+
+            const response = await fetch(diagramUrl);
+            const blob = await response.blob();
+            const diagramBase64 = await new Promise<string>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result as string);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+
+            doc.addImage(diagramBase64, 'JPEG', diagramX, diagramY, diagramWidth, diagramHeight);
+        } catch (error) {
+            console.error('Error fetching body diagram image:', error);
+        }
+    };
+
     // --------------- WORKSHEET INFO --------------------
 
     const addWorksheetInfo = () => {
@@ -263,6 +290,9 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
 
     drawSideGrid('Right', startXRight, gridStartY, observationsRight, cellWidthsRight, distancesRight, xPositionsRight);
     drawSideGrid('Left', startXLeft, gridStartY, observationsLeft, cellWidthsLeft, distancesLeft, xPositionsLeft);
+
+    // Add the body diagram
+    await addBodyDiagram();
 
     // --------------- VAC and DAP Positions --------------------
 

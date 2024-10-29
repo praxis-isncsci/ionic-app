@@ -4,38 +4,108 @@ import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Capacitor } from '@capacitor/core';
 
 export const exportPDF = async (examData: ExamData, filename: string) => {
-    const doc = new jsPDF('p', 'mm', 'a4');
+    const doc = new jsPDF('l', 'mm', 'letter');
 
-    // Page dims
+    // Page dimensions
     const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
 
-    // Function to convert rem units to mm
-    const remToMm = (rem: number): number => {
-        const baseFontSizePx = 16;
-        const mmPerPx = 0.264583;
-        return rem * baseFontSizePx * mmPerPx;
+    // --------------- LOGO --------------------
+
+    const addLogo = async () => {
+        const logoX = 8.6;
+        const logoY = 5.5;
+        const logoWidth = 128.4;
+        const logoHeight = 16.3;
+
+        try {
+            let logoUrl = Capacitor.isNativePlatform()
+                ? Capacitor.convertFileSrc('assets/logo.jpg')
+                : 'assets/logo.jpg';
+
+            const response = await fetch(logoUrl);
+            const blob = await response.blob();
+            const logoBase64 = await new Promise<string>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result as string);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+
+            doc.addImage(logoBase64, 'JPEG', logoX, logoY, logoWidth, logoHeight);
+            doc.setDrawColor(0);
+            doc.setLineWidth(0.2);
+            doc.rect(logoX, logoY, logoWidth, logoHeight);
+        } catch (error) {
+            console.error('Error fetching logo image:', error);
+        }
     };
 
-    // Cell dimensions - to fit all on 1 page
-    const cellWidth = remToMm(1.4); 
-    const cellHeight = remToMm(1.4); 
+    await addLogo();
 
-    // Grid widths
-    const numColsRight = 3; 
-    const gridWidth = numColsRight * cellWidth;
+    // --------------- WORKSHEET INFO --------------------
 
-    // Starting positions for left and right grids (centered)
-    const totalGridWidth = gridWidth * 2 + 60; // 60mm space b/n grids
-    const startX = (pageWidth - totalGridWidth) / 2;
+    const addWorksheetInfo = () => {
+        const fieldXStart = 139;
+        const fieldYStart = 9.5;
 
-    const startXRight = startX;
-    const startYRight = 20; 
+        doc.setFontSize(8);
 
-    const startXLeft = startX + gridWidth + 60; // 60mm space b/n grids
-    const startYLeft = 20; 
+        const fields = [
+            { label: "Patient Name", x: fieldXStart, y: fieldYStart, lineWidth: 58.8 },
+            { label: "Date/Time of Exam", x: fieldXStart + 79, y: fieldYStart, lineWidth: 31 },
+            { label: "Examiner Name", x: fieldXStart, y: fieldYStart + 8, lineWidth: 56 },
+            { label: "Signature", x: fieldXStart + 79, y: fieldYStart + 8, lineWidth: 43.5 },
+        ];
 
-    // Sensory and motor levels
+        fields.forEach(field => {
+            doc.text(field.label, field.x, field.y);
+
+            const labelWidth = doc.getTextWidth(field.label);
+            const lineStartX = field.x + labelWidth + 1;
+            const lineEndX = lineStartX + field.lineWidth;
+
+            doc.setLineWidth(0.2);
+            doc.line(lineStartX, field.y + 0.5, lineEndX, field.y + 0.5);
+        });
+    };
+
+    addWorksheetInfo();
+
+    // --------------- HEADINGS AND LABELS --------------------
+
+    const addHeadingsAndLabels = () => {
+        doc.setFontSize(23);
+        doc.setFont('helvetica', 'bold');
+        doc.text('RIGHT', 22, 31.3);
+        doc.text('LEFT', 238, 31.3);
+
+        const headings = [
+            // RIGHT SIDE
+            { text: 'MOTOR', x: 58, y: 27.2, size: 11 },
+            { text: 'SENSORY', x: 87, y: 26, size: 11 },
+            { text: 'KEY MUSCLES', x: 55, y: 31.2, size: 8 },
+            { text: 'KEY SENSORY POINTS', x: 80.5, y: 30, size: 8 },
+            { text: 'Light Touch (LTR)', x: 76.5, y: 33, size: 6 },
+            { text: 'Pin Prick (PPR)', x: 96, y: 33, size: 6 },
+            // LEFT SIDE
+            { text: 'MOTOR', x: 213.6, y: 27.2, size: 11 },
+            { text: 'SENSORY', x: 179.6, y: 26, size: 11 },
+            { text: 'KEY MUSCLES', x: 210.6, y: 31.2, size: 8 },
+            { text: 'KEY SENSORY POINTS', x: 173.1, y: 30, size: 8 },
+            { text: 'Light Touch (LTL)', x: 169.1, y: 33, size: 6 },
+            { text: 'Pin Prick (PPL)', x: 188.6, y: 33, size: 6 },
+        ];
+
+        headings.forEach(heading => {
+            doc.setFontSize(heading.size);
+            doc.text(heading.text, heading.x, heading.y);
+        });
+    };
+
+    addHeadingsAndLabels();
+
+    // --------------- GRID AND SPACING --------------------
+
     const sensoryLevels = [
         'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'T1',
         'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9',
@@ -48,389 +118,767 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
         'L2', 'L3', 'L4', 'L5', 'S1'
     ];
 
-    // Observations for each side
     const observationsRight = ['M', 'LT', 'PP'];
-    const observationsLeft = ['LT', 'PP', 'M']; 
+    const observationsLeft = ['LT', 'PP', 'M'];
 
-    // Set cell border color
-    doc.setDrawColor('#d9d9d9');
+    const cellHeight = 4.5;
 
-    // Helper function to draw a grid
+    const cellWidthsRight = [10.5, 12, 12];
+    const distancesRight = [0, 3.8, 3.8];
+
+    const cellWidthsLeft = [12, 12, 10.5];
+    const distancesLeft = [0, 3.8, 0.95];
+
+    const gridTotalWidthRight = cellWidthsRight.reduce((a, b) => a + b, 0) + distancesRight.reduce((a, b) => a + b, 0);
+    const gridTotalWidthLeft = cellWidthsLeft.reduce((a, b) => a + b, 0) + distancesLeft.reduce((a, b) => a + b, 0);
+
+    const totalGridWidth = pageWidth - 2 * 66;
+    const spaceBetweenGrids = totalGridWidth - gridTotalWidthRight - gridTotalWidthLeft;
+
+    const startXRight = 78.5;
+    const startXLeft = startXRight + gridTotalWidthRight + spaceBetweenGrids;
+    const gridStartY = 30;
+
+    const levelsBesideLT = new Set(['C2', 'C3', 'C4', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12', 'L1', 'S2', 'S3', 'S4_5']);
+    const levelsBesideM = new Set(['C5', 'C6', 'C7', 'C8', 'T1', 'L2', 'L3', 'L4', 'L5', 'S1']);
+
+    const levelsToAdjustLeft = new Set(['C5', 'C6', 'C7', 'C8', 'T1', 'L2', 'L3', 'L4', 'L5', 'S1']);
+
+    const labelOffsetRight = 7;
+    const labelOffsetLeft = 11;
+    const labelOffsetLeftAdjust = -3.5;
+
+    const s4_5RowIndex = sensoryLevels.indexOf('S4_5');
+
+    const calculateXPositions = (startX: number, observations: string[], cellWidths: number[], distances: number[]) => {
+        const xPositions: number[] = [];
+        let cumulativeX = startX;
+        for (let i = 0; i < observations.length; i++) {
+            cumulativeX += distances[i];
+            xPositions.push(cumulativeX);
+            cumulativeX += cellWidths[i];
+        }
+        return xPositions;
+    };
+
+    const xPositionsRight = calculateXPositions(startXRight, observationsRight, cellWidthsRight, distancesRight);
+    const xPositionsLeft = calculateXPositions(startXLeft, observationsLeft, cellWidthsLeft, distancesLeft);
+
+    const levelDescriptions: { [key: string]: string } = {
+        'C5': 'Elbow flexors',
+        'C6': 'Wrist extensors',
+        'C7': 'Elbow extensors',
+        'C8': 'Finger flexors',
+        'T1': 'Finger abductors (little finger)',
+        'L2': 'Hip flexors',
+        'L3': 'Knee extensors',
+        'L4': 'Ankle dorsiflexors',
+        'L5': 'Long toe extensors',
+        'S1': 'Ankle plantar flexors',
+    };
+
     const drawSideGrid = (
         side: 'Right' | 'Left',
         startX: number,
         startY: number,
         observations: string[],
+        cellWidths: number[],
+        distances: number[],
+        xPositions: number[],
     ) => {
-        const headerHeight = cellHeight; 
-        const gridStartY = startY + headerHeight; // grid starts below the headers
-
+        const headerHeight = cellHeight;
+        const gridStartYWithHeader = startY + headerHeight;
         const numRows = sensoryLevels.length;
-        const numCols = observations.length;
 
-        // Calculate x and y positions
-        const getX = (colIndex: number): number => startX + colIndex * cellWidth;
-        const getY = (rowIndex: number): number => gridStartY + rowIndex * cellHeight;
-
-        // Draw cells 
+        // Draw cells
         for (let row = 0; row < numRows; row++) {
             const level = sensoryLevels[row];
-            for (let col = 0; col < numCols; col++) {
+            for (let col = 0; col < observations.length; col++) {
                 const obs = observations[col];
+                if (obs === 'M' && !motorLevels.includes(level)) continue;
 
-                // skip cells in "M" column for non-motor levels
-                if (obs === 'M' && !motorLevels.includes(level)) {
-                    continue;
-                }
+                const x = xPositions[col] - cellWidths[col];
+                const y = gridStartYWithHeader + row * cellHeight;
+                const width = cellWidths[col];
 
-                const x = getX(col);
-                const y = getY(row);
-                doc.roundedRect(x, y, cellWidth, cellHeight, 0.5, 0.5, 'D');
+                doc.setLineWidth(level === 'S4_5' ? 0.5 : 0.2);
+                doc.rect(x, y, width, cellHeight);
             }
         }
 
-        // Draw observations headers above the grid
-        doc.setFontSize(8);
-        doc.setFont('helvetica', 'normal');
+        doc.setLineWidth(0.2);
 
-        observations.forEach((obs, index) => {
-            const x = getX(index) + cellWidth / 2;
-            const y = startY + headerHeight / 2;
-            doc.text(obs, x, y, { align: 'center', baseline: 'middle' });
-        });
-
-        // Side label at the top
-        const sideLabelX = startX + gridWidth / 2;
-        doc.text(side, sideLabelX, startY - 2, { 
-            align: 'center',
-            baseline: 'bottom',
-        });
-
-        // Draw level labels and populate cells
-        doc.setFontSize(7);
-        doc.setFont('helvetica', 'normal');
+        const indexOfLT = observations.indexOf('LT');
+        const indexOfM = observations.indexOf('M');
 
         sensoryLevels.forEach((level, rowIndex) => {
-            const y = getY(rowIndex) + cellHeight / 2;
-
-            // Level label position
+            const y = gridStartYWithHeader + rowIndex * cellHeight + cellHeight / 2;
             let labelX: number;
             let align: 'left' | 'right';
-            let displayLevel = level.replace('_', '/');
+            const displayLevel = level === 'S4_5' ? 'S4-5' : level;
 
-            if (side === 'Right') {
-                // Level labels on the left of the grid
-                labelX = startX - 2;
-                align = 'right';
+            let labelOffset = side === 'Right' ? labelOffsetRight : levelsToAdjustLeft.has(level) ? labelOffsetLeftAdjust : labelOffsetLeft;
+
+            if (levelsBesideLT.has(level)) {
+                labelX = side === 'Right'
+                    ? xPositions[indexOfLT] - cellWidths[indexOfLT] / 2 - labelOffset
+                    : xPositions[indexOfLT] + cellWidths[indexOfLT] / 2 + labelOffset;
+                align = side === 'Right' ? 'right' : 'left';
+            } else if (levelsBesideM.has(level)) {
+                labelX = side === 'Right'
+                    ? xPositions[indexOfM] - cellWidths[indexOfM] / 2 - labelOffset
+                    : xPositions[indexOfM] + cellWidths[indexOfM] / 2 + labelOffset;
+                align = side === 'Right' ? 'right' : 'left';
             } else {
-                // Left side: Level labels on the right of the grid
-                labelX = startX + gridWidth + 2;
-                align = 'left';
+                labelX = side === 'Right' ? startX - 2 : xPositions[xPositions.length - 1] + cellWidths[cellWidths.length - 1] + labelOffset;
+                align = side === 'Right' ? 'right' : 'left';
             }
 
-            // Draw level label
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(6);
             doc.text(displayLevel, labelX, y, { align, baseline: 'middle' });
 
-            observations.forEach((obs, obsIndex) => {
-                // No values for "M" column for non-motor levels
-                if (obs === 'M' && !motorLevels.includes(level)) {
-                    return;
-                }
+            if (side === 'Left' && levelDescriptions[level]) {
+                doc.setFont('helvetica', 'italic');
+                doc.setFontSize(7);
+                doc.text(levelDescriptions[level], labelX + 5, y, { align: 'left', baseline: 'middle' });
+            }
 
-                const x = getX(obsIndex) + cellWidth / 2;
-
-                // Determine observation type
-                let obsType: 'Motor' | 'LightTouch' | 'PinPrick';
-                if (obs === 'M') {
-                    obsType = 'Motor';
-                } else if (obs === 'LT') {
-                    obsType = 'LightTouch';
-                } else if (obs === 'PP') {
-                    obsType = 'PinPrick';
-                } else {
-                    return;
-                }
-
-                // Construct the key for examData
+            observations.forEach((obs, col) => {
+                if (obs === 'M' && !motorLevels.includes(level)) return;
+                const xCenter = xPositions[col] - cellWidths[col] / 2;
+                const obsType = obs === 'M' ? 'Motor' : obs === 'LT' ? 'LightTouch' : 'PinPrick';
                 const sideKey = side.toLowerCase();
                 const key = `${sideKey}${obsType}${level}`;
-
-                // Get the value from examData
                 const value = (examData as Record<string, any>)[key];
+
                 if (value !== null && value !== undefined) {
-                    doc.text(value.toString(), x, y, { align: 'center', baseline: 'middle' });
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(6);
+                    doc.text(value.toString(), xCenter, y, { align: 'center', baseline: 'middle' });
                 }
             });
         });
     };
 
-    // Draw grids for both sides
-    drawSideGrid('Right', startXRight, startYRight, observationsRight);
-    drawSideGrid('Left', startXLeft, startYLeft, observationsLeft);
+    drawSideGrid('Right', startXRight, gridStartY, observationsRight, cellWidthsRight, distancesRight, xPositionsRight);
+    drawSideGrid('Left', startXLeft, gridStartY, observationsLeft, cellWidthsLeft, distancesLeft, xPositionsLeft);
 
-    // VAC and DAP positions
-    const vacY = startYRight + cellHeight + sensoryLevels.length * cellHeight + 10; // 10mm below the grid
+    // --------------- VAC and DAP Positions --------------------
 
-    // VAC on the right side
-    const vacX = startXRight + gridWidth / 2 - cellWidth; // Centered under right grid
-    const vacCellWidth = cellWidth * 2;
-    const vacCellHeight = cellHeight;
+    const vacDapCellWidth = 10.5;
+    const vacDapY = gridStartY + s4_5RowIndex * cellHeight + cellHeight;
 
-    // Draw VAC cell borders
-    doc.roundedRect(vacX, vacY, vacCellWidth, vacCellHeight, 0.5, 0.5, 'D'); 
+    const addVACAndDAP = () => {
+        // VAC
+        const vacX = startXRight - 28;
+        doc.setLineWidth(0.5);
+        doc.rect(vacX, vacDapY, vacDapCellWidth, cellHeight);
 
-    // VAC value inside the cell
-    const vacValue = examData.voluntaryAnalContraction ?? '';
-    doc.text(vacValue.toString(), vacX + vacCellWidth / 2, vacY + vacCellHeight / 2, {
-        align: 'center',
-        baseline: 'middle',
-    });
+        const vacValue = examData.voluntaryAnalContraction ?? '';
+        doc.text(vacValue.toString(), vacX + vacDapCellWidth / 2, vacDapY + cellHeight / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
 
-    // Text for VAC above the cell
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Voluntary Anal Contraction (VAC):', vacX + vacCellWidth / 2, vacY - 2, {
-        align: 'center',
-        baseline: 'bottom',
-    });
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'normal');
+        const vacTextY = vacDapY - 1;
+        doc.text('(VAC) Voluntary Anal Contraction', vacX - 2, vacTextY, {
+            align: 'right',
+            baseline: 'top',
+        });
 
-    // DAP on the left side
-    const dapY = startYLeft + cellHeight + sensoryLevels.length * cellHeight + 10; // 10mm below the grid
-    const dapX = startXLeft + gridWidth / 2 - cellWidth; // Centered under left grid
-    const dapCellWidth = cellWidth * 2;
-    const dapCellHeight = cellHeight;
+        doc.setFontSize(6);
+        const yesNoVacY = vacTextY + 3;
+        doc.text('(Yes/No)', vacX - 2, yesNoVacY, {
+            align: 'right',
+            baseline: 'top',
+        });
 
-    // Draw DAP cell borders
-    doc.roundedRect(dapX, dapY, dapCellWidth, dapCellHeight, 0.5, 0.5, 'D'); 
+        // DAP
+        const dapX = startXLeft + cellWidthsLeft[0] + distancesLeft[1] + cellWidthsLeft[1] + distancesLeft[2] + 7;
+        doc.rect(dapX, vacDapY, vacDapCellWidth, cellHeight);
 
-    // DAP value inside the cell
-    const dapValue = examData.deepAnalPressure ?? '';
-    doc.text(dapValue.toString(), dapX + dapCellWidth / 2, dapY + dapCellHeight / 2, {
-        align: 'center',
-        baseline: 'middle',
-    });
+        const dapValue = examData.deepAnalPressure ?? '';
+        doc.text(dapValue.toString(), dapX + vacDapCellWidth / 2, vacDapY + cellHeight / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
 
-    // Text for DAP above the cell
-    doc.text('Deep Anal Pressure (DAP):', dapX + dapCellWidth / 2, dapY - 2, {
-        align: 'center',
-        baseline: 'bottom',
-    });
+        doc.setFontSize(7);
+        const dapTextY = vacDapY - 1;
+        doc.text('(DAP) Deep Anal Pressure', dapX + vacDapCellWidth + 2, dapTextY, {
+            align: 'left',
+            baseline: 'top',
+        });
 
-    // Positions for the content below
-    const contentY = Math.max(vacY, dapY) + vacCellHeight + 10; // 10mm below VAC and DAP
+        const yesNoDapY = dapTextY + 3;
+        doc.text('(Yes/No)', dapX + vacDapCellWidth + 2, yesNoDapY, {
+            align: 'left',
+            baseline: 'top',
+        });
 
-    const columnWidth = pageWidth - 40; // 20mm margin on each side
-    const contentX = 20; // Left margin
+        doc.setLineWidth(0.2);
+    };
 
-    // Set text color to black for labels
-    doc.setTextColor(0);
+    addVACAndDAP();
 
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
+    // --------------- TOTALS --------------------
 
-    doc.text('Lowest Non-Key Muscle with Motor Function', contentX, contentY, {
-        align: 'left',
-        baseline: 'top',
-    });
+    const totalsRowY = vacDapY + cellHeight + 1;
+    const totalsCellHeight = cellHeight * 1.3;
+    const totalsTextY = totalsRowY + 2;
 
-    const lnkValueY = contentY + 5;
+    const drawTotals = (side: 'Right' | 'Left', startX: number, observations: string[], cellWidths: number[], xPositions: number[]) => {
+        const totalsTextX = side === 'Right' ? startXRight - 12 : startXLeft + 30;
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`${side.toUpperCase()} TOTALS`, totalsTextX, totalsTextY, { align: side === 'Right' ? 'right' : 'left', baseline: 'top' });
+        doc.setFont('helvetica', 'normal');
+        doc.text('(MAXIMUM)', totalsTextX, totalsTextY + 3.5, { align: side === 'Right' ? 'right' : 'left', baseline: 'top' });
 
-    doc.text(`Right: ${examData.rightLowestNonKeyMuscleWithMotorFunction || ''}`, contentX, lnkValueY, {
-        align: 'left',
-        baseline: 'top',
-    });
+        const bracketedValues = side === 'Right' ? ['(50)', '(56)', '(56)'] : ['(56)', '(56)', '(50)'];
 
-    doc.text(`Left: ${examData.leftLowestNonKeyMuscleWithMotorFunction || ''}`, contentX, lnkValueY + 5, {
-        align: 'left',
-        baseline: 'top',
-    });
+        observations.forEach((obs, col) => {
+            const x = xPositions[col] - cellWidths[col];
+            const width = cellWidths[col];
+            const xCenter = x + width / 2;
 
-    // Comments section
-    const commentsLabelY = lnkValueY + 15; 
+            doc.rect(x, totalsRowY, width, totalsCellHeight);
 
-    doc.text('Comments:', contentX, commentsLabelY, {
-        align: 'left',
-        baseline: 'top',
-    });
+            const totalKey = `${side.toLowerCase()}${obs === 'M' ? 'MotorTotal' : obs === 'LT' ? 'LightTouchTotal' : 'PinPrickTotal'}`;
+            const totalValue = examData[totalKey as keyof ExamData] || '';
 
-    // Set text color to lighter gray for comments values
-    doc.setTextColor(150);
+            doc.text(totalValue.toString(), xCenter, totalsRowY + totalsCellHeight / 2, {
+                align: 'center',
+                baseline: 'middle',
+            });
 
-    // Cell Comments 
-    const cellCommentsValueY = commentsLabelY + 10; 
-    const cellComments = examData.cellComments || '';
-    const cellCommentsLines = doc.splitTextToSize(cellComments, columnWidth - 10);
-    doc.text(cellCommentsLines, contentX, cellCommentsValueY);
+            doc.text(bracketedValues[col], xCenter, totalsRowY + totalsCellHeight / 2 + 3.5, {
+                align: 'center',
+                baseline: 'top',
+            });
+        });
+    };
 
-    // Comments in the box
-    const commentsText = examData.comments || '';
-    const commentLines = doc.splitTextToSize(commentsText, columnWidth - 5);
+    drawTotals('Right', startXRight, observationsRight, cellWidthsRight, xPositionsRight);
+    drawTotals('Left', startXLeft, observationsLeft, cellWidthsLeft, xPositionsLeft);
 
-    // Calc. the height req'd for the comments box
-    const lineHeight = 5; 
-    const commentsY = cellCommentsValueY + cellCommentsLines.length * lineHeight + 5; 
-    const commentsHeight = commentLines.length * lineHeight + 4;
+    // --------------- SUBSCORES --------------------
 
-    // Draw a rectangle around the comments
-    doc.roundedRect(contentX, commentsY, columnWidth, commentsHeight, 0.5, 0.5, 'D');
+    const subscoreStartY = totalsRowY + totalsCellHeight + 15;
 
-    // Add the comments inside the box
-    doc.text(commentLines, contentX + 3, commentsY + 2, {
-        align: 'left',
-        baseline: 'top',
-    });
+    const addSubscores = () => {
+        const reducedCellWidth = 8.9;
 
-    // Reset text color to black
-    doc.setTextColor(0);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text('MOTOR SUBSCORES', startXRight - 68, subscoreStartY - 6, { align: 'left' });
+        doc.text('SENSORY SUBSCORES', startXLeft - 32, subscoreStartY - 6, { align: 'left' });
 
-    // Classification Section
-    let classificationY = commentsY + commentsHeight + 10; 
+        let currentX = startXRight - 65;
 
-    // Ensure the page height within the range
-    if (classificationY + 50 > pageHeight) {
-        doc.addPage();
-        classificationY = 20; // Reset Y position for new page
-    }
+        const drawLabelCellWithMax = (label: string, value: string, maxText: string, x: number) => {
+            doc.rect(x, subscoreStartY - cellHeight, reducedCellWidth, cellHeight);
+            doc.setFont('helvetica', 'normal');
+            doc.text(value, x + reducedCellWidth / 2, subscoreStartY - cellHeight / 2, {
+                align: 'center',
+                baseline: 'middle',
+            });
+            doc.setFont('helvetica', 'bold');
+            doc.text(label, x - 0.8, subscoreStartY - cellHeight / 2, { align: 'right', baseline: 'middle' });
+            doc.setFont('helvetica', 'normal');
+            doc.text(maxText, x + reducedCellWidth / 2, subscoreStartY + 1.2, {
+                align: 'center',
+                baseline: 'top',
+            });
+            return x + reducedCellWidth + 2;
+        };
 
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
+        const uemsTotal = (
+            (parseInt(examData.rightUpperMotorTotal || '0') || 0) +
+            (parseInt(examData.leftUpperMotorTotal || '0') || 0)
+        ).toString();
 
-    doc.text('Classification', pageWidth / 2, classificationY, {
-        align: 'center',
-        baseline: 'top',
-    });
+        currentX = drawLabelCellWithMax('UER', examData.rightUpperMotorTotal || '', 'MAX (25)', currentX);
+        currentX += 8;
+        currentX = drawLabelCellWithMax('+ UEL', examData.leftUpperMotorTotal || '', '(25)', currentX);
+        currentX += 21;
+        currentX = drawLabelCellWithMax('= UEMS TOTAL', uemsTotal, '(50)', currentX);
+        currentX += 10;
 
-    const classificationContentY = classificationY + 10;
+        const lemsTotal = (
+            (parseInt(examData.rightLowerMotorTotal || '0') || 0) +
+            (parseInt(examData.leftLowerMotorTotal || '0') || 0)
+        ).toString();
 
-    // Calc. positions for sections
-    const numSections = 5; // Number of sections to display side by side
-    const sectionSpacing = 5; // Spacing between sections
-    const availableWidth = pageWidth - 2 * contentX - (numSections - 1) * sectionSpacing;
-    const sectionWidth = availableWidth / numSections;
+        currentX = drawLabelCellWithMax('LER', examData.rightLowerMotorTotal || '', 'MAX (25)', currentX);
+        currentX += 7;
+        currentX = drawLabelCellWithMax('+ LEL', examData.leftLowerMotorTotal || '', '(25)', currentX);
+        currentX += 20;
+        currentX = drawLabelCellWithMax('= LEMS TOTAL', lemsTotal, '(50)', currentX);
+        currentX += 10;
 
-    const sectionPositions = Array.from({ length: numSections }, (_, i) => contentX + i * (sectionWidth + sectionSpacing));
+        const ltTotal = (
+            (parseInt(examData.rightLightTouchTotal || '0') || 0) +
+            (parseInt(examData.leftLightTouchTotal || '0') || 0)
+        ).toString();
 
-    // Set font size for content
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
+        currentX = drawLabelCellWithMax('LTR', examData.rightLightTouchTotal || '', 'MAX (56)', currentX);
+        currentX += 7;
+        currentX = drawLabelCellWithMax('+ LTL', examData.leftLightTouchTotal || '', '(56)', currentX);
+        currentX += 15.6;
+        currentX = drawLabelCellWithMax('= LT TOTAL', ltTotal, '(112)', currentX);
+        currentX += 10;
 
-    // Section 1: Neurological Levels
-    let x = sectionPositions[0];
-    let y = classificationContentY;
+        const ppTotal = (
+            (parseInt(examData.rightPinPrickTotal || '0') || 0) +
+            (parseInt(examData.leftPinPrickTotal || '0') || 0)
+        ).toString();
 
-    doc.text('Neurological Levels', x + sectionWidth / 2, y, {
-        align: 'center',
-        baseline: 'top',
-    });
+        currentX = drawLabelCellWithMax('PPR', examData.rightPinPrickTotal || '', 'MAX (56)', currentX);
+        currentX += 7.5;
+        currentX = drawLabelCellWithMax('+ PPL', examData.leftPinPrickTotal || '', '(56)', currentX);
+        currentX += 16;
+        currentX = drawLabelCellWithMax('= PP TOTAL', ppTotal, '(112)', currentX);
+    };
 
-    y += 5;
+    addSubscores();
 
-    doc.text('Sensory', x, y, { align: 'left', baseline: 'top' });
-    doc.text(`R: ${examData.rightSensory || ''}`, x, y + 5, { align: 'left', baseline: 'top' });
-    doc.text(`L: ${examData.leftSensory || ''}`, x, y + 10, { align: 'left', baseline: 'top' });
+    // --------------- Classification Box --------------------
 
-    y += 15;
+    const addClassificationBox = () => {
+        const boxWidth = 262;
+        const boxHeight = 14.5;
+        const boxX = (pageWidth - boxWidth) / 2;
+        const boxY = subscoreStartY + cellHeight + 5;
 
-    doc.text('Motor', x, y, { align: 'left', baseline: 'top' });
-    doc.text(`R: ${examData.rightMotor || ''}`, x, y + 5, { align: 'left', baseline: 'top' });
-    doc.text(`L: ${examData.leftMotor || ''}`, x, y + 10, { align: 'left', baseline: 'top' });
+        doc.setLineWidth(0.2);
+        doc.rect(boxX, boxY, boxWidth, boxHeight);
 
-    // Section 2: Neurological Level of Injury
-    x = sectionPositions[1];
-    y = classificationContentY;
+        let contentX = boxX + 15;
+        let contentY = boxY + 4;
 
-    doc.text('Neurological Level of Injury', x + sectionWidth / 2, y, {
-        align: 'center',
-        baseline: 'top',
-    });
+        // NEUROLOGICAL LEVELS
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('NEUROLOGICAL', contentX, contentY, { align: 'center' });
+        contentY += 3.5;
+        doc.text('LEVELS', contentX, contentY, { align: 'center' });
 
-    y += 10;
+        // Steps 1-6 for classification
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(6);
+        contentY += 2.5;
+        doc.text('Steps 1-6 for classification', contentX, contentY, { align: 'center' });
+        contentY += 2;
+        doc.text('as on reverse', contentX, contentY, { align: 'center' });
 
-    doc.text(examData.neurologicalLevelOfInjury || '', x + sectionWidth / 2, y, {
-        align: 'center',
-        baseline: 'top',
-    });
+        // 1. SENSORY
+        contentX += 32;
+        contentY = boxY + 7.5;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('1. SENSORY', contentX, contentY, { align: 'right' });
 
-    // Section 3: ASIA Impairment Scale
-    x = sectionPositions[2];
-    y = classificationContentY;
+        const cellWidth = 8;
+        const cellHeightBox = 3.8;
+        const cellY = contentY - 3;
+        const cellX_R = contentX + 1;
+        const cellX_L = cellX_R + cellWidth + 2;
 
-    doc.text('ASIA Impairment Scale', x + sectionWidth / 2, y, {
-        align: 'center',
-        baseline: 'top',
-    });
+        doc.setFontSize(7);
+        doc.text('R', cellX_R + cellWidth / 2, cellY - 1, { align: 'center' });
+        doc.text('L', cellX_L + cellWidth / 2, cellY - 1, { align: 'center' });
 
-    y += 10;
+        doc.rect(cellX_R, cellY, cellWidth, cellHeightBox);
+        doc.rect(cellX_L, cellY, cellWidth, cellHeightBox);
 
-    doc.text(examData.asiaImpairmentScale || '', x + sectionWidth / 2, y, {
-        align: 'center',
-        baseline: 'top',
-    });
-    doc.text(examData.injuryComplete || '', x + sectionWidth / 2, y + 5, {
-        align: 'center',
-        baseline: 'top',
-    });
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'normal');
+        doc.text(examData.rightSensory || '', cellX_R + cellWidth / 2, cellY + cellHeightBox / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
+        doc.text(examData.leftSensory || '', cellX_L + cellWidth / 2, cellY + cellHeightBox / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
 
-    // Section 4: Zone of Partial Preservation
-    x = sectionPositions[3];
-    y = classificationContentY;
+        // 2. MOTOR
+        contentY += 4.5;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('2. MOTOR', contentX, contentY, { align: 'right' });
 
-    doc.text('Zone of Partial Preservation', x + sectionWidth / 2, y, {
-        align: 'center',
-        baseline: 'top',
-    });
+        const motorCellY = contentY - 2.8;
 
-    y += 5;
+        doc.rect(cellX_R, motorCellY, cellWidth, cellHeightBox);
+        doc.rect(cellX_L, motorCellY, cellWidth, cellHeightBox);
 
-    doc.text('Sensory', x, y, { align: 'left', baseline: 'top' });
-    doc.text(`R: ${examData.rightSensoryZpp || ''}`, x, y + 5, { align: 'left', baseline: 'top' });
-    doc.text(`L: ${examData.leftSensoryZpp || ''}`, x, y + 10, { align: 'left', baseline: 'top' });
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'normal');
+        doc.text(examData.rightMotor || '', cellX_R + cellWidth / 2, motorCellY + cellHeightBox / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
+        doc.text(examData.leftMotor || '', cellX_L + cellWidth / 2, motorCellY + cellHeightBox / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
 
-    y += 15;
+        // 3. NEUROLOGICAL LEVEL OF INJURY (NLI)
+        contentX += 40;
+        contentY = boxY + 7.5;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('3. NEUROLOGICAL LEVEL', contentX, contentY, { align: 'center' });
+        contentY += 3.5;
+        doc.text('OF INJURY (NLI)', contentX, contentY, { align: 'center' });
 
-    doc.text('Motor', x, y, { align: 'left', baseline: 'top' });
-    doc.text(`R: ${examData.rightMotorZpp || ''}`, x, y + 5, { align: 'left', baseline: 'top' });
-    doc.text(`L: ${examData.leftMotorZpp || ''}`, x, y + 10, { align: 'left', baseline: 'top' });
+        const nliCellWidth = 11;
+        const nliCellHeight = 4.5;
+        const nliCellX = contentX + 19;
+        const nliCellY = boxY + 7;
 
-    // Section 5: Sub-scores (if enough space)
-    x = sectionPositions[4];
-    y = classificationContentY;
+        doc.rect(nliCellX, nliCellY, nliCellWidth, nliCellHeight);
 
-    doc.text('Sub-scores', x + sectionWidth / 2, y, {
-        align: 'center',
-        baseline: 'top',
-    });
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.text(examData.neurologicalLevelOfInjury || '', nliCellX + nliCellWidth / 2, nliCellY + nliCellHeight / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
 
-    y += 5;
+        // 4. COMPLETE OR INCOMPLETE?
+        contentX += 85;
+        contentY = boxY + 5;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('4. COMPLETE OR INCOMPLETE?', contentX, contentY, { align: 'right' });
+        contentY += 2.5;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(6);
+        doc.text('Incomplete = Any sensory or motor function in S4-5', contentX, contentY, { align: 'right' });
 
-    const subscores = [
-        { label: 'UEMS', right: examData.rightUpperMotorTotal || '', left: examData.leftUpperMotorTotal || '' },
-        { label: 'LEMS', right: examData.rightLowerMotorTotal || '', left: examData.leftLowerMotorTotal || '' },
-        { label: 'Light Touch', right: examData.rightLightTouchTotal || '', left: examData.leftLightTouchTotal || '' },
-        { label: 'Pin Prick', right: examData.rightPinPrickTotal || '', left: examData.leftPinPrickTotal || '' },
-    ];
+        const compCellWidth = 8;
+        const compCellHeight = 4;
+        const compCellX = contentX + 2;
+        const compCellY = boxY + 2.8;
 
-    subscores.forEach((score) => {
-        doc.text(score.label, x, y, { align: 'left', baseline: 'top' });
-        doc.text(`R: ${score.right}`, x, y + 5, { align: 'left', baseline: 'top' });
-        doc.text(`L: ${score.left}`, x, y + 10, { align: 'left', baseline: 'top' });
-        y += 15;
-    });
+        doc.setLineWidth(0.5);
+        doc.rect(compCellX, compCellY, compCellWidth, compCellHeight);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.text(examData.injuryComplete || '', compCellX + compCellWidth / 2, compCellY + compCellHeight / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
+
+        doc.setLineWidth(0.2);
+
+        // 5. ASIA IMPAIRMENT SCALE (AIS)
+        contentY += 4.5;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('5. ASIA IMPAIRMENT SCALE (AIS)', contentX, contentY, { align: 'right' });
+
+        const aisCellWidth = 11;
+        const aisCellHeight = 4.7;
+        const aisCellX = contentX + 2;
+        const aisCellY = compCellY + compCellHeight + 2;
+
+        doc.rect(aisCellX, aisCellY, aisCellWidth, aisCellHeight);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.text(examData.asiaImpairmentScale || '', aisCellX + aisCellWidth / 2, aisCellY + aisCellHeight / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
+
+        // 6. ZONE OF PARTIAL PRESERVATION (ZPP)
+        contentX += 38;
+        contentY = boxY + 3;
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(6);
+        doc.text('(In injuries with absent motor OR sensory function in S4-5 only)', contentX - 26, contentY, { align: 'left' });
+
+        contentY += 3.5;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('6. ZONE OF PARTIAL', contentX, contentY, { align: 'center' });
+        contentY += 3.5;
+        doc.text('PRESERVATION (ZPP)', contentX, contentY, { align: 'center' });
+        contentY += 2.5;
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(6);
+        doc.text('Most caudal levels with any innervation', contentX, contentY, { align: 'center' });
+
+        const zppCellWidth = 8;
+        const zppCellHeight = 4;
+        const zppCellY_Sensory = boxY + 4;
+
+        const zppHeaderY = boxY + 3;
+        const zppCellX_R = contentX + 33;
+        const zppCellX_L = zppCellX_R + zppCellWidth + 2;
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7);
+        doc.text('R', zppCellX_R + zppCellWidth / 2, zppHeaderY, { align: 'center' });
+        doc.text('L', zppCellX_L + zppCellWidth / 2, zppHeaderY, { align: 'center' });
+
+        // SENSORY ZPP
+        doc.setFontSize(8);
+        doc.text('SENSORY', contentX + 32, zppCellY_Sensory + 3, { align: 'right' });
+
+        doc.rect(zppCellX_R, zppCellY_Sensory, zppCellWidth, zppCellHeight);
+        doc.rect(zppCellX_L, zppCellY_Sensory, zppCellWidth, zppCellHeight);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.text(examData.rightSensoryZpp || '', zppCellX_R + zppCellWidth / 2, zppCellY_Sensory + zppCellHeight / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
+        doc.text(examData.leftSensoryZpp || '', zppCellX_L + zppCellWidth / 2, zppCellY_Sensory + zppCellHeight / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
+
+        // MOTOR ZPP
+        const zppCellY_Motor = zppCellY_Sensory + zppCellHeight + 1;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('MOTOR', contentX + 32, zppCellY_Motor + 3, { align: 'right' });
+
+        doc.rect(zppCellX_R, zppCellY_Motor, zppCellWidth, zppCellHeight);
+        doc.rect(zppCellX_L, zppCellY_Motor, zppCellWidth, zppCellHeight);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.text(examData.rightMotorZpp || '', zppCellX_R + zppCellWidth / 2, zppCellY_Motor + zppCellHeight / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
+        doc.text(examData.leftMotorZpp || '', zppCellX_L + zppCellWidth / 2, zppCellY_Motor + zppCellHeight / 2, {
+            align: 'center',
+            baseline: 'middle',
+        });
+    };
+
+    addClassificationBox();
+
+    // --------------- Footer --------------------
+
+    const addFooter = () => {
+        const boxY = subscoreStartY + cellHeight + 5;
+        const boxHeight = 14.5;
+        const footerTextY = boxY + boxHeight + 2.5;
+
+        doc.setFont('helvetica', 'bolditalic');
+        doc.setFontSize(7);
+
+        const centeredText = 'This form may be copied freely but should not be altered without permission from the American Spinal Injury Association.';
+        doc.text(centeredText, pageWidth / 2, footerTextY, { align: 'center' });
+
+        const rightAlignedText = 'REV 04/19';
+        doc.text(rightAlignedText, pageWidth - 10, footerTextY, { align: 'right' });
+    };
+
+    addFooter();
+
+    // --------------- RIGHT Side Comments Box --------------------
+
+    const addCommentsBox = () => {
+        const commentsBoxX = 11;
+        const commentsBoxY = 72;
+        const commentsBoxWidth = 56.8;
+        const commentsBoxHeight = 51;
+
+        doc.setLineWidth(0.5);
+        doc.rect(commentsBoxX, commentsBoxY, commentsBoxWidth, commentsBoxHeight);
+
+        let textX = commentsBoxX + 2;
+        let textY = commentsBoxY + 5;
+
+        doc.setFont('helvetica', 'bolditalic');
+        doc.setFontSize(8);
+        doc.text('Comments', textX, textY);
+
+        textX += 15;
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(7);
+        doc.text('Non-key Muscle? Reason for NT?', textX, textY);
+
+        textX -= 15;
+        textY += 3.5;
+        doc.text('Pain? Non-SCI condition?):', textX, textY);
+
+        textY += 5;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        const comments = examData.comments || '';
+        const commentsLines = doc.splitTextToSize(comments, commentsBoxWidth - 4);
+        doc.text(commentsLines, textX, textY);
+
+        textY += commentsLines.length * 4;
+        const cellComments = examData.cellComments || '';
+        if (cellComments) {
+            textY += 2;
+            const cellCommentsLines = doc.splitTextToSize(cellComments, commentsBoxWidth - 4);
+            doc.text(cellCommentsLines, textX, textY);
+        }
+
+        // UER and LER labels
+        const uerX = commentsBoxX + 10;
+        let uerY = commentsBoxY - 15;
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('UER', uerX, uerY, { align: 'center' });
+
+        uerY += 3.5;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.text('(Upper Extremity Right)', uerX, uerY, { align: 'center' });
+
+        let lerY = commentsBoxY + commentsBoxHeight + 8;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('LER', uerX, lerY, { align: 'center' });
+
+        lerY += 5;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.text('(Lower Extremity Right)', uerX, lerY, { align: 'center' });
+    };
+
+    addCommentsBox();
+
+    // --------------- LEFT Side Box and Text --------------------
+
+    const addLeftSideBox = () => {
+        const rightBoxX = 215.2;
+        const rightBoxY = 80;
+        const rightBoxWidth = 48;
+        const rightBoxHeight = 26;
+
+        doc.setLineWidth(0.5);
+        doc.rect(rightBoxX, rightBoxY, rightBoxWidth, rightBoxHeight);
+
+        const boxText = [
+            '0 = Total paralysis',
+            '1 = Palpable or visible contraction',
+            '2 = Active movement, gravity eliminated',
+            '3 = Active movement, against gravity',
+            '4 = Active movement, against some resistance',
+            '5 = Active movement, against full resistance',
+            'NT = Not testable',
+            '0*, ..., 4*, NT* = Non-SCI condition present'
+        ];
+
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(6);
+
+        let textX = rightBoxX + 2.5;
+        let textY = rightBoxY + 2.5;
+
+        boxText.forEach(line => {
+            doc.text(line, textX, textY);
+            textY += 2.8;
+        });
+
+        const motorTextX = rightBoxX + rightBoxWidth / 2;
+        let motorTextY = rightBoxY - 4;
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('MOTOR', motorTextX, motorTextY, { align: 'center' });
+
+        motorTextY += 3;
+        doc.setFontSize(7);
+        doc.text('(SCORING ON REVERSE SIDE)', motorTextX, motorTextY, { align: 'center' });
+
+        let sensoryTextY = rightBoxY + rightBoxHeight + 3;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('SENSORY', motorTextX, sensoryTextY, { align: 'center' });
+
+        sensoryTextY += 3;
+        doc.setFontSize(7);
+        doc.text('(SCORING ON REVERSE SIDE)', motorTextX, sensoryTextY, { align: 'center' });
+
+        const sensoryBoxY = sensoryTextY + 1;
+        const sensoryBoxHeight = 9;
+
+        doc.setLineWidth(0.5);
+        doc.rect(rightBoxX, sensoryBoxY, rightBoxWidth, sensoryBoxHeight);
+
+        const leftTextLines = ['0 = Absent', '1 = Altered', '2 = Normal'];
+        const rightTextLines = ['NT = Not testable', '0*, 1*, NT* = Non-SCI', 'condition present'];
+
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(6);
+
+        let textYStart = sensoryBoxY + 2.1;
+        const columnGap = 2;
+        const columnWidth = (rightBoxWidth - 4 - columnGap) / 2;
+        const leftColumnX = rightBoxX + 2;
+        const rightColumnX = leftColumnX + columnWidth + columnGap;
+
+        const maxLines = Math.max(leftTextLines.length, rightTextLines.length);
+
+        for (let i = 0; i < maxLines; i++) {
+            if (i < leftTextLines.length) {
+                doc.text(leftTextLines[i], leftColumnX, textYStart);
+            }
+            if (i < rightTextLines.length) {
+                doc.text(rightTextLines[i], rightColumnX, textYStart);
+            }
+            textYStart += 2.8;
+        }
+
+        const uelX = rightBoxX + 40;
+        let uelY = 57;
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.text('UEL', uelX, uelY, { align: 'center' });
+
+        uelY += 3.5;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.text('(Upper Extremity Left)', uelX, uelY, { align: 'center' });
+
+        let lelY = 134;
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.text('LEL', uelX, lelY, { align: 'center' });
+
+        lelY += 3.5;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.text('(Lower Extremity Left)', uelX, lelY, { align: 'center' });
+    };
+
+    addLeftSideBox();
 
     // Generate the PDF as a blob
     const pdfOutput = doc.output('blob');
 
-    // Check if running on a mobile device
+    // Save the PDF file
     if (Capacitor.isNativePlatform()) {
         try {
-            // Convert the blob to base64
             const reader = new FileReader();
             reader.readAsDataURL(pdfOutput);
             reader.onloadend = async () => {
                 const base64data = reader.result as string;
                 const base64Content = base64data.split(',')[1];
 
-                // Save the PDF file using Capacitor Filesystem API
                 await Filesystem.writeFile({
                     path: filename,
                     data: base64Content,
@@ -444,7 +892,6 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
             console.error('Error saving PDF file', error);
         }
     } else {
-        // Running in a web browser
         doc.save(filename);
     }
 };

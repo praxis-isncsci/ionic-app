@@ -229,7 +229,17 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
                 const width = cellWidths[col];
 
                 doc.setLineWidth(level === 'S4_5' ? 0.5 : 0.2);
-                doc.rect(x, y, width, cellHeight);
+
+                const isPPColumn = obs === 'PP';
+
+                // Set fill color for PP columns only
+                if (isPPColumn) {
+                    doc.setFillColor(245, 245, 245); // Grey backgrnd
+                    doc.rect(x, y, width, cellHeight, 'FD'); // Fill and stroke
+                } else {
+                    doc.setFillColor(255, 255, 255); // White backgrnd
+                    doc.rect(x, y, width, cellHeight, 'S'); // Stroke only
+                }
             }
         }
 
@@ -261,8 +271,8 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
                 align = side === 'Right' ? 'right' : 'left';
             }
 
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(6);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(8);
             doc.text(displayLevel, labelX, y, { align, baseline: 'middle' });
 
             if (side === 'Left' && levelDescriptions[level]) {
@@ -401,14 +411,14 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
 
     const addSubscores = () => {
         const reducedCellWidth = 8.9;
-
+    
         doc.setFontSize(8);
         doc.setFont('helvetica', 'bold');
         doc.text('MOTOR SUBSCORES', startXRight - 68, subscoreStartY - 6, { align: 'left' });
         doc.text('SENSORY SUBSCORES', startXLeft - 32, subscoreStartY - 6, { align: 'left' });
-
+    
         let currentX = startXRight - 65;
-
+    
         const drawLabelCellWithMax = (label: string, value: string, maxText: string, x: number) => {
             doc.rect(x, subscoreStartY - cellHeight, reducedCellWidth, cellHeight);
             doc.setFont('helvetica', 'normal');
@@ -425,54 +435,63 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
             });
             return x + reducedCellWidth + 2;
         };
-
-        const uemsTotal = (
-            (parseInt(examData.rightUpperMotorTotal || '0') || 0) +
-            (parseInt(examData.leftUpperMotorTotal || '0') || 0)
-        ).toString();
-
-        currentX = drawLabelCellWithMax('UER', examData.rightUpperMotorTotal || '', 'MAX (25)', currentX);
+    
+        // Helper function to calculate total or return empty string
+        const calculateTotal = (value1?: string, value2?: string) => {
+            const num1 = parseInt(value1 || '', 10);
+            const num2 = parseInt(value2 || '', 10);
+    
+            if (isNaN(num1) && isNaN(num2)) {
+                return '';
+            } else {
+                return ((isNaN(num1) ? 0 : num1) + (isNaN(num2) ? 0 : num2)).toString();
+            }
+        };
+    
+        const rightUpperMotorTotal = examData.rightUpperMotorTotal;
+        const leftUpperMotorTotal = examData.leftUpperMotorTotal;
+        const uemsTotal = calculateTotal(rightUpperMotorTotal, leftUpperMotorTotal);
+    
+        currentX = drawLabelCellWithMax('UER', rightUpperMotorTotal || '', 'MAX (25)', currentX);
         currentX += 8;
-        currentX = drawLabelCellWithMax('+ UEL', examData.leftUpperMotorTotal || '', '(25)', currentX);
+        currentX = drawLabelCellWithMax('+ UEL', leftUpperMotorTotal || '', '(25)', currentX);
         currentX += 21;
         currentX = drawLabelCellWithMax('= UEMS TOTAL', uemsTotal, '(50)', currentX);
         currentX += 10;
-
-        const lemsTotal = (
-            (parseInt(examData.rightLowerMotorTotal || '0') || 0) +
-            (parseInt(examData.leftLowerMotorTotal || '0') || 0)
-        ).toString();
-
-        currentX = drawLabelCellWithMax('LER', examData.rightLowerMotorTotal || '', 'MAX (25)', currentX);
+    
+        const rightLowerMotorTotal = examData.rightLowerMotorTotal;
+        const leftLowerMotorTotal = examData.leftLowerMotorTotal;
+        const lemsTotal = calculateTotal(rightLowerMotorTotal, leftLowerMotorTotal);
+    
+        currentX = drawLabelCellWithMax('LER', rightLowerMotorTotal || '', 'MAX (25)', currentX);
         currentX += 7;
-        currentX = drawLabelCellWithMax('+ LEL', examData.leftLowerMotorTotal || '', '(25)', currentX);
+        currentX = drawLabelCellWithMax('+ LEL', leftLowerMotorTotal || '', '(25)', currentX);
         currentX += 20;
         currentX = drawLabelCellWithMax('= LEMS TOTAL', lemsTotal, '(50)', currentX);
         currentX += 10;
-
-        const ltTotal = (
-            (parseInt(examData.rightLightTouchTotal || '0') || 0) +
-            (parseInt(examData.leftLightTouchTotal || '0') || 0)
-        ).toString();
-
-        currentX = drawLabelCellWithMax('LTR', examData.rightLightTouchTotal || '', 'MAX (56)', currentX);
+    
+        const rightLightTouchTotal = examData.rightLightTouchTotal;
+        const leftLightTouchTotal = examData.leftLightTouchTotal;
+        const ltTotal = calculateTotal(rightLightTouchTotal, leftLightTouchTotal);
+    
+        currentX = drawLabelCellWithMax('LTR', rightLightTouchTotal || '', 'MAX (56)', currentX);
         currentX += 7;
-        currentX = drawLabelCellWithMax('+ LTL', examData.leftLightTouchTotal || '', '(56)', currentX);
+        currentX = drawLabelCellWithMax('+ LTL', leftLightTouchTotal || '', '(56)', currentX);
         currentX += 15.6;
         currentX = drawLabelCellWithMax('= LT TOTAL', ltTotal, '(112)', currentX);
         currentX += 10;
-
-        const ppTotal = (
-            (parseInt(examData.rightPinPrickTotal || '0') || 0) +
-            (parseInt(examData.leftPinPrickTotal || '0') || 0)
-        ).toString();
-
-        currentX = drawLabelCellWithMax('PPR', examData.rightPinPrickTotal || '', 'MAX (56)', currentX);
+    
+        const rightPinPrickTotal = examData.rightPinPrickTotal;
+        const leftPinPrickTotal = examData.leftPinPrickTotal;
+        const ppTotal = calculateTotal(rightPinPrickTotal, leftPinPrickTotal);
+    
+        currentX = drawLabelCellWithMax('PPR', rightPinPrickTotal || '', 'MAX (56)', currentX);
         currentX += 7.5;
-        currentX = drawLabelCellWithMax('+ PPL', examData.leftPinPrickTotal || '', '(56)', currentX);
+        currentX = drawLabelCellWithMax('+ PPL', leftPinPrickTotal || '', '(56)', currentX);
         currentX += 16;
         currentX = drawLabelCellWithMax('= PP TOTAL', ppTotal, '(112)', currentX);
     };
+    
 
     addSubscores();
 

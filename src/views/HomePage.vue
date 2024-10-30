@@ -46,9 +46,16 @@ const exportToPDF = async () => {
   if (!isncsciControlRef.value) return;
 
   const examData = isncsciControlRef.value.examData();
-  const name = 'Exam_Data';
 
-  await exportPDF(examData, name);
+  // Use worksheet name if available, otherwise default name
+  const currentDateTime = new Date();
+  let name = `ISNCSCI_${currentDateTime.toISOString().replace(/[:.]/g, '-')}`;
+
+  if (currentMeta.value && currentMeta.value.name) {
+    name = currentMeta.value.name;
+  }
+
+  await exportPDF(examData, name, currentMeta.value ?? undefined);
 };
 
 const isLoading = ref(false);

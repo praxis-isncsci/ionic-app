@@ -2,8 +2,9 @@ import { ExamData } from "isncsci-ui/dist/esm/core/domain";
 import { jsPDF } from 'jspdf';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Capacitor } from '@capacitor/core';
+import { IWorksheetMetaItem } from '@/utils/worksheetUtils';
 
-export const exportPDF = async (examData: ExamData, filename: string) => {
+export const exportPDF = async (examData: ExamData, filename: string, worksheetMeta?: IWorksheetMetaItem) => {
     const doc = new jsPDF('l', 'mm', 'letter');
 
     // Page dimensions
@@ -71,7 +72,7 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
 
     // --------------- WORKSHEET INFO --------------------
 
-    const addWorksheetInfo = () => {
+    const addWorksheetInfo = (worksheetMeta?: IWorksheetMetaItem) => {
         const fieldXStart = 139;
         const fieldYStart = 9.5;
 
@@ -93,10 +94,15 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
 
             doc.setLineWidth(0.2);
             doc.line(lineStartX, field.y + 0.5, lineEndX, field.y + 0.5);
+            if (field.label === "Date/Time of Exam" && worksheetMeta?.examDate) {
+                doc.setFont('helvetica', 'normal');
+                const dateStr = new Date(worksheetMeta.examDate).toLocaleString();
+                doc.text(dateStr, lineStartX + 2, field.y);
+            }
         });
     };
 
-    addWorksheetInfo();
+    addWorksheetInfo(worksheetMeta);
 
     // --------------- HEADINGS AND LABELS --------------------
 
@@ -281,6 +287,14 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
                 doc.text(levelDescriptions[level], labelX + 5, y, { align: 'left', baseline: 'middle' });
             }
 
+
+            // Helper function to format values
+            const formatValue = (value: any): string => {
+                const valueStr = value.toString();
+                // Replace one or more '*' at the end with a single '*'
+                return valueStr.replace(/\*+$/, '*');
+            };
+
             observations.forEach((obs, col) => {
                 if (obs === 'M' && !motorLevels.includes(level)) return;
                 const xCenter = xPositions[col] - cellWidths[col] / 2;
@@ -290,9 +304,10 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
                 const value = (examData as Record<string, any>)[key];
 
                 if (value !== null && value !== undefined) {
+                    const displayValue = formatValue(value);
                     doc.setFont('helvetica', 'normal');
                     doc.setFontSize(6);
-                    doc.text(value.toString(), xCenter, y, { align: 'center', baseline: 'middle' });
+                    doc.text(displayValue, xCenter, y, { align: 'center', baseline: 'middle' });
                 }
             });
         });
@@ -919,6 +934,8 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
     // Generate the PDF as a blob
     const pdfOutput = doc.output('blob');
 
+    const pdfFilename = filename.endsWith('.pdf') ? filename : `${filename}.pdf`;
+
     // Save the PDF file
     if (Capacitor.isNativePlatform()) {
         try {
@@ -929,7 +946,7 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
                 const base64Content = base64data.split(',')[1];
 
                 await Filesystem.writeFile({
-                    path: filename,
+                    path: pdfFilename,
                     data: base64Content,
                     directory: Directory.Documents,
                     recursive: true,
@@ -941,6 +958,6 @@ export const exportPDF = async (examData: ExamData, filename: string) => {
             console.error('Error saving PDF file', error);
         }
     } else {
-        doc.save(filename);
+        doc.save(pdfFilename);
     }
 };

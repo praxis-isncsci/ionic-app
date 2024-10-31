@@ -116,7 +116,7 @@ const addBodyDiagram = async (doc: jsPDF) => {
 };
 
 // --------------- WORKSHEET INFO --------------------
-const addWorksheetInfo = (doc: jsPDF, examDate: Date) => {
+const addWorksheetInfo = (doc: jsPDF, examDate?: Date) => {
     const fieldXStart = 139;
     const fieldYStart = 9.5;
 
@@ -140,7 +140,7 @@ const addWorksheetInfo = (doc: jsPDF, examDate: Date) => {
         doc.line(lineStartX, field.y + 0.5, lineEndX, field.y + 0.5);
         if (field.label === "Date/Time of Exam" && examDate) {
             doc.setFont('helvetica', 'normal');
-            const dateStr = new Date(examDate).toLocaleString();
+            const dateStr = examDate.toLocaleString();
             doc.text(dateStr, lineStartX + 2, field.y);
         }
     });
@@ -881,7 +881,7 @@ let pageWidth: number,
     spaceBetweenGrids: number,
     startXLeft: number;
 
-export const exportPDF = async (examData: ExamData, filename: string, examDate: Date) => {
+export const exportPDF = async (examData: ExamData, filename: string, examDate?: Date) => {
     const doc = new jsPDF('l', 'mm', 'letter');
 
     // Page dimensions

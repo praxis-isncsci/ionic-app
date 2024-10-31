@@ -55,7 +55,7 @@ const exportToPDF = async () => {
     name = currentMeta.value.name;
   }
 
-  await exportPDF(examData, name, currentMeta.value ?? undefined);
+  await exportPDF(examData, name, currentMeta.value?.examDate);
 };
 
 const isLoading = ref(false);

@@ -25,6 +25,9 @@
                         <ion-fab-button @click="onNavigate('/saved-worksheets')">
                             <ion-icon :icon="bookmarksOutline"></ion-icon>
                         </ion-fab-button>
+                        <ion-fab-button @click="exportToPDF">
+                            <ion-icon :icon="downloadOutline"></ion-icon>
+                        </ion-fab-button>
                         <ion-fab-button @click="onNavigate('/eula')">
                             <ion-icon :icon="newspaperOutline"></ion-icon>
                         </ion-fab-button>
@@ -50,13 +53,14 @@
 <script setup lang="ts">
 
 import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList, IonButton } from '@ionic/vue';
-import { manOutline, backspaceOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, helpCircleOutline } from 'ionicons/icons';
+import { manOutline, backspaceOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, helpCircleOutline, downloadOutline } from 'ionicons/icons';
 
-const props = defineProps<{ 
+defineProps<{ 
     calculateOnClick: () => void, 
     saveOnClick: () => void, 
     clearExam: () => void,
-    onNavigate: (path: string) => void
+    onNavigate: (path: string) => void,
+    exportToPDF: () => void
 }>();
 
 </script>

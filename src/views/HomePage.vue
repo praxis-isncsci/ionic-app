@@ -9,7 +9,7 @@
     <IsncsciControl ref="isncsciControlRef"></IsncsciControl>
 
     <template #footer-buttons>
-      <AppNavbar :calculateOnClick="calculate_onClick" :saveOnClick="save_onClick" :clearExam="clearExam"
+      <AppNavbar :calculateOnClick="calculate_onClick" :saveOnClick="save_onClick" :clearExam="clearExam" :exportToPDF="exportToPDF"
         :onNavigate="handleNavigation">
       </AppNavbar>
     </template>
@@ -26,6 +26,7 @@ import { IWorksheetMetaItem, WorksheetDetails, Worksheets } from '@/utils/worksh
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { promptFoNameExist, promptForWorksheetDetails, showToast, showUnsavedDataAlert } from '@/utils/alertsPrompts';
+import { exportPDF } from '@/utils/examDataHelpers';
 
 const worksheets = Worksheets.getInstance();
 const route = useRoute();
@@ -35,10 +36,27 @@ interface IsncsciControlMethods {
   load: (examData: ExamData) => Promise<void>;
   clear: () => Promise<void>;
   calculate: () => Promise<ExamData | undefined>;
+  exportToPDF: () => Promise<void>;
   isFormEmpty: () => boolean;
   examData: () => ExamData;
 }
 const isncsciControlRef = ref<IsncsciControlMethods | null>(null);
+
+const exportToPDF = async () => {
+  if (!isncsciControlRef.value) return;
+
+  const examData = isncsciControlRef.value.examData();
+
+  // Use worksheet name if available, otherwise default name
+  const currentDateTime = new Date();
+  let name = `ISNCSCI_${currentDateTime.toISOString().replace(/[:.]/g, '-')}`;
+
+  if (currentMeta.value && currentMeta.value.name) {
+    name = currentMeta.value.name;
+  }
+
+  await exportPDF(examData, name, currentMeta.value ?? undefined);
+};
 
 const isLoading = ref(false);
 

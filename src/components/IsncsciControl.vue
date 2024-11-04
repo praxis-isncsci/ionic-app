@@ -89,8 +89,38 @@
             <label for="comments" slot="comments-label">Comments:</label>
             <div name="cell-comments-display" id="cell-comments-display" slot="cell-comments-display"></div>
             <textarea name="comments" id="comments" slot="comments"></textarea>
-            <praxis-isncsci-key-points-diagram slot="key-points-diagram"
-                ref="keyPointsDiagramRef"></praxis-isncsci-key-points-diagram>
+            <!-- Chart component for large screens -->
+            <praxis-isncsci-key-points-diagram
+                v-if="isLargeScreen"
+                slot="key-points-diagram"
+                ref="keyPointsDiagramRef"
+            ></praxis-isncsci-key-points-diagram>
+
+            <!-- Modal for small screens -->
+            <ion-modal
+                :is-open="isChartModalOpen"
+                @didDismiss="onModalDidDismiss"
+                @didPresent="onModalDidPresent"
+            >
+                <ion-header>
+                    <ion-toolbar>
+                    <ion-title>Chart</ion-title>
+                    <ion-buttons slot="end">
+                        <ion-button @click="isChartModalOpen = false">
+                        <ion-icon :icon="close"></ion-icon>
+                        </ion-button>
+                    </ion-buttons>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content>
+                    <div class="diagram-container">
+                        <!-- Chart component for small screens inside the modal -->
+                        <praxis-isncsci-key-points-diagram
+                            ref="modalKeyPointsDiagramRef"
+                        ></praxis-isncsci-key-points-diagram>
+                    </div>
+                </ion-content>
+            </ion-modal>
         </praxis-isncsci-input-layout>
         <praxis-isncsci-input slot="input-controls" disabled ref="inputButtonsRef">
             <label for="consider-normal" slot="consider-normal-label">Consider normal or not normal for
@@ -228,10 +258,10 @@
     </praxis-isncsci-app-layout>
 </template>
 
-
 <script setup lang="ts">
 import { close } from 'ionicons/icons';
-import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue';
+import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent } from '@ionic/vue';
+import { ref, nextTick, onMounted, onBeforeUnmount, watch } from 'vue';
 import { bindExamDataToGridModel, bindExamDataToTotals, getEmptyExamData, getExamDataFromGridModel } from 'isncsci-ui/dist/esm/core/helpers'
 import {
     AppStoreProvider,
@@ -267,6 +297,15 @@ const inputLayoutRef = ref<HTMLElement | null>(null);
 const inputButtonsRef = ref<HTMLElement | null>(null);
 const classificationRef = ref<HTMLElement | null>(null);
 const keyPointsDiagramRef = ref<HTMLElement | null>(null);
+const modalKeyPointsDiagramRef = ref<HTMLElement | null>(null);
+const isLargeScreen = ref(window.innerWidth >= 850);
+const isChartModalOpen = ref(false);
+const isLoading = ref(false);
+const lastCalculatedExamData = ref<ExamData | undefined>(undefined);
+let ready = false;
+
+const diagramRef = ref<HTMLElement | null>(null);
+
 const externalMessagePortProvider: IExternalMessageProvider = {
     sendOutExamData: () => {
         console.log('externalMessagePortProvider called');
@@ -275,9 +314,85 @@ const externalMessagePortProvider: IExternalMessageProvider = {
 
 const appStoreProvider = new AppStoreProvider(appStore);
 const isncsciExamProvider = new IsncsciExamProvider();
-let ready = false;
-const isLoading = ref(false);
-const lastCalculatedExamData = ref<ExamData | undefined>(undefined)
+
+const updateScreenSize = () => {
+    isLargeScreen.value = window.innerWidth >= 850;
+};
+
+const initializeKeyPointDiagram = () => {
+    if (diagramRef.value) {
+        new KeyPointDiagramController(appStore, diagramRef.value);
+        appStoreProvider.setGridModel(appStore.getState().gridModel);
+    }
+};
+
+const cleanupKeyPointDiagram = () => {
+    diagramRef.value = null;
+};
+
+onMounted(() => {
+    window.addEventListener('resize', updateScreenSize);
+
+    if (
+        inputLayoutRef.value &&
+        inputButtonsRef.value &&
+        classificationRef.value
+    ) {
+        new InputLayoutController(
+            appStore,
+            appStoreProvider,
+            externalMessagePortProvider,
+            inputLayoutRef.value,
+            inputButtonsRef.value,
+            classificationRef.value,
+        );
+    }
+    
+    // Initialize the chart for large screens if it's visible
+    if (isLargeScreen.value) {
+        diagramRef.value = keyPointsDiagramRef.value;
+        initializeKeyPointDiagram();
+    }
+
+    initializeAppUseCase(appStoreProvider);
+
+    appStore.subscribe(() => { handleFormChange(); })
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateScreenSize);
+    unsubscribeFromStoreHandler();
+    cleanupKeyPointDiagram();
+});
+
+watch(
+    () => isLargeScreen.value,
+    (newValue) => {
+        if (newValue) {
+        diagramRef.value = keyPointsDiagramRef.value;
+        initializeKeyPointDiagram();
+        } else {
+        cleanupKeyPointDiagram();
+        }
+    }
+);
+
+const showChart = () => {
+    if (isLargeScreen.value) {
+        return;
+    }
+    isChartModalOpen.value = true;
+};
+
+const onModalDidPresent = () => {
+    diagramRef.value = modalKeyPointsDiagramRef.value;
+    initializeKeyPointDiagram();
+};
+
+const onModalDidDismiss = () => {
+    cleanupKeyPointDiagram();
+    isChartModalOpen.value = false;
+};
 
 const stateChanged = (state: IAppState, actionType: string) => {
     if (!ready && state.status === StatusCodes.Ready) {
@@ -297,42 +412,10 @@ const unsubscribeFromStoreHandler = appStore.subscribe(
     (state: IAppState, actionType: string) => stateChanged(state, actionType),
 );
 
-onMounted(() => {
-    if (
-        inputLayoutRef.value &&
-        inputButtonsRef.value &&
-        classificationRef.value
-    ) {
-        new InputLayoutController(
-            appStore,
-            appStoreProvider,
-            externalMessagePortProvider,
-            inputLayoutRef.value,
-            inputButtonsRef.value,
-            classificationRef.value,
-        );
-    }
-
-    if (keyPointsDiagramRef.value) {
-        new KeyPointDiagramController(appStore, keyPointsDiagramRef.value);
-    }
-
-    initializeAppUseCase(appStoreProvider);
-
-    appStore.subscribe(() => { handleFormChange(); })
-});
-
-onBeforeUnmount(() => {
-    if (unsubscribeFromStoreHandler) {
-        unsubscribeFromStoreHandler();
-    }
-});
+const handleFormChange = () => {
+}
 
 initializeAppUseCase(appStoreProvider);
-
-const handleFormChange = () => {
-
-}
 
 const closeClassification_onClick = () => {
     classificationStyle.value = '';
@@ -442,5 +525,14 @@ defineExpose({
     calculate,
     isFormEmpty,
     examData: getExamData,
+    showChart,
 });
 </script>
+
+<style scoped>
+.diagram-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>

@@ -9,8 +9,14 @@
     <IsncsciControl ref="isncsciControlRef"></IsncsciControl>
 
     <template #footer-buttons>
-      <AppNavbar :calculateOnClick="calculate_onClick" :saveOnClick="save_onClick" :clearExam="clearExam" :exportToPDF="exportToPDF"
-        :onNavigate="handleNavigation">
+      <AppNavbar 
+      :calculateOnClick="calculate_onClick" 
+      :saveOnClick="save_onClick" 
+      :clearExam="clearExam" 
+      :exportToPDF="exportToPDF"
+      :onNavigate="handleNavigation"
+      :showChart="showChart"
+      >
       </AppNavbar>
     </template>
   </MainLayout>
@@ -39,6 +45,7 @@ interface IsncsciControlMethods {
   exportToPDF: () => Promise<void>;
   isFormEmpty: () => boolean;
   examData: () => ExamData;
+  showChart: () => void;
 }
 const isncsciControlRef = ref<IsncsciControlMethods | null>(null);
 
@@ -200,6 +207,12 @@ const loadWorksheet = async () => {
   } else {
     await isncsciControlRef.value?.clear();
     currentMeta.value = null;
+  }
+};
+
+const showChart = () => {
+  if (isncsciControlRef.value) {
+    isncsciControlRef.value.showChart();
   }
 };
 

@@ -2,7 +2,7 @@
     <ion-grid>
         <ion-row>
             <ion-col class="ion-text-center">
-                <ion-button size="small">
+                <ion-button size="small" @click="showChart">
                     <ion-icon slot="start" :icon="manOutline"></ion-icon>
                     Chart
                 </ion-button>
@@ -60,7 +60,8 @@ defineProps<{
     saveOnClick: () => void, 
     clearExam: () => void,
     onNavigate: (path: string) => void,
-    exportToPDF: () => void
+    exportToPDF: () => void,
+    showChart: () => void
 }>();
 
 </script>

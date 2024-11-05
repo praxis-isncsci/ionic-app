@@ -529,10 +529,17 @@ defineExpose({
 });
 </script>
 
-<style scoped>
+<style>
 .diagram-container {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+@media (max-width: 500px) {
+    :root {
+        --cell-width: 2rem;
+        --cell-height: 2rem;
+    }
 }
 </style>

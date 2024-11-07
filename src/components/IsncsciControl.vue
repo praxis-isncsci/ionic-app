@@ -452,6 +452,13 @@ const getExamData = (): ExamData => {
         state.leftLowestNonKeyMuscleWithMotorFunction,
         state.comments
     );
+    // Include the totals from the appStore state
+    const totals = state.totals;
+
+    if (totals) {
+    Object.assign(examData, totals);
+    }
+    
     return examData;
 }
 

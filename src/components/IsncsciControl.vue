@@ -267,7 +267,7 @@ import {
     AppStoreProvider,
     IsncsciExamProvider,
 } from 'isncsci-ui/dist/esm/app/providers';
-import { appStore } from 'isncsci-ui/dist/esm/app/store';
+import { appStore, Actions } from 'isncsci-ui/dist/esm/app/store';
 
 /* ISNCSCI UI */
 import 'isncsci-ui/dist/esm/web/index.js';
@@ -291,6 +291,7 @@ import {
 
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { inputFieldNames } from '@/utils/inputFieldNames';
+import { showCalculationErrorAlert } from '@/utils/alertsPrompts';
 
 const classificationStyle = ref('');
 const inputLayoutRef = ref<HTMLElement | null>(null);
@@ -409,9 +410,16 @@ const stateChanged = (state: IAppState, actionType: string) => {
         ready = true;
     }
 
-    if (actionType == 'SET_CELLS_VALUE') {
-        //reset last calculated exam data to undefined because the cell value has been changed
+    if (actionType === Actions.SET_CELLS_VALUE) {
+        // Reset last calculated exam data to undefined because the cell value has been changed
         lastCalculatedExamData.value = undefined;
+    }
+
+    if (
+        actionType === Actions.SET_CALCULATION_ERROR &&
+        state.calculationError
+    ) {
+        showCalculationErrorAlert(state.calculationError);
     }
 };
 

@@ -458,7 +458,7 @@ const getExamData = (): ExamData => {
     if (totals) {
     Object.assign(examData, totals);
     }
-    
+
     return examData;
 }
 

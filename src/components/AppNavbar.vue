@@ -2,7 +2,15 @@
     <ion-grid>
         <ion-row class="btn-row">
             <ion-col class="ion-text-center">
-                <ion-button size="small"  fill="clear" color="primary" class="navbar-btn" @click="showChart">
+                <ion-button 
+                size="small"  
+                fill="clear" 
+                color="primary" 
+                class="navbar-btn" 
+                @click="showChart" 
+                :disabled="!isLessThan850"
+                :class="{ 'disabled-button': !isLessThan850 }"
+                >
                     <div class="btn-content">
                         <ion-icon :icon="manOutline"></ion-icon>
                         <span>Dermatome</span>
@@ -126,6 +134,16 @@ onBeforeUnmount(() => {
     --color: var(--ion-color-primary);
     --color-hover: var(--ion-color-light);
     width: 100%; 
+}
+
+.navbar-btn[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.disabled-button .btn-content ion-icon,
+.disabled-button .btn-content span {
+    color: #5E5E5E; 
 }
 
 .fab-list-btn {

@@ -124,7 +124,6 @@ export const promptForWorksheetDetails = (
         });
 };
 
-
 export const showToast = async (message: string): Promise<void> => {
     const toast = await toastController.create({
         message,
@@ -134,3 +133,24 @@ export const showToast = async (message: string): Promise<void> => {
         });
     await toast.present();
 }
+
+export const showCalculationErrorAlert = (message: string): Promise<void> => {
+    return new Promise((resolve) => {
+        alertController
+        .create({
+            header: 'Calculation Error',
+            message: message,
+            buttons: [
+                {
+                text: 'OK',
+                role: 'cancel',
+                handler: () => {
+                    resolve();
+                },
+                },
+            ],
+            cssClass: 'calculation-error-alert',
+        })
+        .then((alert) => alert.present());
+    });
+};

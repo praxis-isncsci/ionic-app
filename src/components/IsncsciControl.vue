@@ -104,7 +104,7 @@
             >
                 <ion-header>
                     <ion-toolbar>
-                    <ion-title>Chart</ion-title>
+                    <ion-title>Dermatome Chart</ion-title>
                     <ion-buttons slot="end">
                         <ion-button @click="isChartModalOpen = false">
                         <ion-icon :icon="close"></ion-icon>
@@ -122,7 +122,7 @@
                 </ion-content>
             </ion-modal>
         </praxis-isncsci-input-layout>
-        <praxis-isncsci-input slot="input-controls" disabled ref="inputButtonsRef">
+        <praxis-isncsci-input slot="input-controls" disabled :class="{ 'fixed-bottom': isSmallScreen }" ref="inputButtonsRef">
             <label for="consider-normal" slot="consider-normal-label">Consider normal or not normal for
                 classification:</label>
             <select name="consider-normal" id="consider-normal" slot="consider-normal">
@@ -267,7 +267,7 @@ import {
     AppStoreProvider,
     IsncsciExamProvider,
 } from 'isncsci-ui/dist/esm/app/providers';
-import { appStore } from 'isncsci-ui/dist/esm/app/store';
+import { appStore, Actions } from 'isncsci-ui/dist/esm/app/store';
 
 /* ISNCSCI UI */
 import 'isncsci-ui/dist/esm/web/index.js';
@@ -291,6 +291,7 @@ import {
 
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { inputFieldNames } from '@/utils/inputFieldNames';
+import { showCalculationErrorAlert } from '@/utils/alertsPrompts';
 
 const classificationStyle = ref('');
 const inputLayoutRef = ref<HTMLElement | null>(null);
@@ -317,6 +318,7 @@ const isncsciExamProvider = new IsncsciExamProvider();
 
 const updateScreenSize = () => {
     isLargeScreen.value = window.innerWidth >= 850;
+    isSmallScreen.value = window.innerWidth <= 767;
 };
 
 const initializeKeyPointDiagram = () => {
@@ -330,7 +332,12 @@ const cleanupKeyPointDiagram = () => {
     diagramRef.value = null;
 };
 
+const isSmallScreen = ref(window.innerWidth <= 767);
+
+window.addEventListener('resize', updateScreenSize);
+
 onMounted(() => {
+    updateScreenSize();
     window.addEventListener('resize', updateScreenSize);
 
     if (
@@ -347,7 +354,7 @@ onMounted(() => {
             classificationRef.value,
         );
     }
-    
+
     // Initialize the chart for large screens if it's visible
     if (isLargeScreen.value) {
         diagramRef.value = keyPointsDiagramRef.value;
@@ -358,6 +365,7 @@ onMounted(() => {
 
     appStore.subscribe(() => { handleFormChange(); })
 });
+
 
 onBeforeUnmount(() => {
     window.removeEventListener('resize', updateScreenSize);
@@ -402,9 +410,16 @@ const stateChanged = (state: IAppState, actionType: string) => {
         ready = true;
     }
 
-    if (actionType == 'SET_CELLS_VALUE') {
-        //reset last calculated exam data to undefined because the cell value has been changed
+    if (actionType === Actions.SET_CELLS_VALUE) {
+        // Reset last calculated exam data to undefined because the cell value has been changed
         lastCalculatedExamData.value = undefined;
+    }
+
+    if (
+        actionType === Actions.SET_CALCULATION_ERROR &&
+        state.calculationError
+    ) {
+        showCalculationErrorAlert(state.calculationError);
     }
 };
 
@@ -437,6 +452,13 @@ const getExamData = (): ExamData => {
         state.leftLowestNonKeyMuscleWithMotorFunction,
         state.comments
     );
+    // Include the totals from the appStore state
+    const totals = state.totals;
+
+    if (totals) {
+    Object.assign(examData, totals);
+    }
+
     return examData;
 }
 
@@ -536,10 +558,28 @@ defineExpose({
     align-items: center;
 }
 
+.fixed-bottom {
+    position: fixed !important;
+    background-color: #fcfbff;
+    bottom: 70px !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 2 !important;
+}
+
+@media (max-width: 767px) {
+    praxis-isncsci-input-layout {
+        padding-bottom: 100px;
+    }
+}
+
 @media (max-width: 500px) {
     :root {
         --cell-width: 2rem;
         --cell-height: 2rem;
+        --isncsci-anal-function-width: 4rem;
+        --space-12: 2rem;
     }
 }
 </style>

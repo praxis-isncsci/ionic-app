@@ -243,3 +243,7 @@ html {
   https://ionicframework.com/docs/layout/dynamic-font-scaling */
   --ion-dynamic-font: var(--ion-default-dynamic-font);
 }
+
+.calculation-error-alert .alert-message {
+  white-space: pre-wrap;
+}

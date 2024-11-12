@@ -23,6 +23,9 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+/* UI styles */
+import 'isncsci-ui/dist/css/design-system.css';
+
 const app = createApp(App)
   .use(IonicVue)
   .use(router);

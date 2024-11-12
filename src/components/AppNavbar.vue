@@ -2,18 +2,26 @@
     <ion-grid>
         <ion-row class="btn-row">
             <ion-col class="ion-text-center">
-                <ion-button size="small"  fill="clear" color="primary" class="navbar-btn" @click="exportToPDF">
+                <ion-button 
+                size="small"  
+                fill="clear" 
+                color="primary" 
+                class="navbar-btn" 
+                @click="showChart" 
+                :disabled="!isLessThan850"
+                :class="{ 'disabled-button': !isLessThan850 }"
+                >
                     <div class="btn-content">
-                        <ion-icon :icon="downloadOutline"></ion-icon>
-                        <span>PDF</span>
+                        <ion-icon :icon="manOutline"></ion-icon>
+                        <span>Dermatome</span>
                     </div>
                 </ion-button>
             </ion-col>
             <ion-col class="ion-text-center">
                 <ion-button size="small" fill="clear" color="primary" class="navbar-btn" @click="clearExam">
                     <div class="btn-content">
-                        <ion-icon slot="start" :icon="backspaceOutline"></ion-icon>
-                        <span>Clear</span>
+                        <ion-icon slot="start" :icon="documentOutline"></ion-icon>
+                        <span>New Exam</span>
                     </div>
                 </ion-button>
             </ion-col>
@@ -23,14 +31,14 @@
                         <ion-icon :icon="chevronUp"></ion-icon>
                     </ion-fab-button>
                     <ion-fab-list side="top">
+                        <ion-fab-button class="fab-list-btn" @click="exportToPDF">
+                            <ion-icon :icon="downloadOutline"></ion-icon>
+                        </ion-fab-button>
                         <ion-fab-button class="fab-list-btn" @click="onNavigate('/saved-worksheets')">
                             <ion-icon :icon="bookmarksOutline"></ion-icon>
                         </ion-fab-button>
                         <ion-fab-button class="fab-list-btn" @click="onNavigate('/eula')">
                             <ion-icon :icon="newspaperOutline"></ion-icon>
-                        </ion-fab-button>
-                        <ion-fab-button class="fab-list-btn" v-if="isLessThan850" @click="showChart">
-                            <ion-icon :icon="manOutline"></ion-icon>
                         </ion-fab-button>
                     </ion-fab-list>
                 </ion-fab>
@@ -58,7 +66,7 @@
 <script setup lang="ts">
 
 import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList, IonButton } from '@ionic/vue';
-import { manOutline, backspaceOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, helpCircleOutline, downloadOutline } from 'ionicons/icons';
+import { manOutline, documentOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, downloadOutline } from 'ionicons/icons';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 defineProps<{ 
@@ -116,7 +124,7 @@ onBeforeUnmount(() => {
 
 .btn-content span {
     font-size: 12px;
-    margin-left: 4px;
+    margin-left: 3px;
     white-space: nowrap;
 }
 
@@ -128,14 +136,27 @@ onBeforeUnmount(() => {
     width: 100%; 
 }
 
+.navbar-btn[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.disabled-button .btn-content ion-icon,
+.disabled-button .btn-content span {
+    color: #5E5E5E; 
+}
+
 .fab-list-btn {
-    --background: transparent;
-    --background-hover: transparent;
+    --background-hover: var(--ion-color-primary);
     --color: var(--ion-color-primary);
     --color-hover: var(--ion-color-primary);
 }
-
-@media (max-width: 500px) {
+@media (max-width: 650px) {
+    .btn-content span {
+        font-size: 10px;
+    }
+}
+@media (max-width: 525px) {
     .btn-row {
         flex-wrap: wrap;
     }

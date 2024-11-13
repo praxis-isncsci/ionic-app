@@ -42,8 +42,16 @@ After the account was created we used it to generated the key for our certificat
 
 We had to add the account as a user in the **Google Play console** and give it the necessary permissions to publish the app so we could use the certificate created with its key to setup our **Ionic Appflow** automated deployment.
 
-We still, however, need to do manual publishing.
+We still need to build the app and add android platform first
+1. npm run build
+2. npx cap add android
+The android app should build and 
+3. Check the versionCode and versionName in Google Play Console
+3. increment the versionCode to versionName /android/app/build.gradle         
+   3.1 versionCode 2
+   3.2 versionName "1.0.2"
 
+We still, however, need to do manual publishing.
 1. Commit and push the changes to the `main` branch
 2. Open the **Ionic Appflow** dashboard
 3. Select the project

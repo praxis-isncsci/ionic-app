@@ -557,6 +557,10 @@ const calculate = async () => {
             '--calc-classification-height',
             `${heightPx / 16}rem`,
         );
+        window.scrollTo({
+        top: 0,
+        behavior: 'auto',
+    });
     });
 
     const state = appStore.getState();

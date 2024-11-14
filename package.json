@@ -20,7 +20,7 @@
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
     "ionicons": "^7.0.0",
-    "isncsci-ui": "^1.0.20",
+    "isncsci-ui": "^1.0.21",
     "jspdf": "^2.5.2",
     "vue": "^3.3.0",
     "vue-router": "^4.2.0"

@@ -236,6 +236,7 @@ watch(
   background-color: #F9F9F9;
   padding: 10px 16px;
   z-index: 1000;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .worksheet-name {

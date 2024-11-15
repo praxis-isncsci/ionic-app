@@ -1,10 +1,13 @@
 <template>
   <MainLayout title="ISNCSCI" :showFooter="true">
-    <div v-if="currentMeta" class="worksheet-info">
-      <div class="worksheet-name">Worksheet Name: {{ currentMeta.name }}</div>
-      <div class="worksheet-exam-date">Exam Date: {{ new Date(currentMeta.examDate).toLocaleString() }}</div>
-      <input type="hidden" id="worksheet-id" name="worksheet-id" value="{{ currentMeta.id }}" />
-    </div>
+    <template #worksheet-info-slot>
+      <div v-if="currentMeta" class="worksheet-info">
+        <div class="worksheet-name">Worksheet Name: {{ currentMeta.name }}</div>
+        <div class="worksheet-exam-date">Exam Date: {{ new Date(currentMeta.examDate).toLocaleString() }}</div>
+        <input type="hidden" id="worksheet-id" name="worksheet-id" value="{{ currentMeta.id }}" />
+      </div>
+    </template>
+    
 
     <IsncsciControl ref="isncsciControlRef"></IsncsciControl>
 
@@ -232,6 +235,7 @@ watch(
 .worksheet-info {
   background-color: #F9F9F9;
   padding: 10px 16px;
+  z-index: 1000;
 }
 
 .worksheet-name {

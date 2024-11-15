@@ -547,22 +547,6 @@ const clear = async () => {
 }
 
 const calculate = async () => {
-    classificationStyle.value = 'visible';
-
-    nextTick(() => {
-        const heightPx = classificationRef.value
-            ? classificationRef.value.clientHeight
-            : 280;
-        document.documentElement.style.setProperty(
-            '--calc-classification-height',
-            `${heightPx / 16}rem`,
-        );
-        window.scrollTo({
-        top: 0,
-        behavior: 'auto',
-    });
-    });
-
     const state = appStore.getState();
     const examData = await calculateUseCase(
         state.gridModel ?? [],
@@ -576,6 +560,27 @@ const calculate = async () => {
         externalMessagePortProvider,
     );
     lastCalculatedExamData.value = examData;
+    
+    const updatedState = appStore.getState();
+    if (!updatedState.calculationError) {
+        classificationStyle.value = 'visible';
+
+        await nextTick();
+        
+        const heightPx = classificationRef.value
+        ? classificationRef.value.clientHeight
+        : 280;
+        document.documentElement.style.setProperty(
+        '--calc-classification-height',
+        `${heightPx / 16}rem`,
+        );
+        if (classificationRef.value) {
+            classificationRef.value.scrollIntoView({ behavior: 'auto', block: 'start' });
+        }
+    } else {
+        // Error - classification is hidden
+        classificationStyle.value = '';
+    }
     return examData;
 };
 

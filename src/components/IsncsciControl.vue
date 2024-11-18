@@ -603,6 +603,7 @@ defineExpose({
 
 select {
     background-color: #fefefe;
+    border: 1px solid #848484;
 }
 
 @media (max-width: 500px) {

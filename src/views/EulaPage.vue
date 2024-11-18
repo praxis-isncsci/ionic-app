@@ -10,6 +10,7 @@
           <ion-icon :icon="checkmarkOutline" class="checkmark-icon"></ion-icon>
           Accepted
         </p>
+        <ion-button @click="goToHomePage">ISNCSCI</ion-button>
       </div>
     </div>
   </MainLayout>
@@ -43,6 +44,10 @@ const acceptEula = (): void => {
   router.push('/home');
 };
 
+const goToHomePage = () => {
+  router.push('/home');
+};
+
 onMounted(() => {
   checkEulaAccepted();
 });
@@ -61,6 +66,7 @@ onMounted(() => {
 
 .accepted-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;

@@ -19,7 +19,7 @@
                         </div>
                         <div v-else>
                             <h2>{{ worksheet.name }}</h2>
-                            <p>{{ new Date(worksheet.lastUpdateDate).toLocaleString() }}</p>
+                            <p>Last time edited: {{ new Date(worksheet.lastUpdateDate).toLocaleString() }}</p>
                         </div>
                         <div class="button-group">
                             <ion-button size="small" fill="clear" @click="editWorksheetDetails(worksheet.id)"

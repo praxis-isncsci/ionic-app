@@ -7,6 +7,8 @@
       </ion-toolbar>
     </ion-header>
 
+    <slot name="worksheet-info-slot"></slot>
+
     <ion-content>
       <slot></slot>
     </ion-content>

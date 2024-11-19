@@ -92,7 +92,7 @@ const addLogo = async (doc: jsPDF) => {
 const addBodyDiagram = async (doc: jsPDF) => {
     const diagramX = 112;
     const diagramY = 30;
-    const diagramWidth = 60;
+    const diagramWidth = 58;
     const diagramHeight = 135;
 
     try {
@@ -166,7 +166,7 @@ const addHeadingsAndLabels = (doc: jsPDF) => {
         { text: 'SENSORY', x: 179.6, y: 26, size: 11 },
         { text: 'KEY MUSCLES', x: 210.6, y: 31.2, size: 8 },
         { text: 'KEY SENSORY POINTS', x: 173.1, y: 30, size: 8 },
-        { text: 'Light Touch (LTL)', x: 169.1, y: 33, size: 6 },
+        { text: 'Light Touch (LTL)', x: 170, y: 33, size: 6 },
         { text: 'Pin Prick (PPL)', x: 188.6, y: 33, size: 6 },
     ];
 
@@ -724,7 +724,7 @@ const addCommentsBox = (doc: jsPDF, examData: ExamData) => {
     textX += 15;
     doc.setFont('helvetica', 'italic');
     doc.setFontSize(7);
-    doc.text('Non-key Muscle? Reason for NT?', textX, textY);
+    doc.text('(Non-key Muscle? Reason for NT?', textX, textY);
 
     textX -= 15;
     textY += 3.5;
@@ -733,6 +733,23 @@ const addCommentsBox = (doc: jsPDF, examData: ExamData) => {
     textY += 5;
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7);
+    const rightLowestNonKey = examData.rightLowestNonKeyMuscleWithMotorFunction || '';
+    const leftLowestNonKey = examData.leftLowestNonKeyMuscleWithMotorFunction || '';
+    let nonKeyMuscleMessage = '';
+    if (rightLowestNonKey && leftLowestNonKey) {
+        nonKeyMuscleMessage = `Motor function present in non-key muscle at ${rightLowestNonKey} on the right and at ${leftLowestNonKey} on the left.`;
+    } else if (rightLowestNonKey) {
+        nonKeyMuscleMessage = `Motor function present in non-key muscle at ${rightLowestNonKey} on the right.`;
+    } else if (leftLowestNonKey) {
+        nonKeyMuscleMessage = `Motor function present in non-key muscle at ${leftLowestNonKey} on the left.`;
+    }
+
+    if (nonKeyMuscleMessage) {
+        const nonKeyMuscleLines = doc.splitTextToSize(nonKeyMuscleMessage, commentsBoxWidth - 4);
+        doc.text(nonKeyMuscleLines, textX, textY);
+        textY += nonKeyMuscleLines.length * 4;
+        textY += 2;
+    }
     const comments = examData.comments || '';
     const commentsLines = doc.splitTextToSize(comments, commentsBoxWidth - 4);
     doc.text(commentsLines, textX, textY);

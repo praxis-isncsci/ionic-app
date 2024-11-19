@@ -259,7 +259,7 @@
                 </praxis-isncsci-classification>
             </praxis-isncsci-app-layout>
         </ion-content>
-        <ion-footer v-show="isSmallScreen && classificationStyle !== 'visible' ">
+        <ion-footer v-if="isSmallScreen && classificationStyle !== 'visible' ">
             <praxis-isncsci-input slot="input-controls" disabled ref="inputButtonsRef">
                     <label for="consider-normal" slot="consider-normal-label">Consider normal or not normal for
                         classification:</label>
@@ -599,6 +599,7 @@ defineExpose({
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 5px solid red;
 }
 
 select {

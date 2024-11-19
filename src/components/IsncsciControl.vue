@@ -599,7 +599,6 @@ defineExpose({
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 5px solid red;
 }
 
 select {

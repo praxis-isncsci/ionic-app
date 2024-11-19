@@ -7,7 +7,6 @@
         <input type="hidden" id="worksheet-id" name="worksheet-id" value="{{ currentMeta.id }}" />
       </div>
     </template>
-    
 
     <IsncsciControl ref="isncsciControlRef"></IsncsciControl>
 

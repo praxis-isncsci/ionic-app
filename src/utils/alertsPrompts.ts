@@ -134,23 +134,28 @@ export const showToast = async (message: string): Promise<void> => {
     await toast.present();
 }
 
-export const showCalculationErrorAlert = (message: string): Promise<void> => {
-    return new Promise((resolve) => {
-        alertController
-        .create({
-            header: 'Calculation Error',
-            message: message,
-            buttons: [
-                {
+let isCalculationErrorAlertOpen = false;
+
+export const showCalculationErrorAlert = async (message: string): Promise<void> => {
+    if (isCalculationErrorAlertOpen) return;
+    isCalculationErrorAlertOpen = true;
+
+    const alert = await alertController.create({
+        header: 'Calculation Error',
+        message: message,
+        buttons: [
+            {
                 text: 'OK',
                 role: 'cancel',
                 handler: () => {
-                    resolve();
+                    isCalculationErrorAlertOpen = false;
                 },
-                },
-            ],
-            cssClass: 'calculation-error-alert',
-        })
-        .then((alert) => alert.present());
+            },
+        ],
+        cssClass: 'calculation-error-alert',
     });
+
+    await alert.present();
+    await alert.onDidDismiss();
+    isCalculationErrorAlertOpen = false;
 };

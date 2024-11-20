@@ -9,14 +9,8 @@
     <IsncsciControl ref="isncsciControlRef"></IsncsciControl>
 
     <template #footer-buttons>
-      <AppNavbar 
-      :calculateOnClick="calculate_onClick" 
-      :saveOnClick="save_onClick" 
-      :clearExam="clearExam" 
-      :exportToPDF="exportToPDF"
-      :onNavigate="handleNavigation"
-      :showChart="showChart"
-      >
+      <AppNavbar :calculateOnClick="calculate_onClick" :saveOnClick="save_onClick" :clearExam="clearExam"
+        :exportToPDF="exportToPDF" :onNavigate="handleNavigation" :showChart="showChart">
       </AppNavbar>
     </template>
   </MainLayout>
@@ -105,7 +99,7 @@ const checkUnsavedChanges = async (): Promise<boolean> => {
     return true;
   } else if (currentMeta.value && isncsciControlRef.value) {
     // exist. exam with unsaved changes
-    const savedWorksheet = worksheets.getWorksheet(currentMeta.value.id);
+    const savedWorksheet = await worksheets.getWorksheet(currentMeta.value.id);
     const currentExamData = isncsciControlRef.value.examData();
     const savedExamData = savedWorksheet.examData;
     if (!examDataEqual(currentExamData, savedExamData)) {
@@ -158,7 +152,7 @@ const save_onClick = async () => {
         nameIsValid = true;
       }
     }
-    currentMeta.value = worksheets.newWorksheet(
+    currentMeta.value = await worksheets.newWorksheet(
       worksheetDetails!.name,
       examData,
       worksheetDetails!.examDate
@@ -167,12 +161,12 @@ const save_onClick = async () => {
     await showToast('Saved successfully.');
   } else {
     // exist. worksheet
-    const savedWorksheet = worksheets.getWorksheet(currentMeta.value.id);
+    const savedWorksheet = await worksheets.getWorksheet(currentMeta.value.id);
     const savedExamData = savedWorksheet.examData;
 
     if (!examDataEqual(examData, savedExamData)) {
       //data changed, save and show save message
-      worksheets.saveWorksheet({ id: currentMeta.value.id, examData });
+      await worksheets.saveWorksheet({ id: currentMeta.value.id, examData });
       await showToast('Saved successfully.');
     } else {
       //data hasn't been changed - no message
@@ -194,7 +188,7 @@ const clearExam = async () => {
 const loadWorksheet = async () => {
   if (route.params.id) {
     const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
-    const worksheet = worksheets.getWorksheet(id);
+    const worksheet = await worksheets.getWorksheet(id);
     if (worksheet && worksheet.examData) {
       isLoading.value = true;
       await isncsciControlRef.value?.load(worksheet.examData);
@@ -217,6 +211,7 @@ const showChart = () => {
 };
 
 onMounted(async () => {
+  await worksheets.loadMeta();
   await loadWorksheet();
 });
 

@@ -1,0 +1,12 @@
+{
+	"appId": "org.praxisinstitute.isncsci",
+	"appName": "isncsci",
+	"webDir": "dist",
+	"server": {
+		"androidScheme": "https"
+	},
+	"packageClassList": [
+		"FilesystemPlugin",
+		"PreferencesPlugin"
+	]
+}

@@ -1,3 +1,4 @@
+import { Preferences } from '@capacitor/preferences';
 import { APP_PREFIX } from '@/config';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 
@@ -19,32 +20,41 @@ export interface WorksheetDetails {
 
 export class Worksheets {
     private static instance: Worksheets;
-    private meta: IWorksheetMetaItem[];
+    private meta: IWorksheetMetaItem[] = [];
     private metaKey = `${APP_PREFIX}meta`;
+    private isMetaLoaded = false;
 
-    private updateMetaLocalStorage() {
-        localStorage.setItem(this.metaKey, JSON.stringify(this.meta));
+    private async updateMetaLocalStorage() {
+        await Preferences.set({ key: this.metaKey, value: JSON.stringify(this.meta) });
+        //localStorage.setItem(this.metaKey, JSON.stringify(this.meta));
     }
 
-    private updateWorksheetLocalStorage(worksheet: IWorksheet) {
-        localStorage.setItem(`${APP_PREFIX}${worksheet.id}`, JSON.stringify(worksheet));
+    private async updateWorksheetLocalStorage(worksheet: IWorksheet) {
+        Preferences.set({ key: `${APP_PREFIX}${worksheet.id}`, value: JSON.stringify(worksheet) });
+        //localStorage.setItem(`${APP_PREFIX}${worksheet.id}`, JSON.stringify(worksheet));
     }
 
-    private constructor() {
-        this.meta = JSON.parse(localStorage.getItem(this.metaKey) || '[]');
-        this.meta.forEach((m) => {
-            m.examDate = new Date(m.examDate);
-            m.lastUpdateDate = new Date(m.lastUpdateDate);
-        });
+    public async loadMeta() {
+        if (!this.isMetaLoaded) {
+            const result = await Preferences.get({ key: this.metaKey });
+            if (result && result.value) {
+                this.meta = JSON.parse(result.value);
+                this.meta.forEach((m) => {
+                    m.examDate = new Date(m.examDate);
+                    m.lastUpdateDate = new Date(m.lastUpdateDate);
+                });
+            }
+        }
+        this.isMetaLoaded = true;
     }
 
-    public updateWorksheetDetails(id: string, newName: string, newExamDate: Date): void {
+    public async updateWorksheetDetails(id: string, newName: string, newExamDate: Date): Promise<void> {
         const worksheetMeta = this.meta.find(m => m.id === id);
         if (worksheetMeta) {
             worksheetMeta.name = newName;
             worksheetMeta.examDate = newExamDate;
             worksheetMeta.lastUpdateDate = new Date();
-            this.updateMetaLocalStorage();
+            await this.updateMetaLocalStorage();
         } else {
             throw new Error('Worksheet not found');
         }
@@ -62,9 +72,9 @@ export class Worksheets {
             name = `${suffex}${++index}`;
         }
         return name;
-    } 
+    }
 
-    public newWorksheet(name: string, examData: ExamData, examDate: Date): IWorksheetMetaItem {
+    public async newWorksheet(name: string, examData: ExamData, examDate: Date): Promise<IWorksheetMetaItem> {
         if (this.isNameExist(name)) {
             throw "Worksheet name exists";
         }
@@ -74,41 +84,48 @@ export class Worksheets {
             id, name, examDate, lastUpdateDate: now
         };
         this.meta.push(metaItem);
-        this.updateMetaLocalStorage();
-        this.updateWorksheetLocalStorage({
+        await this.updateMetaLocalStorage();
+        await this.updateWorksheetLocalStorage({
             id,
             examData
         });
         return metaItem;
     }
 
-    public saveWorksheet(worksheet: IWorksheet) {
+    public async saveWorksheet(worksheet: IWorksheet) {
         const worksheetMeta = this.meta.find(m => m.id == worksheet.id);
         if (!worksheetMeta) {
             throw "Worksheet not found";
         }
         worksheetMeta.lastUpdateDate = new Date();
-        this.updateMetaLocalStorage();
-        this.updateWorksheetLocalStorage(worksheet);
+        await this.updateMetaLocalStorage();
+        await this.updateWorksheetLocalStorage(worksheet);
     }
 
     public getAllMeta(): IWorksheetMetaItem[] {
         return this.meta;
     }
 
-    public removeWorksheet(id: string): void {
+    public async removeWorksheet(id: string): Promise<void> {
         // Filter out the worksheet with the selected id
         this.meta = this.meta.filter(m => m.id !== id);
 
         // Update the meta data in local storage
-        this.updateMetaLocalStorage();
+        await this.updateMetaLocalStorage();
 
         // Remove the specific worksheet data from local storage
-        localStorage.removeItem(`${APP_PREFIX}${id}`);
+        await Preferences.remove({ key: `${APP_PREFIX}${id}` });
+        //localStorage.removeItem(`${APP_PREFIX}${id}`);
     }
 
-    public getWorksheet(id: string): IWorksheet {
-        return JSON.parse(localStorage.getItem(`${APP_PREFIX}${id}`) || '{}') as IWorksheet
+    public async getWorksheet(id: string): Promise<IWorksheet> {
+        const result = await Preferences.get({ key: `${APP_PREFIX}${id}` });
+        if (result && result.value) {
+            return JSON.parse(result.value) as IWorksheet;
+        } else {
+            return {} as IWorksheet;
+        }
+        //return JSON.parse(localStorage.getItem(`${APP_PREFIX}${id}`) || '{}') as IWorksheet
     }
 
     public getMeta(id: string): IWorksheetMetaItem | undefined {
@@ -121,5 +138,5 @@ export class Worksheets {
         }
         return Worksheets.instance;
     }
-    
+
 }

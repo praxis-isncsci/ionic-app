@@ -1,5 +1,12 @@
 <template>
   <MainLayout title="EULA" :showNavbar="false" :showFooter="false">
+    <template #header-buttons>
+      <ion-buttons slot="end" v-if="isEulaAccepted">
+        <ion-button @click="goToHomePage" fill="clear">
+          <ion-icon slot="icon-only" :icon="closeOutline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </template>
     <div class="ion-padding">
       <div v-html="eulaContent" class="eula-content"></div>
       <div v-if="!isEulaAccepted">
@@ -10,7 +17,6 @@
           <ion-icon :icon="checkmarkOutline" class="checkmark-icon"></ion-icon>
           Accepted
         </p>
-        <ion-button @click="goToHomePage">ISNCSCI</ion-button>
       </div>
     </div>
   </MainLayout>
@@ -21,7 +27,7 @@ import { ref, onMounted } from 'vue';
 import {
   IonButton, IonIcon
 } from '@ionic/vue';
-import { checkmarkOutline } from 'ionicons/icons';
+import { checkmarkOutline, closeOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import MainLayout from './MainLayout.vue';
 import { eulaContent } from '../eulaContent'

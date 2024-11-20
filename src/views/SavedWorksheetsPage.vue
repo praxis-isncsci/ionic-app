@@ -59,9 +59,11 @@ const savedWorksheets = ref<IWorksheetMetaItem[]>([]);
 const editingWorksheetId = ref<string | null>(null);
 const editingWorksheetName = ref<string>('');
 
-onMounted(() => {
-    const storedData = JSON.parse(localStorage.getItem(`${APP_PREFIX}meta`) || '[]');
-    savedWorksheets.value = storedData;
+onMounted(async () => {
+    // const storedData = JSON.parse(localStorage.getItem(`${APP_PREFIX}meta`) || '[]');
+    // savedWorksheets.value = storedData;
+    await worksheets.loadMeta();
+    savedWorksheets.value = worksheets.getAllMeta();
 });
 
 const close_onClick = () => {
@@ -99,7 +101,7 @@ const editWorksheetDetails = async (id: string) => {
     }
 
     // Update the worksheet details in the Worksheets utility
-    worksheets.updateWorksheetDetails(
+    await worksheets.updateWorksheetDetails(
         id,
         worksheetDetails!.name,
         worksheetDetails!.examDate
@@ -118,7 +120,7 @@ const editWorksheet = async (id: string) => {
 const removeWorksheet = async (id: string) => {
     const confirm = await showConfirmDeleteAlert();
     if (confirm) {
-        worksheets.removeWorksheet(id);
+        await worksheets.removeWorksheet(id);
         savedWorksheets.value = worksheets.getAllMeta();
     }
 };

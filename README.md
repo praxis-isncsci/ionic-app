@@ -44,12 +44,13 @@ We had to add the account as a user in the **Google Play console** and give it t
 
 We still need to build the app and add android platform first
 1. npm run build
-2. npx cap add android
+2. npx cap sync
+3. npx cap add android
 The android app should build and 
-3. Check the versionCode and versionName in Google Play Console
-3. increment the versionCode to versionName /android/app/build.gradle         
-   3.1 versionCode 2
-   3.2 versionName "1.0.2"
+4. Check the versionCode and versionName in Google Play Console
+5. increment the versionCode to versionName /android/app/build.gradle         
+   5.1 versionCode 2
+   5.2 versionName "1.0.2"
 
 We still, however, need to do manual publishing.
 1. Commit and push the changes to the `main` branch

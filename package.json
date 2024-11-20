@@ -17,11 +17,13 @@
     "@capacitor/core": "^6.1.2",
     "@capacitor/filesystem": "^6.0.1",
     "@capacitor/ios": "^6.1.2",
+    "@capacitor/preferences": "^6.0.3",
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
     "ionicons": "^7.0.0",
     "isncsci-ui": "^1.0.22",
     "jspdf": "^2.5.2",
+    "update": "^0.7.4",
     "vue": "^3.3.0",
     "vue-router": "^4.2.0"
   },

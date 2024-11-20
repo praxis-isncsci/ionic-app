@@ -1,49 +1,42 @@
 <template>
-    <ion-page>
-        <ion-header>
-            <ion-toolbar>
-                <ion-title>Saved Worksheets</ion-title>
-                <ion-buttons slot="end">
-                    <ion-button @click="close_onClick">
-                        <ion-icon :icon="closeOutline"></ion-icon>
-                    </ion-button>
-                </ion-buttons>
-            </ion-toolbar>
-        </ion-header>
-        <ion-content>
-            <ion-list>
-                <ion-item v-for="worksheet in savedWorksheets" :key="worksheet.id">
-                    <ion-label class="worksheet-row">
-                        <div v-if="editingWorksheetId === worksheet.id">
-                            <input v-model="editingWorksheetName" />
-                        </div>
-                        <div v-else>
-                            <h2>{{ worksheet.name }}</h2>
-                            <p>Last time edited: {{ new Date(worksheet.lastUpdateDate).toLocaleString() }}</p>
-                        </div>
-                        <div class="button-group">
-                            <ion-button size="small" fill="clear" @click="editWorksheetDetails(worksheet.id)"
-                                class="icon-button">
-                                <ion-icon :icon="createOutline"></ion-icon>
-                            </ion-button>
-                            <ion-button size="small" fill="clear" @click="editWorksheet(worksheet.id)"
-                                class="icon-button">
-                                <ion-icon :icon="pencilOutline"></ion-icon>
-                            </ion-button>
-                            <ion-button size="small" fill="clear" color="danger" @click="removeWorksheet(worksheet.id)"
-                                class="icon-button">
-                                <ion-icon :icon="trashOutline"></ion-icon>
-                            </ion-button>
-                        </div>
-                    </ion-label>
-                </ion-item>
-            </ion-list>
-        </ion-content>
-    </ion-page>
+    <MainLayout title="Saved Worksheets"  :showNavbar="false" :showFooter="false">
+        <template #header-buttons>
+            <ion-buttons slot="end">
+            <ion-button @click="close_onClick" fill="clear">
+                <ion-icon slot="icon-only" :icon="closeOutline"></ion-icon>
+            </ion-button>
+            </ion-buttons>
+        </template>
+        <ion-list>
+            <ion-item v-for="worksheet in savedWorksheets" :key="worksheet.id">
+            <ion-label class="worksheet-row">
+                <div v-if="editingWorksheetId === worksheet.id">
+                <input v-model="editingWorksheetName" />
+                </div>
+                <div v-else>
+                <h2>{{ worksheet.name }}</h2>
+                <p>Last time edited: {{ new Date(worksheet.lastUpdateDate).toLocaleString() }}</p>
+                </div>
+                <div class="button-group">
+                <ion-button size="small" fill="clear" @click="editWorksheetDetails(worksheet.id)" class="icon-button">
+                    <ion-icon :icon="createOutline"></ion-icon>
+                </ion-button>
+                <ion-button size="small" fill="clear" @click="editWorksheet(worksheet.id)" class="icon-button">
+                    <ion-icon :icon="pencilOutline"></ion-icon>
+                </ion-button>
+                <ion-button size="small" fill="clear" color="danger" @click="removeWorksheet(worksheet.id)" class="icon-button">
+                    <ion-icon :icon="trashOutline"></ion-icon>
+                </ion-button>
+                </div>
+            </ion-label>
+            </ion-item>
+        </ion-list>
+    </MainLayout>
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonItem, IonLabel, IonList } from '@ionic/vue';
+import MainLayout from './MainLayout.vue';
+import { IonButtons, IonButton, IonIcon, IonItem, IonLabel, IonList } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import { closeOutline, createOutline, pencilOutline, trashOutline } from 'ionicons/icons';

@@ -101,30 +101,46 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+ion-grid {
+        padding-bottom: 10px;
+        border-top: 1px solid #D4D4D4;
+    }
+
 .btn-row {
-    display: flex;
-    flex-wrap: nowrap;
-}
+        flex-wrap: wrap;
+    }
 
-.btn-row ion-col {
-    flex: 0 0 20%;
-    max-width: 20%;
-    text-align: center;
-}
+    .btn-row ion-col {
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
 
-.btn-content {
+    .btn-content {
+        flex-direction: column;
+    }
+
+    .ion-grid,
+    .ion-row {
+        --ion-grid-column-padding: 0;
+    }
+
+    .ion-col {
+        padding: 0;
+    }
+
+    .btn-content {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .btn-content ion-icon {
-    font-size: 16px;
+    font-size: 25px;
 }
 
 .btn-content span {
     font-size: 12px;
-    margin-left: 3px;
+    margin-top: 3px;
     white-space: nowrap;
 }
 
@@ -147,45 +163,34 @@ onBeforeUnmount(() => {
 }
 
 .fab-list-btn {
+    border: 1px solid #D4D4D4;
+    border-radius: 50%;
     --background-hover: var(--ion-color-primary);
     --color: var(--ion-color-primary);
     --color-hover: var(--ion-color-primary);
 }
+
 @media (max-width: 650px) {
     .btn-content span {
         font-size: 10px;
     }
+
+    ion-grid {
+            padding-bottom: 15px;
+        }
 }
 @media (max-width: 525px) {
-    .btn-row {
-        flex-wrap: wrap;
-    }
+    ion-grid {
+            padding-bottom: 15px;
+            border-top: 1px solid #D4D4D4;
+        }
 
-    .btn-row ion-col {
-        flex: 0 0 20%;
-        max-width: 20%;
-    }
+        .btn-content ion-icon {
+            font-size: 20px;
+        }
 
-    .btn-content {
-        flex-direction: column;
-    }
-
-    .ion-grid,
-    .ion-row {
-        --ion-grid-column-padding: 0;
-    }
-
-    .ion-col {
-        padding: 0;
-    }
-
-    .btn-content ion-icon {
-        font-size: 15px;
-    }
-
-    .btn-content span {
-        font-size: 8px;
-        margin: 3px 0 0 0;
+        .btn-content span {
+        margin-top: 2px;
     }
 }
 </style>

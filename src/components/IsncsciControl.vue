@@ -1,7 +1,9 @@
 <template isncsci-web-app>
     <ion-page>
-        <ion-content>
-            <praxis-isncsci-app-layout :classification-style="classificationStyle">
+        <ion-content >
+            <praxis-isncsci-app-layout :classification-style="classificationStyle"
+            :class="{ 'content-with-footer': isSmallScreen && classificationStyle !== 'visible' }"
+            >
                 <praxis-isncsci-input-layout slot="input-layout" ref="inputLayoutRef">
                     <div slot="vac" class="anal-function right">
                         <label for="vac"><span class="intermittent">(</span>VAC<span class="intermittent">) Voluntary anal
@@ -124,7 +126,12 @@
                         </ion-content>
                     </ion-modal>
                 </praxis-isncsci-input-layout>
-                <praxis-isncsci-input v-if="!isSmallScreen" slot="input-controls" disabled ref="inputButtonsRef">
+                <praxis-isncsci-input 
+                    slot="input-controls" 
+                    disabled 
+                    ref="inputButtonsRef"
+                    :class="{ 'footer-position': isSmallScreen && classificationStyle !== 'visible' }"
+                >
                     <label for="consider-normal" slot="consider-normal-label">Consider normal or not normal for
                         classification:</label>
                     <select name="consider-normal" id="consider-normal" slot="consider-normal">
@@ -259,7 +266,7 @@
                 </praxis-isncsci-classification>
             </praxis-isncsci-app-layout>
         </ion-content>
-        <ion-footer v-if="isSmallScreen && classificationStyle !== 'visible' ">
+        <!-- <ion-footer v-if="isSmallScreen && classificationStyle !== 'visible' ">
             <praxis-isncsci-input slot="input-controls" disabled ref="inputButtonsRef">
                     <label for="consider-normal" slot="consider-normal-label">Consider normal or not normal for
                         classification:</label>
@@ -289,7 +296,7 @@
                         name="reason-for-impairment-not-due-to-sci-specify"
                         slot="reason-for-impairment-not-due-to-sci-specify"></textarea>
                 </praxis-isncsci-input>
-        </ion-footer>
+        </ion-footer> -->
     </ion-page>
 </template>
 
@@ -604,6 +611,18 @@ defineExpose({
 select {
     background-color: #fefefe;
     border: 1px solid #848484;
+}
+
+.footer-position {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #fefefe;
+}
+
+.content-with-footer {
+    padding-bottom: 150px;
 }
 
 @media (max-width: 500px) {

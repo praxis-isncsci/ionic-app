@@ -92,10 +92,12 @@ function checkScreenSize() {
 onMounted(() => {
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
+    window.addEventListener('orientationchange', checkScreenSize);
 });
 
 onBeforeUnmount(() => {
     window.removeEventListener('resize', checkScreenSize);
+    window.removeEventListener('orientationchange', checkScreenSize);
 });
 
 </script>

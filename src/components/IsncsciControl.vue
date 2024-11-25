@@ -1,10 +1,15 @@
 <template isncsci-web-app>
     <ion-page>
         <ion-content >
-            <praxis-isncsci-app-layout :classification-style="classificationStyle"
-            :class="{ 'content-with-footer': isSmallScreen && classificationStyle !== 'visible' }"
+            <praxis-isncsci-app-layout 
+            :classification-style="classificationStyle"
+            class="app-layout"
             >
-                <praxis-isncsci-input-layout slot="input-layout" ref="inputLayoutRef">
+                <praxis-isncsci-input-layout 
+                slot="input-layout" 
+                ref="inputLayoutRef" 
+                class="input-layout"
+                >
                     <div slot="vac" class="anal-function right">
                         <label for="vac"><span class="intermittent">(</span>VAC<span class="intermittent">) Voluntary anal
                                 contraction</span></label>
@@ -130,7 +135,8 @@
                     slot="input-controls" 
                     disabled 
                     ref="inputButtonsRef"
-                    :class="{ 'footer-position': isSmallScreen && classificationStyle !== 'visible' }"
+                    class="input-controls"
+                    :class="{ 'hidden': classificationStyle === 'visible' }"
                 >
                     <label for="consider-normal" slot="consider-normal-label">Consider normal or not normal for
                         classification:</label>
@@ -160,7 +166,11 @@
                         name="reason-for-impairment-not-due-to-sci-specify"
                         slot="reason-for-impairment-not-due-to-sci-specify"></textarea>
                 </praxis-isncsci-input>
-                <praxis-isncsci-classification slot="classification" ref="classificationRef">
+                <praxis-isncsci-classification 
+                slot="classification" 
+                ref="classificationRef" 
+                class="classification"
+                >
                     <praxis-isncsci-dialog-header slot="header">
                         <div slot="title">Classification</div>
                         <div slot="close">
@@ -266,37 +276,6 @@
                 </praxis-isncsci-classification>
             </praxis-isncsci-app-layout>
         </ion-content>
-        <!-- <ion-footer v-if="isSmallScreen && classificationStyle !== 'visible' ">
-            <praxis-isncsci-input slot="input-controls" disabled ref="inputButtonsRef">
-                    <label for="consider-normal" slot="consider-normal-label">Consider normal or not normal for
-                        classification:</label>
-                    <select name="consider-normal" id="consider-normal" slot="consider-normal">
-                        <option></option>
-                        <option value="1" class="cell-input">Consider Normal</option>
-                        <option value="2" class="cell-input">Consider Not Normal</option>
-                    </select>
-                    <label for="reason-for-impairment-not-due-to-sci" slot="reason-for-impairment-not-due-to-sci-label">If motor
-                        impairment not due to SCI, please indicate
-                        reason:</label>
-                    <select id="reason-for-impairment-not-due-to-sci" name="reason-for-impairment-not-due-to-sci"
-                        slot="reason-for-impairment-not-due-to-sci">
-                        <option></option>
-                        <option value="1" class="cell-input">Plexopathy</option>
-                        <option value="2" class="cell-input">
-                            Peripheral neuropathy
-                        </option>
-                        <option value="3" class="cell-input">
-                            Pre-existing myoneural disease (e.g. Stroke, MS, etc.)
-                        </option>
-                        <option value="6" class="cell-input">Other (specify:)</option>
-                    </select>
-                    <label for="reason-for-impairment-not-due-to-sci-specify"
-                        slot="reason-for-impairment-not-due-to-sci-specify-label">Specify:</label>
-                    <textarea id="reason-for-impairment-not-due-to-sci-specify"
-                        name="reason-for-impairment-not-due-to-sci-specify"
-                        slot="reason-for-impairment-not-due-to-sci-specify"></textarea>
-                </praxis-isncsci-input>
-        </ion-footer> -->
     </ion-page>
 </template>
 
@@ -612,17 +591,61 @@ select {
     background-color: #fefefe;
     border: 1px solid #848484;
 }
-
-.footer-position {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: #fefefe;
+.app-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
 }
 
-.content-with-footer {
-    padding-bottom: 150px;
+.input-layout,
+.classification {
+    overflow-y: auto;
+}
+
+.input-controls {
+    flex-shrink: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .app-layout {
+        flex-direction: column;
+    }
+
+    .input-layout {
+        order: 1;
+    }
+
+    .input-controls {
+        order: 2;
+    }
+
+    .classification {
+        order: 3;
+    }
+}
+
+@media (max-width: 767px) {
+    .app-layout {
+        flex-direction: column;
+    }
+
+    .input-layout {
+        order: 1;
+    }
+
+    .classification {
+        order: 2;
+    }
+
+    .input-controls {
+        order: 3;
+        margin-top: auto;
+    }
 }
 
 @media (max-width: 500px) {
@@ -630,7 +653,12 @@ select {
         --cell-width: 2rem;
         --cell-height: 2rem;
         --isncsci-anal-function-width: 4rem;
-        --space-12: 2rem;
+        --space-12: 1.5rem;
+    }
+
+    praxis-isncsci-input-layout {
+        padding: 0 1.2rem;
     }
 }
+
 </style>

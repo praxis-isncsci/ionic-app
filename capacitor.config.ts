@@ -7,6 +7,17 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: 'https',
   },
+  plugins: {
+    ScreenOrientation: {
+      ios: {
+        supportedOrientations: ['portrait'],
+      },
+      android: {
+        allowOrientationChange: false,
+        orientation: 'portrait',
+      },
+    },
+  },
 };
 
 export default config;

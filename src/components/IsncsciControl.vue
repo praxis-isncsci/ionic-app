@@ -1,8 +1,14 @@
 <template isncsci-web-app>
     <ion-page>
-        <ion-content>
-            <praxis-isncsci-app-layout :classification-style="classificationStyle">
-                <praxis-isncsci-input-layout slot="input-layout" ref="inputLayoutRef">
+        <ion-content >
+            <praxis-isncsci-app-layout 
+            :classification-style="classificationStyle"
+            class="app-layout"
+            >
+                <praxis-isncsci-input-layout 
+                slot="input-layout" 
+                ref="inputLayoutRef" 
+                >
                     <div slot="vac" class="anal-function right">
                         <label for="vac"><span class="intermittent">(</span>VAC<span class="intermittent">) Voluntary anal
                                 contraction</span></label>
@@ -124,7 +130,11 @@
                         </ion-content>
                     </ion-modal>
                 </praxis-isncsci-input-layout>
-                <praxis-isncsci-input v-if="!isSmallScreen" slot="input-controls" disabled ref="inputButtonsRef">
+                <praxis-isncsci-input 
+                    slot="input-controls" 
+                    disabled 
+                    ref="inputButtonsRef"
+                >
                     <label for="consider-normal" slot="consider-normal-label">Consider normal or not normal for
                         classification:</label>
                     <select name="consider-normal" id="consider-normal" slot="consider-normal">
@@ -153,7 +163,11 @@
                         name="reason-for-impairment-not-due-to-sci-specify"
                         slot="reason-for-impairment-not-due-to-sci-specify"></textarea>
                 </praxis-isncsci-input>
-                <praxis-isncsci-classification slot="classification" ref="classificationRef">
+                <praxis-isncsci-classification 
+                slot="classification" 
+                ref="classificationRef" 
+                class="classification"
+                >
                     <praxis-isncsci-dialog-header slot="header">
                         <div slot="title">Classification</div>
                         <div slot="close">
@@ -259,43 +273,12 @@
                 </praxis-isncsci-classification>
             </praxis-isncsci-app-layout>
         </ion-content>
-        <ion-footer v-if="isSmallScreen && classificationStyle !== 'visible' ">
-            <praxis-isncsci-input slot="input-controls" disabled ref="inputButtonsRef">
-                    <label for="consider-normal" slot="consider-normal-label">Consider normal or not normal for
-                        classification:</label>
-                    <select name="consider-normal" id="consider-normal" slot="consider-normal">
-                        <option></option>
-                        <option value="1" class="cell-input">Consider Normal</option>
-                        <option value="2" class="cell-input">Consider Not Normal</option>
-                    </select>
-                    <label for="reason-for-impairment-not-due-to-sci" slot="reason-for-impairment-not-due-to-sci-label">If motor
-                        impairment not due to SCI, please indicate
-                        reason:</label>
-                    <select id="reason-for-impairment-not-due-to-sci" name="reason-for-impairment-not-due-to-sci"
-                        slot="reason-for-impairment-not-due-to-sci">
-                        <option></option>
-                        <option value="1" class="cell-input">Plexopathy</option>
-                        <option value="2" class="cell-input">
-                            Peripheral neuropathy
-                        </option>
-                        <option value="3" class="cell-input">
-                            Pre-existing myoneural disease (e.g. Stroke, MS, etc.)
-                        </option>
-                        <option value="6" class="cell-input">Other (specify:)</option>
-                    </select>
-                    <label for="reason-for-impairment-not-due-to-sci-specify"
-                        slot="reason-for-impairment-not-due-to-sci-specify-label">Specify:</label>
-                    <textarea id="reason-for-impairment-not-due-to-sci-specify"
-                        name="reason-for-impairment-not-due-to-sci-specify"
-                        slot="reason-for-impairment-not-due-to-sci-specify"></textarea>
-                </praxis-isncsci-input>
-        </ion-footer>
     </ion-page>
 </template>
 
 <script setup lang="ts">
 import { close } from 'ionicons/icons';
-import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonFooter, IonPage } from '@ionic/vue';
+import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue';
 import { ref, nextTick, onMounted, onBeforeUnmount, watch } from 'vue';
 import { bindExamDataToGridModel, bindExamDataToTotals, getEmptyExamData, getExamDataFromGridModel } from 'isncsci-ui/dist/esm/core/helpers'
 import {
@@ -338,9 +321,8 @@ const isLargeScreen = ref(window.innerWidth >= 850);
 const isChartModalOpen = ref(false);
 const isLoading = ref(false);
 const lastCalculatedExamData = ref<ExamData | undefined>(undefined);
-let ready = false;
-
 const diagramRef = ref<HTMLElement | null>(null);
+let ready = false;
 
 const externalMessagePortProvider: IExternalMessageProvider = {
     sendOutExamData: () => {
@@ -371,7 +353,6 @@ const updateScreenSize = () => {
 
 onMounted(() => {
     updateScreenSize();
-    console.log('Window innerWidth:', window.innerWidth);
     window.addEventListener('resize', updateScreenSize);
 
     if (
@@ -606,12 +587,22 @@ select {
     border: 1px solid #848484;
 }
 
+.app-layout {
+    height: 100%;
+}
+
+
 @media (max-width: 500px) {
     :root {
         --cell-width: 2rem;
         --cell-height: 2rem;
         --isncsci-anal-function-width: 4rem;
-        --space-12: 2rem;
+        --space-12: 1.5rem;
+    }
+
+    praxis-isncsci-input-layout {
+        padding: 0 1.2rem;
     }
 }
+
 </style>

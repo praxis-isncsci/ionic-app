@@ -61,6 +61,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
 .eula-content {
   display: flex;
   flex-direction: column;
@@ -92,4 +93,5 @@ onMounted(() => {
   border: 1px solid var(--ion-color-success);
   border-radius: 2px;
 }
+
 </style>

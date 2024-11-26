@@ -56,7 +56,7 @@ onMounted(async () => {
     // const storedData = JSON.parse(localStorage.getItem(`${APP_PREFIX}meta`) || '[]');
     // savedWorksheets.value = storedData;
     await worksheets.loadMeta();
-    savedWorksheets.value = worksheets.getAllMeta();
+    savedWorksheets.value = [...worksheets.getAllMeta()];
 });
 
 const close_onClick = () => {
@@ -101,7 +101,7 @@ const editWorksheetDetails = async (id: string) => {
     );
 
     // Refresh the savedWorksheets array
-    savedWorksheets.value = worksheets.getAllMeta();
+    savedWorksheets.value = [...worksheets.getAllMeta()];
 };
 
 // Edit Worksheet

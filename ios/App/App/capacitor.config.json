@@ -5,6 +5,19 @@
 	"server": {
 		"androidScheme": "https"
 	},
+	"plugins": {
+		"ScreenOrientation": {
+			"ios": {
+				"supportedOrientations": [
+					"portrait"
+				]
+			},
+			"android": {
+				"allowOrientationChange": false,
+				"orientation": "portrait"
+			}
+		}
+	},
 	"packageClassList": [
 		"FilesystemPlugin",
 		"PreferencesPlugin"

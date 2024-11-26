@@ -8,7 +8,6 @@
                 <praxis-isncsci-input-layout 
                 slot="input-layout" 
                 ref="inputLayoutRef" 
-                class="input-layout"
                 >
                     <div slot="vac" class="anal-function right">
                         <label for="vac"><span class="intermittent">(</span>VAC<span class="intermittent">) Voluntary anal
@@ -135,8 +134,6 @@
                     slot="input-controls" 
                     disabled 
                     ref="inputButtonsRef"
-                    class="input-controls"
-                    :class="{ 'hidden': classificationStyle === 'visible' }"
                 >
                     <label for="consider-normal" slot="consider-normal-label">Consider normal or not normal for
                         classification:</label>
@@ -281,7 +278,7 @@
 
 <script setup lang="ts">
 import { close } from 'ionicons/icons';
-import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonFooter, IonPage } from '@ionic/vue';
+import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue';
 import { ref, nextTick, onMounted, onBeforeUnmount, watch } from 'vue';
 import { bindExamDataToGridModel, bindExamDataToTotals, getEmptyExamData, getExamDataFromGridModel } from 'isncsci-ui/dist/esm/core/helpers'
 import {
@@ -324,9 +321,8 @@ const isLargeScreen = ref(window.innerWidth >= 850);
 const isChartModalOpen = ref(false);
 const isLoading = ref(false);
 const lastCalculatedExamData = ref<ExamData | undefined>(undefined);
-let ready = false;
-
 const diagramRef = ref<HTMLElement | null>(null);
+let ready = false;
 
 const externalMessagePortProvider: IExternalMessageProvider = {
     sendOutExamData: () => {
@@ -357,7 +353,6 @@ const updateScreenSize = () => {
 
 onMounted(() => {
     updateScreenSize();
-    console.log('Window innerWidth:', window.innerWidth);
     window.addEventListener('resize', updateScreenSize);
 
     if (
@@ -591,62 +586,11 @@ select {
     background-color: #fefefe;
     border: 1px solid #848484;
 }
+
 .app-layout {
-    display: flex;
-    flex-direction: column;
     height: 100%;
-    overflow: hidden;
 }
 
-.input-layout,
-.classification {
-    overflow-y: auto;
-}
-
-.input-controls {
-    flex-shrink: 0;
-}
-
-.hidden {
-    display: none;
-}
-
-@media (min-width: 768px) {
-    .app-layout {
-        flex-direction: column;
-    }
-
-    .input-layout {
-        order: 1;
-    }
-
-    .input-controls {
-        order: 2;
-    }
-
-    .classification {
-        order: 3;
-    }
-}
-
-@media (max-width: 767px) {
-    .app-layout {
-        flex-direction: column;
-    }
-
-    .input-layout {
-        order: 1;
-    }
-
-    .classification {
-        order: 2;
-    }
-
-    .input-controls {
-        order: 3;
-        margin-top: auto;
-    }
-}
 
 @media (max-width: 500px) {
     :root {

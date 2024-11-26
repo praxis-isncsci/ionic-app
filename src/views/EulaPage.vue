@@ -61,9 +61,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.ion-padding {
-  padding: 0 2.5rem;
-}
+
 .eula-content {
   display: flex;
   flex-direction: column;
@@ -95,4 +93,5 @@ onMounted(() => {
   border: 1px solid var(--ion-color-success);
   border-radius: 2px;
 }
+
 </style>

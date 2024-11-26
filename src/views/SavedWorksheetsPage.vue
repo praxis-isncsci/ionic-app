@@ -101,7 +101,7 @@ const editWorksheetDetails = async (id: string) => {
     );
 
     // Refresh the savedWorksheets array
-    savedWorksheets.value = worksheets.getAllMeta();
+    savedWorksheets.value = [...worksheets.getAllMeta()];
 };
 
 // Edit Worksheet

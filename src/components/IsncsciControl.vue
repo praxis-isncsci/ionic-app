@@ -322,6 +322,7 @@ const isChartModalOpen = ref(false);
 const isLoading = ref(false);
 const lastCalculatedExamData = ref<ExamData | undefined>(undefined);
 const diagramRef = ref<HTMLElement | null>(null);
+
 let ready = false;
 
 const externalMessagePortProvider: IExternalMessageProvider = {
@@ -465,7 +466,7 @@ const getExamData = (): ExamData => {
         state.dap,
         state.rightLowestNonKeyMuscleWithMotorFunction,
         state.leftLowestNonKeyMuscleWithMotorFunction,
-        state.comments
+        state.comments,
     );
     // Include the totals from the appStore state
     const totals = state.totals;
@@ -508,6 +509,7 @@ const load = async (examData: ExamData) => {
         examData.leftLowestNonKeyMuscleWithMotorFunction,
         examData.comments || '',
     );
+
     isLoading.value = false;
 }
 

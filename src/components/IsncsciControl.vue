@@ -508,6 +508,7 @@ const load = async (examData: ExamData) => {
         examData.rightLowestNonKeyMuscleWithMotorFunction,
         examData.leftLowestNonKeyMuscleWithMotorFunction,
         examData.comments || '',
+        examData.cellComments || '',
     );
 
     isLoading.value = false;
@@ -523,7 +524,7 @@ const clear = async () => {
         await appStoreProvider.setGridModel(gridModel);
         await appStoreProvider.setTotals(totals);
         await appStoreProvider.setVacDap(null, null);
-        await appStoreProvider.setExtraInputs(null, null, '');
+        await appStoreProvider.setExtraInputs(null, null, '', '');
     } catch (error) {
         console.log(error);
     }

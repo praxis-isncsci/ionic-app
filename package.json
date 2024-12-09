@@ -21,6 +21,7 @@
     "@capacitor/preferences": "^6.0.3",
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
+    "capacitor-secure-storage-plugin": "^0.10.0",
     "ionicons": "^7.0.0",
     "isncsci-ui": "^1.0.24",
     "jspdf": "^2.5.2",

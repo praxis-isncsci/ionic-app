@@ -238,17 +238,17 @@ http://ionicframework.com/docs/theming/ */
   }
 }
 
-html {
+/* html { */
   /* For more information on dynamic font scaling, visit the documentation: 
   https://ionicframework.com/docs/layout/dynamic-font-scaling */
-  --ion-dynamic-font: var(--ion-default-dynamic-font);
-}
+  /* --ion-dynamic-font: var(--ion-default-dynamic-font);
+} */
 
 .calculation-error-alert .alert-message {
   white-space: pre-wrap;
 }
 
 html, body {
-  -webkit-text-size-adjust: none; /* For iOS Safari */
-  text-size-adjust: none;          /* For other browsers */
+  -webkit-text-size-adjust: none !important;
+  text-size-adjust: none !important;
 }

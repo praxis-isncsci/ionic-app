@@ -1,8 +1,8 @@
-import { Preferences } from '@capacitor/preferences';
 import { APP_PREFIX } from '@/config';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
-import { Capacitor } from '@capacitor/core';
-import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
+// import { Capacitor } from '@capacitor/core';
+import { inject } from 'vue';
+import { Storage } from '@ionic/storage';
 
 export interface IWorksheetMetaItem {
     id: string,
@@ -25,41 +25,34 @@ export class Worksheets {
     private meta: IWorksheetMetaItem[] = [];
     private metaKey = `${APP_PREFIX}meta`;
     private isMetaLoaded = false;
-    private isNativePlatform = Capacitor.isNativePlatform();
+    private store: Storage;
 
-    private constructor() { }
+    private constructor() {
+        const store = inject<Storage>('store');
+        if (!store) {
+            throw new Error('Ionic Storage instance is not available. Ensure it is provided in main.ts')
+        }
+        this.store = store;
+    }
 
     public static getInstance(): Worksheets {
         if (!Worksheets.instance) {
             Worksheets.instance = new Worksheets();
+
         }
         return Worksheets.instance;
     }
 
     private async secureSet(key: string, value: string): Promise<void> {
-        if (this.isNativePlatform) {
-            await SecureStoragePlugin.set({ key, value });
-        } else {
-            await Preferences.set({ key, value });
-        }
+        return this.store.set(key, value);
     }
 
     private async secureGet(key: string): Promise<string | undefined> {
-        if (this.isNativePlatform) {
-            const result = await SecureStoragePlugin.get({ key });
-            return result.value;
-        } else {
-            const result = await Preferences.get({ key });
-            return result.value ?? undefined;
-        }
+        return this.store.get(key)
     }
 
     private async secureRemove(key: string): Promise<void> {
-        if (this.isNativePlatform) {
-            await SecureStoragePlugin.remove({ key });
-        } else {
-            await Preferences.remove({ key });
-        }
+        return this.store.remove(key);
     }
 
     private async updateMetaLocalStorage() {

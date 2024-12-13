@@ -18,10 +18,11 @@
     "@capacitor/core": "^6.2.0",
     "@capacitor/filesystem": "^6.0.1",
     "@capacitor/ios": "^6.1.2",
-    "@capacitor/preferences": "^6.0.3",
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
-    "capacitor-secure-storage-plugin": "^0.10.0",
+    "@ionic/storage": "^4.0.0",
+    "cordova-sqlite-storage": "^6.1.0",
+    "localforage-cordovasqlitedriver": "^1.8.0",
     "ionicons": "^7.0.0",
     "isncsci-ui": "^1.0.24",
     "jspdf": "^2.5.2",
@@ -39,10 +40,10 @@
     "eslint-plugin-vue": "^9.9.0",
     "jsdom": "^22.1.0",
     "terser": "^5.4.0",
-    "typescript": "^5.1.6",
+    "typescript": "~5.6.2",
     "vite": "^5.0.0",
     "vitest": "^0.34.6",
-    "vue-tsc": "^2.1.6"
+    "vue-tsc": "^2.1.10"
   },
   "description": "ISNCSCI Application"
 }

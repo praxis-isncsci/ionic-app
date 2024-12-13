@@ -597,14 +597,14 @@ select {
 
 @media (max-width: 500px) {
     :root {
-        --cell-width: 2rem;
-        --cell-height: 2rem;
-        --isncsci-anal-function-width: 4rem;
-        --space-12: 1.5rem;
+        --cell-width: 32px;
+        --cell-height: 32px;
+        --isncsci-anal-function-width: 64px;
+        --space-12: 24px;
     }
 
     praxis-isncsci-input-layout {
-        padding: 0 1.2rem;
+        padding: 0 20px;
     }
 }
 

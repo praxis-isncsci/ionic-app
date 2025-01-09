@@ -58,7 +58,13 @@ const exportToPDF = async () => {
     name = currentMeta.value.name;
   }
 
-  await exportPDF(examData, name, currentMeta.value?.examDate);
+  try {
+    await exportPDF(examData, name, currentMeta.value?.examDate);
+    await showToast('Exported successfully.');
+  } catch (err) {
+    console.error('Error exporting PDF:', err);
+    await showToast('Export failed.');
+  }
 };
 
 const isLoading = ref(false);

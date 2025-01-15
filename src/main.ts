@@ -35,10 +35,8 @@ const store = new Storage({
   name: "__isncscidb",
   driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB, Drivers.LocalStorage]
 });
-store.create().then(() => {
-  app.provide('store', store);
-});
 
-router.isReady().then(() => {
+Promise.all([store.create(), router.isReady()]).then(() => {
+  app.provide('store', store);
   app.mount('#app');
 });

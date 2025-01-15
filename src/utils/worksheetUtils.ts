@@ -1,6 +1,8 @@
-import { Preferences } from '@capacitor/preferences';
 import { APP_PREFIX } from '@/config';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
+// import { Capacitor } from '@capacitor/core';
+import { inject } from 'vue';
+import { Storage } from '@ionic/storage';
 
 export interface IWorksheetMetaItem {
     id: string,
@@ -23,29 +25,57 @@ export class Worksheets {
     private meta: IWorksheetMetaItem[] = [];
     private metaKey = `${APP_PREFIX}meta`;
     private isMetaLoaded = false;
+    private store: Storage;
+
+    private constructor() {
+        const store = inject<Storage>('store');
+        if (!store) {
+            throw new Error('Ionic Storage instance is not available. Ensure it is provided in main.ts')
+        }
+        this.store = store;
+    }
+
+    public static getInstance(): Worksheets {
+        if (!Worksheets.instance) {
+            Worksheets.instance = new Worksheets();
+
+        }
+        return Worksheets.instance;
+    }
+
+    private async secureSet(key: string, value: string): Promise<void> {
+        return this.store.set(key, value);
+    }
+
+    private async secureGet(key: string): Promise<string | undefined> {
+        return this.store.get(key)
+    }
+
+    private async secureRemove(key: string): Promise<void> {
+        return this.store.remove(key);
+    }
 
     private async updateMetaLocalStorage() {
-        await Preferences.set({ key: this.metaKey, value: JSON.stringify(this.meta) });
-        //localStorage.setItem(this.metaKey, JSON.stringify(this.meta));
+        await this.secureSet(this.metaKey, JSON.stringify(this.meta));
     }
 
     private async updateWorksheetLocalStorage(worksheet: IWorksheet) {
-        Preferences.set({ key: `${APP_PREFIX}${worksheet.id}`, value: JSON.stringify(worksheet) });
+        await this.secureSet(`${APP_PREFIX}${worksheet.id}`, JSON.stringify(worksheet));
         //localStorage.setItem(`${APP_PREFIX}${worksheet.id}`, JSON.stringify(worksheet));
     }
 
     public async loadMeta() {
         if (!this.isMetaLoaded) {
-            const result = await Preferences.get({ key: this.metaKey });
-            if (result && result.value) {
-                this.meta = JSON.parse(result.value);
+            const value = await this.secureGet(this.metaKey);
+            if (value) {
+                this.meta = JSON.parse(value);
                 this.meta.forEach((m) => {
                     m.examDate = new Date(m.examDate);
                     m.lastUpdateDate = new Date(m.lastUpdateDate);
                 });
             }
+            this.isMetaLoaded = true;
         }
-        this.isMetaLoaded = true;
     }
 
     public async updateWorksheetDetails(id: string, newName: string, newExamDate: Date): Promise<void> {
@@ -114,29 +144,20 @@ export class Worksheets {
         await this.updateMetaLocalStorage();
 
         // Remove the specific worksheet data from local storage
-        await Preferences.remove({ key: `${APP_PREFIX}${id}` });
+        await this.secureRemove(`${APP_PREFIX}${id}`);
         //localStorage.removeItem(`${APP_PREFIX}${id}`);
     }
 
     public async getWorksheet(id: string): Promise<IWorksheet> {
-        const result = await Preferences.get({ key: `${APP_PREFIX}${id}` });
-        if (result && result.value) {
-            return JSON.parse(result.value) as IWorksheet;
+        const value = await this.secureGet(`${APP_PREFIX}${id}`);
+        if (value) {
+            return JSON.parse(value) as IWorksheet;
         } else {
             return {} as IWorksheet;
         }
-        //return JSON.parse(localStorage.getItem(`${APP_PREFIX}${id}`) || '{}') as IWorksheet
     }
 
     public getMeta(id: string): IWorksheetMetaItem | undefined {
         return this.meta.find(m => m.id.trim().toLowerCase() == id.trim().toLowerCase());
     }
-
-    public static getInstance(): Worksheets {
-        if (!Worksheets.instance) {
-            Worksheets.instance = new Worksheets();
-        }
-        return Worksheets.instance;
-    }
-
 }

@@ -1192,9 +1192,7 @@ export const exportPDF = async (examData: ExamData, filename: string, examDate?:
     secondpageY += 5;
 
     const whenToTestText = `
-    In a patient with an apparent AIS B classification, non-key muscle functions        
-    more than 3 levels below the motor level on each side should be tested to           
-    most accurately classify the injury (differentiate between AIS B and C).`.trim();
+    In a patient with an apparent AIS B classification, non-key muscle functions more than 3 levels below the motor level on each side should be tested to most accurately classify the injury (differentiate between AIS B and C).`.trim();
 
     printWrappedParagraph(whenToTestText, leftColumnWrapWidth, 7.5);
 

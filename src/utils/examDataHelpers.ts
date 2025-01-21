@@ -1800,7 +1800,7 @@ export const exportPDF = async (examData: ExamData, filename: string, examDate?:
         doc.setFont("helvetica", "bold");
         
         const noX = startX + 20;
-        const yesX = startX + 60;
+        const yesX = startX + 45;
         
         doc.text("NO", noX-4, currentY);
         

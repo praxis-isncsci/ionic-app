@@ -88,30 +88,146 @@ const addLogo = async (doc: jsPDF) => {
     }
 };
 
+// --------------- COLOURED DERMATOME CHART --------------------
+async function svgToPngBase64(svgString: string, width?: number, height?: number): Promise<string> {
+    const svgBlob = new Blob([svgString], { type: "image/svg+xml" });
+    const svgUrl = URL.createObjectURL(svgBlob);
+
+    const img = new Image();
+    return new Promise((resolve, reject) => {
+        img.onload = () => {
+            const scale = 10; // upsample to reduce pixelation
+            const targetWidth = width || img.width;
+            const targetHeight = height || img.height;
+
+            const canvas = document.createElement("canvas");
+            canvas.width = targetWidth * scale;
+            canvas.height = targetHeight * scale;
+
+            const ctx = canvas.getContext("2d")!;
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            const pngBase64 = canvas.toDataURL("image/png");
+            URL.revokeObjectURL(svgUrl);
+            resolve(pngBase64);
+        };
+        img.onerror = (error) => {
+            URL.revokeObjectURL(svgUrl);
+            reject(new Error("Error loading SVG image."));
+        };
+
+        img.src = svgUrl;
+    });
+}
+
+// Helper: force fill colors into fill on ea. shape
+const forceInlineFill = (svgEl: SVGElement) => {
+    const shapes = svgEl.querySelectorAll('path, polygon, circle, rect, ellipse, line');
+    shapes.forEach((shape) => {
+        const cs = getComputedStyle(shape);
+        const fillColor = cs.fill;
+        if (fillColor && fillColor !== 'none') {
+            shape.setAttribute('fill', fillColor);
+        }
+        const strokeColor = cs.stroke;
+        if (strokeColor && strokeColor !== 'none') {
+            shape.setAttribute('stroke', strokeColor);
+        }
+    });
+}
+
+// Try to locate the live, fully-rendered <svg> from <praxis-isncsci-key-points-diagram>
+async function getDiagramSvgElementOrNull(): Promise<SVGElement | null> {
+    const diagramEl = document.querySelector('praxis-isncsci-key-points-diagram') as HTMLElement | null;
+    if (!diagramEl) {
+        return null; 
+    }
+    // Let the component do its final rendering in the next frame
+    await new Promise((res) => requestAnimationFrame(res));
+
+    const shadow = (diagramEl as any).shadowRoot;
+    if (!shadow) {
+        return null;
+    }
+    const svg = shadow.querySelector('svg') as SVGElement | null;
+    if (!svg) return null;
+
+    // Force inline fills so the final serialized SVG actually has color
+    forceInlineFill(svg);
+    return svg;
+}
+
 // --------------- BODY DIAGRAM --------------------
 const addBodyDiagram = async (doc: jsPDF) => {
-    const diagramX = 112;
-    const diagramY = 30;
-    const diagramWidth = 58;
-    const diagramHeight = 135;
+    const diagramX = 109;
+    const diagramY = 45;
+    const diagramWidth = 65;
+    const diagramHeight = 115;
+
+    const fallbackX = 98;
+    const fallbackY = 25;
+    const fallbackWidth = 80;
+    const fallbackHeight = 150;
+
+
+    let usedFallback = false;
+    let finalSvgString: string | null = null;
+    try {
+        const realSvgElement = await getDiagramSvgElementOrNull();
+        if (realSvgElement) {
+            // Serialize inline-styled <svg> to string
+            finalSvgString = new XMLSerializer().serializeToString(realSvgElement);
+        }
+    } catch(e) {
+        console.warn('No colorized diagram from component, fallback to local file.', e);
+    }
+
+    if (!finalSvgString) {
+        usedFallback = true;
+        try {
+            const diagramUrl = Capacitor.isNativePlatform()
+                ? Capacitor.convertFileSrc('assets/c-isncsci-body-diagram.svg')
+                : 'assets/c-isncsci-body-diagram.svg';
+
+            const resp = await fetch(diagramUrl);
+            finalSvgString = await resp.text();
+        } catch(err) {
+            console.error('Error fetching fallback SVG', err);
+            // no diagram to show
+            return;
+        }
+    }
 
     try {
-        const diagramUrl = Capacitor.isNativePlatform()
-            ? Capacitor.convertFileSrc('assets/body-diagram.jpg')
-            : 'assets/body-diagram.jpg';
 
-        const response = await fetch(diagramUrl);
-        const blob = await response.blob();
-        const diagramBase64 = await new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
+        // Convert final SVG to base64 PNG
+        const diagramBase64 = await svgToPngBase64(finalSvgString, diagramWidth, diagramHeight);
 
-        doc.addImage(diagramBase64, 'JPEG', diagramX, diagramY, diagramWidth, diagramHeight);
+        if (usedFallback) {
+            // Fallback = original sizing, no additional scaling
+            doc.addImage(
+                diagramBase64,
+                'PNG',
+                fallbackX,
+                fallbackY,
+                fallbackWidth,
+                fallbackHeight
+            );
+            console.log('[PDF] Used fallback uncolored SVG, no scaling.');
+        } else {
+
+            doc.addImage(
+                diagramBase64,
+                'PNG',
+                diagramX,
+                diagramY,
+                diagramWidth,
+                diagramHeight
+            );
+            console.log('[PDF] Used actual colorized diagram at 70% scale.');
+        }
     } catch (error) {
-        console.error('Error fetching body diagram image:', error);
+        console.error('Error converting diagram to PNG:', error);
     }
 };
 

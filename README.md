@@ -48,7 +48,21 @@ We still need to build the app and add android platform first
 3. npx cap add android
 The android app should build and 
 4. Check the versionCode and versionName in Google Play Console
-5. increment the versionCode to versionName /android/app/build.gradle         
+5. Override android/app/src/main/java/org/praxisinstitute/isncsci/MainActivity.java to disable the text zoom in android
+      package org.praxisinstitute.isncsci;
+      import android.os.Bundle;
+      import com.getcapacitor.BridgeActivity;
+
+      public class MainActivity extends BridgeActivity {
+         @Override
+      protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+
+         // Set WebView text zoom to 100%
+         getBridge().getWebView().getSettings().setTextZoom(100);
+      }
+      }
+6. increment the versionCode to versionName /android/app/build.gradle         
    5.1 versionCode 2
    5.2 versionName "1.0.2"
 

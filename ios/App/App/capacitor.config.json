@@ -20,7 +20,6 @@
 	},
 	"packageClassList": [
 		"FilesystemPlugin",
-		"PreferencesPlugin",
-		"SecureStoragePlugin"
+		"CDVPlugin"
 	]
 }

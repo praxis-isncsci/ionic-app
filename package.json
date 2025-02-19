@@ -24,7 +24,7 @@
     "cordova-sqlite-storage": "^6.1.0",
     "localforage-cordovasqlitedriver": "^1.8.0",
     "ionicons": "^7.0.0",
-    "isncsci-ui": "^1.0.24",
+    "isncsci-ui": "^1.0.25",
     "jspdf": "^2.5.2",
     "update": "^0.7.4",
     "vue": "^3.3.0",

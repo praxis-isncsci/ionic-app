@@ -4,23 +4,14 @@ PODS:
   - CapacitorCordova (6.2.0)
   - CapacitorFilesystem (6.0.2):
     - Capacitor
-  - CapacitorPreferences (6.0.3):
-    - Capacitor
-  - CapacitorSecureStoragePlugin (0.10.0):
-    - Capacitor
-    - SwiftKeychainWrapper
-  - SwiftKeychainWrapper (4.0.1)
+  - CordovaPlugins (6.2.0):
+    - CapacitorCordova
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
-  - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
-  - CapacitorSecureStoragePlugin (from `../../node_modules/capacitor-secure-storage-plugin`)
-
-SPEC REPOS:
-  trunk:
-    - SwiftKeychainWrapper
+  - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -29,19 +20,15 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorFilesystem:
     :path: "../../node_modules/@capacitor/filesystem"
-  CapacitorPreferences:
-    :path: "../../node_modules/@capacitor/preferences"
-  CapacitorSecureStoragePlugin:
-    :path: "../../node_modules/capacitor-secure-storage-plugin"
+  CordovaPlugins:
+    :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
   Capacitor: 1f3c7b9802d958cd8c4eb63895fff85dff2e1eea
   CapacitorCordova: b33e7f4aa4ed105dd43283acdd940964374a87d9
   CapacitorFilesystem: c832a3f6d4870c3872688e782ae8e33665e6ecbf
-  CapacitorPreferences: 9f9935bce493977183511362131a93f7b260191a
-  CapacitorSecureStoragePlugin: ced6025438fbbdbfb9fffec4398e748572fc147b
-  SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
+  CordovaPlugins: 7678aa8fe15acffa82452f538e4ec6aeea074f87
 
-PODFILE CHECKSUM: 68272ba20073dc9d3b14bd0c440def31fe985802
+PODFILE CHECKSUM: ff18aeb46079d58971602466575001d9f7905786
 
 COCOAPODS: 1.15.2

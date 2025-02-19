@@ -733,15 +733,22 @@ const addCommentsBox = (doc: jsPDF, examData: ExamData) => {
     textY += 5;
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7);
-    const rightLowestNonKey = examData.rightLowestNonKeyMuscleWithMotorFunction || '';
-    const leftLowestNonKey = examData.leftLowestNonKeyMuscleWithMotorFunction || '';
+    const checkValInNonKeyMuscle = (val: unknown): string => {
+        if (val === null || val === undefined || val === 'None') {
+            return '';
+        }
+        return String(val);
+    }
+    const rightVal = checkValInNonKeyMuscle(examData.rightLowestNonKeyMuscleWithMotorFunction);
+    const leftVal = checkValInNonKeyMuscle(examData.leftLowestNonKeyMuscleWithMotorFunction);
+    
     let nonKeyMuscleMessage = '';
-    if (rightLowestNonKey && leftLowestNonKey) {
-        nonKeyMuscleMessage = `Motor function present in non-key muscle at ${rightLowestNonKey} on the right and at ${leftLowestNonKey} on the left.`;
-    } else if (rightLowestNonKey) {
-        nonKeyMuscleMessage = `Motor function present in non-key muscle at ${rightLowestNonKey} on the right.`;
-    } else if (leftLowestNonKey) {
-        nonKeyMuscleMessage = `Motor function present in non-key muscle at ${leftLowestNonKey} on the left.`;
+    if (rightVal && leftVal) {
+    nonKeyMuscleMessage = `Motor function present in non-key muscle at ${rightVal} on the right and at ${leftVal} on the left.`;
+    } else if (rightVal) {
+    nonKeyMuscleMessage = `Motor function present in non-key muscle at ${rightVal} on the right.`;
+    } else if (leftVal) {
+    nonKeyMuscleMessage = `Motor function present in non-key muscle at ${leftVal} on the left.`;
     }
 
     if (nonKeyMuscleMessage) {

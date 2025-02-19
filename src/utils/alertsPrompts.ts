@@ -85,7 +85,8 @@ export const promptForWorksheetDetails = (
         return new Promise((resolve) => {
         alertController
             .create({
-            header: 'Worksheet Details',
+            header: 'Worksheet Details:',
+            subHeader: 'Name and exam date/time',
             inputs: [
                 {
                 name: 'worksheetName',

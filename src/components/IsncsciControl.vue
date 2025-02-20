@@ -207,10 +207,18 @@
                     <praxis-isncsci-classification-grid slot="ais">
                         <div slot="heading">Asia Impairment Scale<br />(AIS)</div>
                         <div slot="grid">
-                            <praxis-isncsci-classification-total
-                                data-total="asia-impairment-scale">&nbsp;</praxis-isncsci-classification-total>
-                            <praxis-isncsci-classification-total
-                                data-total="injury-complete">&nbsp;</praxis-isncsci-classification-total>
+                        <praxis-isncsci-classification-total data-total="asia-impairment-scale"
+                            >&nbsp;</praxis-isncsci-classification-total
+                        >
+                        </div>
+                        </praxis-isncsci-classification-grid>
+                    <!-- Injury Complete or Incomplete -->
+                    <praxis-isncsci-classification-grid slot="injury-complete">
+                        <div slot="heading">Complete or<br />Incomplete?</div>
+                        <div slot="grid">
+                        <praxis-isncsci-classification-total data-total="injury-complete"
+                            >&nbsp;</praxis-isncsci-classification-total
+                        >
                         </div>
                     </praxis-isncsci-classification-grid>
                     <!-- ZPP -->

@@ -2,7 +2,7 @@ PODS:
   - Capacitor (6.2.0):
     - CapacitorCordova
   - CapacitorCordova (6.2.0)
-  - CapacitorFilesystem (6.0.2):
+  - CapacitorFilesystem (6.0.3):
     - Capacitor
   - CordovaPlugins (6.2.0):
     - CapacitorCordova
@@ -26,7 +26,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Capacitor: 1f3c7b9802d958cd8c4eb63895fff85dff2e1eea
   CapacitorCordova: b33e7f4aa4ed105dd43283acdd940964374a87d9
-  CapacitorFilesystem: c832a3f6d4870c3872688e782ae8e33665e6ecbf
+  CapacitorFilesystem: fa3099b3c3aa43a1b51362d0c999301ab1a9a752
   CordovaPlugins: 7678aa8fe15acffa82452f538e4ec6aeea074f87
 
 PODFILE CHECKSUM: ff18aeb46079d58971602466575001d9f7905786

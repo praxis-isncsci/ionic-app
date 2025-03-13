@@ -8,7 +8,12 @@
       </div>
     </template>
 
-    <IsncsciControl ref="isncsciControlRef"></IsncsciControl>
+    <IsncsciControl ref="isncsciControlRef" ></IsncsciControl>
+    <TrainingMode 
+      :training-mode="trainingModeBoolean"
+      @update:training-mode="onUpdateTrainingMode"
+      />
+    <TrainingIconsOverlay  :trainingMode="trainingModeBoolean"/>
 
     <template #footer-buttons>
       <AppNavbar :calculateOnClick="calculate_onClick" :saveOnClick="save_onClick" :clearExam="clearExam"
@@ -22,13 +27,25 @@
 import MainLayout from './MainLayout.vue';
 import IsncsciControl from '@/components/IsncsciControl.vue';
 import AppNavbar from '@/components/AppNavbar.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { ExamData } from 'isncsci-ui/dist/esm/core/domain';
 import { IWorksheetMetaItem, WorksheetDetails, Worksheets } from '@/utils/worksheetUtils';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { promptFoNameExist, promptForWorksheetDetails, showToast, showUnsavedDataAlert } from '@/utils/alertsPrompts';
 import { exportPDF } from '@/utils/examDataHelpers';
+import TrainingMode from '@/components/TrainingMode.vue';
+import TrainingIconsOverlay from '@/components/TrainingIconsOverlay.vue';
+
+const trainingModeRef = ref<boolean>(false);
+const trainingModeBoolean = computed<boolean>({
+  get: () => trainingModeRef.value,
+  set: (val: boolean) => { trainingModeRef.value = val }
+})
+
+const onUpdateTrainingMode = (newVal: boolean) => {
+  trainingModeRef.value = newVal
+}
 
 const worksheets = Worksheets.getInstance();
 const route = useRoute();

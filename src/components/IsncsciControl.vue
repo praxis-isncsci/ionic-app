@@ -1,6 +1,6 @@
 <template isncsci-web-app>
     <ion-page>
-        <ion-content >
+        <ion-content style="position: relative">
             <praxis-isncsci-app-layout 
             :classification-style="classificationStyle"
             class="app-layout"
@@ -39,7 +39,9 @@
                             C5 - Shoulder: Flexion, extension, abduction, adduction,
                             internal and external rotation - Elbow: Supination
                         </option>
-                        <option value="C6">C6 - Elbow: Pronation - Wrist: Flexion</option>
+                        <option value="C6">
+                            C6 - Elbow: Pronation - Wrist: Flexion
+                        </option>
                         <option value="C7">
                             C7 - Finger: Flexion at proximal joint, extension. Thumb:
                             Flexion, extension and abduction in plane of thumb
@@ -601,7 +603,6 @@ select {
 .app-layout {
     height: 100%;
 }
-
 
 @media (max-width: 500px) {
     :root {

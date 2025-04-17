@@ -1,5 +1,5 @@
 <template>
-  <MainLayout title="EULA" :showNavbar="false" :showFooter="false">
+  <MainLayout title="EULA" :showNavbar="false" :showFooter="false"  :helpMode="false">
     <template #header-buttons>
       <ion-buttons slot="end" v-if="isEulaAccepted">
         <ion-button @click="goToHomePage" fill="clear">

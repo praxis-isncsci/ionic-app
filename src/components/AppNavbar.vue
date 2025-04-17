@@ -31,6 +31,9 @@
                         <ion-icon :icon="chevronUp"></ion-icon>
                     </ion-fab-button>
                     <ion-fab-list side="top">
+                        <ion-fab-button class="fab-list-btn" @click="contactUs">
+                            <ion-icon :icon="mailOutline"></ion-icon>
+                        </ion-fab-button>
                         <ion-fab-button class="fab-list-btn" @click="exportToPDF">
                             <ion-icon :icon="downloadOutline"></ion-icon>
                         </ion-fab-button>
@@ -66,7 +69,7 @@
 <script setup lang="ts">
 
 import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList, IonButton } from '@ionic/vue';
-import { manOutline, documentOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, downloadOutline } from 'ionicons/icons';
+import { manOutline, documentOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, downloadOutline, mailOutline } from 'ionicons/icons';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 defineProps<{ 
@@ -75,6 +78,7 @@ defineProps<{
     clearExam: () => void,
     onNavigate: (path: string) => void,
     exportToPDF: () => void,
+    contactUs: () => void,
     showChart: () => void
 }>();
 

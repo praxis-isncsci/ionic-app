@@ -173,7 +173,7 @@ ion-grid {
     border-radius: 50%;
     --background-hover: var(--ion-color-primary);
     --color: var(--ion-color-primary);
-    --color-hover: #ffffff;
+    --color-hover: var(--ion-color-primary);
 }
 
 @media (max-width: 650px) {

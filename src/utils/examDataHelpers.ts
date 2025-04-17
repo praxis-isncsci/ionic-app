@@ -1755,33 +1755,3 @@ let pageWidth: number,
             URL.revokeObjectURL(url);
         }
     };
-    
-
-    export async function exportPDFtoEmail(
-        examData: ExamData,
-        filename: string,
-        examDate: Date | undefined,
-        contactMessage: string
-    ): Promise<{ pdfBase64: string; pdfFilename: string; textBody: string; subject: string }> {
-        const pdfBlob = await generatePDFBlob(examData, filename, examDate, true);
-    
-        let pdfBase64: string;
-        try {
-        pdfBase64 = await blobToBase64(pdfBlob);
-        } catch (error) {
-        console.error("Error converting PDF to Base64", error);
-        throw new Error("PDF conversion failed.");
-        }
-    
-        const pdfFilename = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
-    
-        const subject = `Contact via ISNCSCI App: ${filename}`;
-        const textBody = `User message:\n\n${contactMessage}\n\n`;
-    
-        return {
-        pdfBase64,
-        pdfFilename,
-        textBody,
-        subject
-        };
-    }

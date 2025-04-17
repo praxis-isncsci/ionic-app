@@ -7,7 +7,7 @@
             >
                 <praxis-isncsci-input-layout 
                 slot="input-layout" 
-                ref="inputLayoutRef" 
+                ref="inputLayoutRef"
                 >
                     <div slot="vac" class="anal-function right">
                         <label for="vac"><span class="intermittent">(</span>VAC<span class="intermittent">) Voluntary anal
@@ -601,7 +601,6 @@ select {
 .app-layout {
     height: 100%;
 }
-
 
 @media (max-width: 500px) {
     :root {

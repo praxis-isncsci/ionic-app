@@ -88,32 +88,148 @@ const addLogo = async (doc: jsPDF) => {
     }
 };
 
+async function svgToPngBase64(svgString: string, width?: number, height?: number): Promise<string> {
+    const svgBlob = new Blob([svgString], { type: "image/svg+xml" });
+    const svgUrl = URL.createObjectURL(svgBlob);
+
+    const img = new Image();
+    return new Promise((resolve, reject) => {
+        img.onload = () => {
+            const scale = 10; // upsample to reduce pixelation
+            const targetWidth = width || img.width;
+            const targetHeight = height || img.height;
+
+            const canvas = document.createElement("canvas");
+            canvas.width = targetWidth * scale;
+            canvas.height = targetHeight * scale;
+
+            const ctx = canvas.getContext("2d")!;
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            const pngBase64 = canvas.toDataURL("image/png");
+            URL.revokeObjectURL(svgUrl);
+            resolve(pngBase64);
+        };
+        img.onerror = (error) => {
+            URL.revokeObjectURL(svgUrl);
+            reject(new Error("Error loading SVG image."));
+        };
+
+        img.src = svgUrl;
+    });
+}
+
+// Helper: force fill colors into fill on ea. shape
+const forceInlineFill = (svgEl: SVGElement) => {
+    const shapes = svgEl.querySelectorAll('path, polygon, circle, rect, ellipse, line');
+    shapes.forEach((shape) => {
+        const cs = getComputedStyle(shape);
+        const fillColor = cs.fill;
+        if (fillColor && fillColor !== 'none') {
+            shape.setAttribute('fill', fillColor);
+        }
+        const strokeColor = cs.stroke;
+        if (strokeColor && strokeColor !== 'none') {
+            shape.setAttribute('stroke', strokeColor);
+        }
+    });
+}
+
+// Try to locate the live, fully-rendered <svg> from <praxis-isncsci-key-points-diagram>
+async function getDiagramSvgElementOrNull(): Promise<SVGElement | null> {
+    const diagramEl = document.querySelector('praxis-isncsci-key-points-diagram') as HTMLElement | null;
+    if (!diagramEl) {
+        return null; 
+    }
+    // Let the component do its final rendering in the next frame
+    await new Promise((res) => requestAnimationFrame(res));
+
+    const shadow = (diagramEl as any).shadowRoot;
+    if (!shadow) {
+        return null;
+    }
+    const svg = shadow.querySelector('svg') as SVGElement | null;
+    if (!svg) return null;
+
+    // Force inline fills so the final serialized SVG actually has color
+    forceInlineFill(svg);
+    return svg;
+}
+
 // --------------- BODY DIAGRAM --------------------
 const addBodyDiagram = async (doc: jsPDF) => {
-    const diagramX = 112;
-    const diagramY = 30;
-    const diagramWidth = 58;
-    const diagramHeight = 135;
+    const diagramX = 109;
+    const diagramY = 45;
+    const diagramWidth = 65;
+    const diagramHeight = 115;
+
+    const fallbackX = 98;
+    const fallbackY = 25;
+    const fallbackWidth = 80;
+    const fallbackHeight = 150;
+
+
+    let usedFallback = false;
+    let finalSvgString: string | null = null;
+    try {
+        const realSvgElement = await getDiagramSvgElementOrNull();
+        if (realSvgElement) {
+            // Serialize inline-styled <svg> to string
+            finalSvgString = new XMLSerializer().serializeToString(realSvgElement);
+        }
+    } catch(e) {
+        console.warn('No colorized diagram from component, fallback to local file.', e);
+    }
+
+    if (!finalSvgString) {
+        usedFallback = true;
+        try {
+            const diagramUrl = Capacitor.isNativePlatform()
+                ? Capacitor.convertFileSrc('assets/c-isncsci-body-diagram.svg')
+                : 'assets/c-isncsci-body-diagram.svg';
+
+            const resp = await fetch(diagramUrl);
+            finalSvgString = await resp.text();
+        } catch(err) {
+            console.error('Error fetching fallback SVG', err);
+            // no diagram to show
+            return;
+        }
+    }
 
     try {
-        const diagramUrl = Capacitor.isNativePlatform()
-            ? Capacitor.convertFileSrc('assets/body-diagram.jpg')
-            : 'assets/body-diagram.jpg';
 
-        const response = await fetch(diagramUrl);
-        const blob = await response.blob();
-        const diagramBase64 = await new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
+        // Convert final SVG to base64 PNG
+        const diagramBase64 = await svgToPngBase64(finalSvgString, diagramWidth, diagramHeight);
 
-        doc.addImage(diagramBase64, 'JPEG', diagramX, diagramY, diagramWidth, diagramHeight);
+        if (usedFallback) {
+            // Fallback = original sizing, no additional scaling
+            doc.addImage(
+                diagramBase64,
+                'PNG',
+                fallbackX,
+                fallbackY,
+                fallbackWidth,
+                fallbackHeight
+            );
+            console.log('[PDF] Used fallback uncolored SVG, no scaling.');
+        } else {
+
+            doc.addImage(
+                diagramBase64,
+                'PNG',
+                diagramX,
+                diagramY,
+                diagramWidth,
+                diagramHeight
+            );
+            console.log('[PDF] Used actual colorized diagram at 70% scale.');
+        }
     } catch (error) {
-        console.error('Error fetching body diagram image:', error);
+        console.error('Error converting diagram to PNG:', error);
     }
 };
+
 
 // --------------- WORKSHEET INFO --------------------
 const addWorksheetInfo = (doc: jsPDF, examDate?: Date) => {
@@ -412,12 +528,13 @@ const addSubscores = (doc: jsPDF, examData: ExamData) => {
 
     // Helper function to calculate total or return empty string
     const calculateTotal = (value1?: string, value2?: string) => {
+
+        if (value1 === 'ND' || value2 === 'ND') {
+            return 'ND';
+        } else {
+
         const num1 = parseInt(value1 || '', 10);
         const num2 = parseInt(value2 || '', 10);
-
-        if (isNaN(num1) && isNaN(num2)) {
-            return '';
-        } else {
             return ((isNaN(num1) ? 0 : num1) + (isNaN(num2) ? 0 : num2)).toString();
         }
     };
@@ -466,6 +583,14 @@ const addSubscores = (doc: jsPDF, examData: ExamData) => {
     drawLabelCellWithMax('= PP TOTAL', ppTotal, '(112)', currentX);
 };
 
+// --------------- helper to remove ND range from classification and export as ND
+const removeNDRange = (value?: string): string => {
+    if (!value) return '';
+    if (value.includes('ND:')) {
+        return 'ND';
+    }
+    return value;
+}
 // --------------- Classification Box --------------------
 const addClassificationBox = (doc: jsPDF, examData: ExamData) => {
     const boxWidth = 262;
@@ -516,11 +641,11 @@ const addClassificationBox = (doc: jsPDF, examData: ExamData) => {
 
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
-    doc.text(examData.rightSensory || '', cellX_R + cellWidth / 2, cellY + cellHeightBox / 2, {
+    doc.text(removeNDRange(examData.rightSensory) || '', cellX_R + cellWidth / 2, cellY + cellHeightBox / 2, {
         align: 'center',
         baseline: 'middle',
     });
-    doc.text(examData.leftSensory || '', cellX_L + cellWidth / 2, cellY + cellHeightBox / 2, {
+    doc.text(removeNDRange(examData.leftSensory) || '', cellX_L + cellWidth / 2, cellY + cellHeightBox / 2, {
         align: 'center',
         baseline: 'middle',
     });
@@ -538,11 +663,11 @@ const addClassificationBox = (doc: jsPDF, examData: ExamData) => {
 
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
-    doc.text(examData.rightMotor || '', cellX_R + cellWidth / 2, motorCellY + cellHeightBox / 2, {
+    doc.text(removeNDRange(examData.rightMotor) || '', cellX_R + cellWidth / 2, motorCellY + cellHeightBox / 2, {
         align: 'center',
         baseline: 'middle',
     });
-    doc.text(examData.leftMotor || '', cellX_L + cellWidth / 2, motorCellY + cellHeightBox / 2, {
+    doc.text(removeNDRange(examData.leftMotor) || '', cellX_L + cellWidth / 2, motorCellY + cellHeightBox / 2, {
         align: 'center',
         baseline: 'middle',
     });
@@ -565,7 +690,7 @@ const addClassificationBox = (doc: jsPDF, examData: ExamData) => {
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
-    doc.text(examData.neurologicalLevelOfInjury || '', nliCellX + nliCellWidth / 2, nliCellY + nliCellHeight / 2, {
+    doc.text(removeNDRange(examData.neurologicalLevelOfInjury) || '', nliCellX + nliCellWidth / 2, nliCellY + nliCellHeight / 2, {
         align: 'center',
         baseline: 'middle',
     });
@@ -613,7 +738,7 @@ const addClassificationBox = (doc: jsPDF, examData: ExamData) => {
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
-    doc.text(examData.asiaImpairmentScale || '', aisCellX + aisCellWidth / 2, aisCellY + aisCellHeight / 2, {
+    doc.text(removeNDRange(examData.asiaImpairmentScale) || '', aisCellX + aisCellWidth / 2, aisCellY + aisCellHeight / 2, {
         align: 'center',
         baseline: 'middle',
     });
@@ -658,11 +783,11 @@ const addClassificationBox = (doc: jsPDF, examData: ExamData) => {
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
-    doc.text(examData.rightSensoryZpp || '', zppCellX_R + zppCellWidth / 2, zppCellY_Sensory + zppCellHeight / 2, {
+    doc.text(removeNDRange(examData.rightSensoryZpp) || '', zppCellX_R + zppCellWidth / 2, zppCellY_Sensory + zppCellHeight / 2, {
         align: 'center',
         baseline: 'middle',
     });
-    doc.text(examData.leftSensoryZpp || '', zppCellX_L + zppCellWidth / 2, zppCellY_Sensory + zppCellHeight / 2, {
+    doc.text(removeNDRange(examData.leftSensoryZpp) || '', zppCellX_L + zppCellWidth / 2, zppCellY_Sensory + zppCellHeight / 2, {
         align: 'center',
         baseline: 'middle',
     });
@@ -678,11 +803,11 @@ const addClassificationBox = (doc: jsPDF, examData: ExamData) => {
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
-    doc.text(examData.rightMotorZpp || '', zppCellX_R + zppCellWidth / 2, zppCellY_Motor + zppCellHeight / 2, {
+    doc.text(removeNDRange(examData.rightMotorZpp) || '', zppCellX_R + zppCellWidth / 2, zppCellY_Motor + zppCellHeight / 2, {
         align: 'center',
         baseline: 'middle',
     });
-    doc.text(examData.leftMotorZpp || '', zppCellX_L + zppCellWidth / 2, zppCellY_Motor + zppCellHeight / 2, {
+    doc.text(removeNDRange(examData.leftMotorZpp) || '', zppCellX_L + zppCellWidth / 2, zppCellY_Motor + zppCellHeight / 2, {
         align: 'center',
         baseline: 'middle',
     });
@@ -905,988 +1030,758 @@ let pageWidth: number,
     spaceBetweenGrids: number,
     startXLeft: number;
 
-export const exportPDF = async (examData: ExamData, filename: string, examDate?: Date) => {
-    const doc = new jsPDF('l', 'mm', 'letter');
-
-    // Page dimensions
-    pageWidth = doc.internal.pageSize.getWidth();
-    totalGridWidth = pageWidth - 2 * 66;
-    spaceBetweenGrids = totalGridWidth - gridTotalWidthRight - gridTotalWidthLeft;
-    startXLeft = startXRight + gridTotalWidthRight + spaceBetweenGrids;
-
-    // 1st PAGE
-    await addLogo(doc);
-    addWorksheetInfo(doc, examDate);
-    addHeadingsAndLabels(doc);
-
-    const observationsRight = ['M', 'LT', 'PP'];
-    const observationsLeft = ['LT', 'PP', 'M'];
-    const xPositionsRight = calculateXPositions(startXRight, observationsRight, cellWidthsRight, distancesRight);
-    const xPositionsLeft = calculateXPositions(startXLeft, observationsLeft, cellWidthsLeft, distancesLeft);
-
-    drawSideGrid(doc, examData, 'Right', startXRight, gridStartY, observationsRight, cellWidthsRight, xPositionsRight);
-    drawSideGrid(doc, examData, 'Left', startXLeft, gridStartY, observationsLeft, cellWidthsLeft, xPositionsLeft);
-
-
-    await addBodyDiagram(doc);
-    addVACAndDAP(doc, examData, startXLeft);
-
-
-    drawTotals(doc, examData, 'Right', observationsRight, cellWidthsRight, xPositionsRight);
-    drawTotals(doc, examData, 'Left', observationsLeft, cellWidthsLeft, xPositionsLeft);
-    addSubscores(doc, examData);
-    addClassificationBox(doc, examData);
-    addFooter(doc);
-    addCommentsBox(doc, examData);
-    addLeftSideBox(doc);
-    
-
-    // --------------- 2nd PAGE ---------------
-    doc.addPage();
-
-    // LOGOS
-    const addLogos = async (doc: jsPDF) => {
-        const logoX = 105;
-        const logoY = 161;
-        const logoWidth = 71;
-        const logoHeight = 38;
-
+    const addBodyDiagramFallback = async (doc: jsPDF) => {
+        const fallbackUrl = Capacitor.isNativePlatform()
+            ? Capacitor.convertFileSrc('assets/c-isncsci-body-diagram.svg')
+            : 'assets/c-isncsci-body-diagram.svg';
         try {
-            const logoUrl = Capacitor.isNativePlatform()
-                ? Capacitor.convertFileSrc('assets/logos-second-page.jpg')
-                : 'assets/logos-second-page.jpg';
-
-            const response = await fetch(logoUrl);
-            const blob = await response.blob();
-            const logoBase64 = await new Promise<string>((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result as string);
-                reader.onerror = reject;
-                reader.readAsDataURL(blob);
-            });
-
-            doc.addImage(logoBase64, 'JPEG', logoX, logoY, logoWidth, logoHeight);
-        } catch (error) {
-            console.error('Error fetching logo image:', error);
+            const resp = await fetch(fallbackUrl);
+            const svgText = await resp.text();
+            const diagramWidth = 65;
+            const diagramHeight = 115;
+            const fallbackX = 98;
+            const fallbackY = 25;
+            const fallbackWidth = 80;
+            const fallbackHeight = 150;
+            const diagramBase64 = await svgToPngBase64(svgText, diagramWidth, diagramHeight);
+            doc.addImage(diagramBase64, 'PNG', fallbackX, fallbackY, fallbackWidth, fallbackHeight);
+            console.log('[PDF] Used fallback uncolored SVG.');
+        } catch (err) {
+            console.error("Error fetching fallback uncolored SVG", err);
         }
     };
 
-    await addLogos(doc);
-
-    // ---------------- MUSCLE FUNCTION GRADING ----------------
-    doc.setFont('helvetica', 'bold');
-    doc.setCharSpace(-0.1); 
-    doc.setFontSize(14);
-
-    let secondpageY = 8; 
-    const titleX = 8;
-    const muscleTitle = "Muscle Function Grading";
-
-    // Print the title - underlined
-    doc.text(muscleTitle, titleX, secondpageY);
-    const muscleTitleWidth = doc.getTextWidth(muscleTitle);
-    doc.setLineWidth(0.2);
-    doc.line(titleX, secondpageY + 1, titleX + muscleTitleWidth - 2, secondpageY + 1);
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7.5);
-    doc.setCharSpace(-0.05); 
-
-    secondpageY += 7;
-
-    const muscleFunctionBullets = [
-        { 
-            boldLabel: "0", 
-            text: "= Total paralysis" 
-        },
-        { 
-            boldLabel: "1", 
-            text: "= Palpable or visible contraction" 
-        },
-        { 
-            boldLabel: "2", 
-            text: "= Active movement, full range of motion (ROM) with gravity eliminated" 
-        },
-        { 
-            boldLabel: "3", 
-            text: "= Active movement, full ROM against gravity" 
-            
-        },
-        {
-            boldLabel: "4",
-            text: "= Active movement, full ROM against gravity and moderate resistance in a muscle specific position"
-        },
-        {
-            boldLabel: "5",
-            text: "= (normal) active movement, full ROM against gravity and full resistance in a functional muscle position expected from an otherwise unimpaired person"
-        },
-        {
-            boldLabel: "NT",
-            text: "= Not testable. (i.e. due to immobilization, severe pain such that the patient cannot be graded, amputation of limb, or contracture of > 50% of the normal ROM)"
-        },
-        {
-            boldLabel: "0*, ..., 4*, NT*",
-            text: "= Non-SCI condition present"
-        },
-    ];
-
-    doc.setFontSize(5.5);
-    doc.text("a", titleX + 50, secondpageY + 38.5);
-    doc.setFontSize(7.5);
-
-    const printBulletFirstColumn = (
-        boldLabel: string,
-        normalText: string,
-        wrapWidth: number
-    ) => {
-        doc.setCharSpace(-0.05);
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(7.5);
-
-        const fullString = `${boldLabel} ${normalText}`.trim();
-
-        // Wrap lines
-        const wrappedLines = doc.splitTextToSize(fullString, wrapWidth);
-
-        if (wrappedLines.length === 0) return;
-
-        const firstLine = wrappedLines[0];
-        const labelWithSpace = boldLabel + ' ';
-        const labelWidth = doc.getTextWidth(labelWithSpace);
-
-        // Print label in bold
-        doc.setFont('helvetica', 'bold');
-        doc.text(boldLabel, titleX, secondpageY);
-
-        // the rest of line in normal font
-        doc.setFont('helvetica', 'normal');
-        const remainder = firstLine.slice(labelWithSpace.length);
-        doc.text(remainder, titleX + labelWidth, secondpageY);
-
-        for (let i = 1; i < wrappedLines.length; i++) {
-            secondpageY += 4; 
-            doc.text(wrappedLines[i], titleX, secondpageY);
-        }
-        // Extra gap after each bullet
-        secondpageY += 4;
-    }
-
-    const leftColumnWrapWidth = 98;
-
-    // Print each bullet with wrapping
-    muscleFunctionBullets.forEach((item) => {
-        printBulletFirstColumn(item.boldLabel, item.text, leftColumnWrapWidth);
-    });
-
-    // ---------------- SENSORY GRADING ----------------
-    secondpageY += 5; // extra gap
-    doc.setFont('helvetica', 'bold');
-    doc.setCharSpace(-0.1);
-    doc.setFontSize(14);
-
-    const sensoryTitle = "Sensory Grading";
-    doc.text(sensoryTitle, titleX, secondpageY);
-    const sensoryTitleWidth = doc.getTextWidth(sensoryTitle);
-    doc.setLineWidth(0.2);
-    doc.line(titleX, secondpageY + 1, titleX + sensoryTitleWidth - 1, secondpageY + 1);
-
-    secondpageY += 5;
-
-    const printSensoryLine = (
-        lines: { text: string; bold?: boolean }[],
-        startX: number,
-        startY: number
-    ): number => {
-        let currentX = startX;
+    export const generatePDFBlob = async (examData: ExamData, filename: string, examDate?: Date, useUncoloredSVG: boolean = false): Promise<Blob> => {
+        const doc = new jsPDF('l', 'mm', 'letter');
     
-        lines.forEach((line) => {
-        if (line.bold) {
-            doc.setFont('helvetica', 'bold');
+        // Page dimensions
+        pageWidth = doc.internal.pageSize.getWidth();
+        totalGridWidth = pageWidth - 2 * 66;
+        spaceBetweenGrids = totalGridWidth - gridTotalWidthRight - gridTotalWidthLeft;
+        startXLeft = startXRight + gridTotalWidthRight + spaceBetweenGrids;
+    
+        // 1st PAGE
+        await addLogo(doc);
+        addWorksheetInfo(doc, examDate);
+        addHeadingsAndLabels(doc);
+    
+        const observationsRight = ['M', 'LT', 'PP'];
+        const observationsLeft = ['LT', 'PP', 'M'];
+        const xPositionsRight = calculateXPositions(startXRight, observationsRight, cellWidthsRight, distancesRight);
+        const xPositionsLeft = calculateXPositions(startXLeft, observationsLeft, cellWidthsLeft, distancesLeft);
+    
+        drawSideGrid(doc, examData, 'Right', startXRight, gridStartY, observationsRight, cellWidthsRight, xPositionsRight);
+        drawSideGrid(doc, examData, 'Left', startXLeft, gridStartY, observationsLeft, cellWidthsLeft, xPositionsLeft);
+    
+        if (useUncoloredSVG) {
+            await addBodyDiagramFallback(doc);
         } else {
-            doc.setFont('helvetica', 'normal');
+            await addBodyDiagram(doc);
         }
-
-        const segmentWidth = doc.getTextWidth(line.text);
+        addVACAndDAP(doc, examData, startXLeft);
     
-        doc.text(line.text, currentX, startY);
+        drawTotals(doc, examData, 'Right', observationsRight, cellWidthsRight, xPositionsRight);
+        drawTotals(doc, examData, 'Left', observationsLeft, cellWidthsLeft, xPositionsLeft);
+        addSubscores(doc, examData);
+        addClassificationBox(doc, examData);
+        addFooter(doc);
+        addCommentsBox(doc, examData);
+        addLeftSideBox(doc);
     
-        currentX += segmentWidth;
-        });
+        // 2nd PAGE
+        doc.addPage();
     
-        return currentX;
-    }
-
-    // 1) LINE 1
-    const line1Segments = [
-        { text: "0", bold: true },
-        { text: " = Absent ", bold: false },
-        { text: "1", bold: true },
-        { text: " = Altered, either decreased/impaired sensation or hypersensitivity", bold: false },
-    ];
-
-    doc.setFontSize(7.5);
-    doc.setCharSpace(-0.05); 
-    printSensoryLine(line1Segments, titleX, secondpageY);
+        // LOGOS (second page)
+        const addLogos = async (doc: jsPDF) => {
+            const logoX = 105;
+            const logoY = 161;
+            const logoWidth = 71;
+            const logoHeight = 38;
     
-    secondpageY += 4;
-
-    // 2) LINE 2
-    const line2Segments = [
-        { text: "2", bold: true },
-        { text: " = Normal ", bold: false },
-        { text: "NT", bold: true },
-        { text: " = Not testable", bold: false },
-    ];
-
-    printSensoryLine(line2Segments, titleX, secondpageY);
-    secondpageY += 4;
+            try {
+                const logoUrl = Capacitor.isNativePlatform()
+                    ? Capacitor.convertFileSrc('assets/logos-second-page.jpg')
+                    : 'assets/logos-second-page.jpg';
     
-    // 3) LINE 3
-    const line3Segments = [
-        { text: "0*, 1*, NT*", bold: true },
-        { text: " = Non-SCI condition present", bold: false },
-    ];
-    // Print the normal text:
-    const xEndOfLine3 = printSensoryLine(line3Segments, titleX, secondpageY);
-
-    // "a" as subscript:
-    doc.setFontSize(5.5);
-    // For subscript we shift downward a bit (+1 or +1.5)
-    doc.text("a", xEndOfLine3, secondpageY - 1.2);
-    // Revert font size
-    doc.setFontSize(7.5);
+                const response = await fetch(logoUrl);
+                const blob = await response.blob();
+                const logoBase64 = await new Promise<string>((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result as string);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
     
-    printSensoryLine(line3Segments, titleX, secondpageY);
-    secondpageY += 5;
-
-    //NOTE
-    doc.setFontSize(5.5);
-    doc.text("a", titleX, secondpageY - 1.2);
-    doc.setFontSize(7.5);
-
-    const noteText = `   Note: Abnormal motor and sensory scores should be tagged with a “*” to indicate an impairment due to a non-SCI condition. The non-SCI condition should be explained     in the comments box together with information about how the score is rated for classification purposes (at least normal / not normal for classification).`;
-
-    // function to wrap paragraph with no bold label
-    const printWrappedParagraph = (text: string, wrapWidth: number, fontSize: number = 7.5) => {
-        doc.setCharSpace(-0.05);
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(fontSize);
-
-        const lines = doc.splitTextToSize(text, wrapWidth);
-
-        lines.forEach((line:string) => {
-            doc.text(line, titleX, secondpageY);
-            secondpageY += 3.5; 
-        });
-        secondpageY += 2;
-    }
-
-    printWrappedParagraph(noteText, leftColumnWrapWidth, 7.2);
-
-
-    // ---------------- When to Test Non-Key Muscles: ----------------
-    secondpageY += 5; 
-    doc.setFont('helvetica', 'bold');
-    doc.setCharSpace(-0.1);
-    doc.setFontSize(14);
-
-    const whenToTestTitle = "When to Test Non-Key Muscles:";
-    doc.text(whenToTestTitle, titleX, secondpageY);
-    const whenToTestTitleWidth = doc.getTextWidth(whenToTestTitle);
-    doc.setLineWidth(0.2);
-    doc.line(titleX, secondpageY + 1, titleX + whenToTestTitleWidth - 1.2, secondpageY + 1);
-
-    secondpageY += 5;
-
-    const whenToTestText = `
-    In a patient with an apparent AIS B classification, non-key muscle functions more than 3 levels below the motor level on each side should be tested to most accurately classify the injury (differentiate between AIS B and C).`.trim();
-
-    printWrappedParagraph(whenToTestText, leftColumnWrapWidth, 7.5);
-
-    // ---------------- MOVEMENT ROOT LEVEL SECTION  ----------------
-
-    const movementPairs = [
-        {
-            lines: [
-                { label: "Shoulder:", rest: " Flexion, extension, abduction, adduction, internal and external rotation" },
-                { label: "Elbow:", rest: " Supination" }
-            ],
-            root: "C5"
-        },
-        {
-            lines: [
-                { label: "Elbow:", rest: " Pronation" },
-                { label: "Wrist:", rest: " Flexion" }
-            ],
-            root: "C6"
-        },
-        {
-            lines: [
-                { label: "Finger:", rest: " Flexion at proximal joint, extension" },
-                { label: "Thumb:", rest: " Flexion, extension and abduction in plane of thumb" }
-            ],
-            root: "C7"
-        },
-        {
-            lines: [
-                { label: "Finger:", rest: " Flexion at MCP joint" },
-                { label: "Thumb:", rest: " Opposition, adduction and abduction perpendicular to palm" }
-            ],
-            root: "C8"
-        },
-        {
-            lines: [
-                { label: "Finger:", rest: " Abduction of the index finger" }
-            ],
-            root: "T1"
-        },
-        {
-            lines: [
-                { label: "Hip:", rest: " Adduction" }
-            ],
-            root: "L2"
-        },
-        {
-            lines: [
-                { label: "Hip:", rest: " External rotation" }
-            ],
-            root: "L3"
-        },
-        {
-            lines: [
-                { label: "Hip:", rest: " Extension, abduction, internal rotation" },
-                { label: "Knee:", rest: " Flexion" },
-                { label: "Ankle:", rest: " Inversion and eversion" },
-                { label: "Toe:", rest: " MP and IP extension" }
-            ],
-            root: "L4"
-        },
-        {
-            lines: [
-                { label: "Hallux and Toe:", rest: " DIP and PIP flexion and abduction" }
-            ],
-            root: "L5"
-        },
-        {
-            lines: [
-                { label: "Hallux:", rest: " Adduction" }
-            ],
-            root: "S1"
-        },
-    ];
-
-    const printMovementPairs = (
-        pairs: {
-            lines: { label: string; rest: string }[];
-            root: string;
-        }[],
-        startX: number,
-        secondpageY: number,
-        widthLeft: number,
-        widthRight: number
-    ) => {
-        const pairSpacing = 1.5; 
-        const lineSpacing = 3;
-    
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(9);
-    
-        doc.text('Movement', startX, secondpageY);
-    
-        const rootHeadingX = startX + widthLeft - 5 ; 
-        doc.text('Root Level', rootHeadingX, secondpageY);
-
-        doc.setFont('helvetica');
-        doc.setFontSize(7.2);
-
-        let currentY = secondpageY + 5;
-    
-        pairs.forEach((pair) => {
-        interface WrappedLine {
-            text: string;
-            labelLen: number;
-            isFirstSubline: boolean;
-        }
-    
-        const allSublines: WrappedLine[] = [];
-    
-        pair.lines.forEach(({ label, rest }) => {
-            const fullLine = label + ' ' + rest;
-            const sublines: string[] = doc.splitTextToSize(fullLine, widthLeft);
-    
-            const labelLen = (label + ' ').length;
-    
-            sublines.forEach((sub: string, i: number) => {
-            allSublines.push({
-                text: sub,
-                labelLen,
-                isFirstSubline: i === 0
-            });
-            });
-        });
-    
-        const totalHeight = allSublines.length * lineSpacing + 1;
-    
-        doc.setFillColor(245, 245, 245);
-        const totalWidth = widthLeft + widthRight - 5;
-        doc.rect(startX, currentY - 3, totalWidth, totalHeight, 'F');
-    
-        let localY = currentY;
-        allSublines.forEach(({ text, labelLen, isFirstSubline }) => {
-            if (isFirstSubline) {
-                doc.setFont('helvetica', 'bold');
-                const labelPart = text.slice(0, labelLen);
-                doc.text(labelPart, startX, localY);
-
-                doc.setFont('helvetica', 'normal');
-                const remainder = text.slice(labelLen);
-                const boldWidth = doc.getTextWidth(labelPart);
-                doc.text(remainder, startX + boldWidth, localY);
-            } else {
-                doc.setFont('helvetica', 'normal');
-                doc.text(text, startX, localY);
+                doc.addImage(logoBase64, 'JPEG', logoX, logoY, logoWidth, logoHeight);
+            } catch (error) {
+                console.error('Error fetching logo image:', error);
             }
+        };
     
-            localY += lineSpacing;
-        });
+        await addLogos(doc);
     
+        // ---------------- MUSCLE FUNCTION GRADING (second page) ----------------
         doc.setFont('helvetica', 'bold');
-        const rootX = startX + widthLeft + 3;
-        const rootCenterY = currentY - 1.8 + (totalHeight / 2);
-        doc.text(pair.root, rootX, rootCenterY);
+        doc.setCharSpace(-0.1); 
+        doc.setFontSize(14);
     
-        currentY += totalHeight + pairSpacing;
-        });
-    }
-
-    const widthLeft = 75;
-    const widthRight = 17;
-
-    printMovementPairs(movementPairs, titleX, secondpageY, widthLeft, widthRight);
-
-    // ---------------- MIDDLE COLUMN BOX ----------------
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(14);
-    doc.setCharSpace(-0.1);
-    const AISTitleX = 110;
-    const AISTitleXY = 8;
-
-    const AISTitle = "ASIA Impairment Scale (AIS)";
-    doc.text(AISTitle, AISTitleX, AISTitleXY);
-    const AISTitleWidth = doc.getTextWidth(AISTitle);
-    doc.setLineWidth(0.2);
-    doc.line(AISTitleX, AISTitleXY + 1, AISTitleX + AISTitleWidth - 2, AISTitleXY + 1);
-
-    const boxX = 104;
-    const boxY = 13;
-    const boxWidth = 76;
-    const boxHeight = 131;
-
-    doc.setLineWidth(0.5);
-    doc.rect(boxX, boxY, boxWidth, boxHeight);
-
-    const textX = boxX + 3;
-    let textY = boxY + 6;
-
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'normal');
-
-    const printBullet = (
-        boldLabel: string,
-        normalText: string,
-        maxWidth: number
-    ) => {
-        doc.setCharSpace(-0.05);
+        let secondpageY = 8; 
+        const titleX = 8;
+        const muscleTitle = "Muscle Function Grading";
+    
+        // Print the title - underlined
+        doc.text(muscleTitle, titleX, secondpageY);
+        const muscleTitleWidth = doc.getTextWidth(muscleTitle);
+        doc.setLineWidth(0.2);
+        doc.line(titleX, secondpageY + 1, titleX + muscleTitleWidth - 2, secondpageY + 1);
+    
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(7.5);
-
-        const fullString = `${boldLabel} ${normalText}`.trim();
-
-        const wrappedLines = doc.splitTextToSize(fullString, maxWidth);
-
-        if (wrappedLines.length > 0) {
-            const firstLine = wrappedLines[0];
-            const labelWidth = doc.getTextWidth(boldLabel + ' ');
-
-            doc.setFont('helvetica', 'bold');
-            doc.text(boldLabel, textX, textY);
-
+        doc.setCharSpace(-0.05); 
+    
+        secondpageY += 7;
+    
+        const muscleFunctionBullets = [
+            { boldLabel: "0", text: "= Total paralysis" },
+            { boldLabel: "1", text: "= Palpable or visible contraction" },
+            { boldLabel: "2", text: "= Active movement, full range of motion (ROM) with gravity eliminated" },
+            { boldLabel: "3", text: "= Active movement, full ROM against gravity" },
+            { boldLabel: "4", text: "= Active movement, full ROM against gravity and moderate resistance in a muscle specific position" },
+            { boldLabel: "5", text: "= (normal) active movement, full ROM against gravity and full resistance in a functional muscle position expected from an otherwise unimpaired person" },
+            { boldLabel: "NT", text: "= Not testable. (i.e. due to immobilization, severe pain such that the patient cannot be graded, amputation of limb, or contracture of > 50% of the normal ROM)" },
+            { boldLabel: "0*, ..., 4*, NT*", text: "= Non-SCI condition present" },
+        ];
+    
+        doc.setFontSize(5.5);
+        doc.text("a", titleX + 50, secondpageY + 38.5);
+        doc.setFontSize(7.5);
+    
+        const printBulletFirstColumn = (boldLabel: string, normalText: string, wrapWidth: number) => {
+            doc.setCharSpace(-0.05);
             doc.setFont('helvetica', 'normal');
-            const remainder = firstLine.slice((boldLabel + ' ').length);
-            doc.text(remainder, textX + labelWidth, textY);
-
+            doc.setFontSize(7.5);
+    
+            const fullString = `${boldLabel} ${normalText}`.trim();
+            const wrappedLines = doc.splitTextToSize(fullString, wrapWidth);
+            if (wrappedLines.length === 0) return;
+            const firstLine = wrappedLines[0];
+            const labelWithSpace = boldLabel + ' ';
+            const labelWidth = doc.getTextWidth(labelWithSpace);
+            doc.setFont('helvetica', 'bold');
+            doc.text(boldLabel, titleX, secondpageY);
+            doc.setFont('helvetica', 'normal');
+            const remainder = firstLine.slice(labelWithSpace.length);
+            doc.text(remainder, titleX + labelWidth, secondpageY);
             for (let i = 1; i < wrappedLines.length; i++) {
-                textY += 3.3;
-                doc.text(wrappedLines[i], textX, textY);
+                secondpageY += 4; 
+                doc.text(wrappedLines[i], titleX, secondpageY);
             }
-            textY += 8;
-        }
-    };
-
-    // A) A = Complete
-    printBullet(
-        'A = Complete.',
-        ` No sensory or motor function is preserved in the sacral segments S4-5.`,
-        boxWidth - 6
-    );
-
-    // B) B = Sensory Incomplete
-    printBullet(
-        'B = Sensory Incomplete.',
-        `  Sensory but not motor function is preserved below the neurological level and includes the sacral segments S4-5 (light touch or pin prick at S4-5 or deep anal pressure) AND no motor function is preserved more than three levels below the motor level on either side of the body.`,
-        boxWidth - 6
-    );
-
-    // C) C = Motor Incomplete
-    printBullet(
-        'C = Motor Incomplete.',
-        `  Motor function is preserved at the most caudal sacral segments for voluntary anal contraction (VAC) OR the patient meets the criteria for sensory incomplete status (sensory function preserved at the most caudal sacral segments (S4-S5) by LT, PP or DAP), and has some sparing of motor function more than three levels below the ipsilateral motor level on either side of the body. (This includes key or non-key muscle functions to determine motor incomplete status.) For AIS C – less than half of key muscle functions below the single NLI have a muscle grade >= 3.`,
-        boxWidth - 6
-    );
-
-    // D) D = Motor Incomplete
-    printBullet(
-        'D = Motor Incomplete.',
-        `  Motor incomplete status as defined above, with at least half (half or more) of key muscle functions below the single NLI having a muscle grade >= 3.`,
-        boxWidth - 6
-    );
-
-    // E) E = Normal
-    printBullet(
-        'E = Normal.',
-        ` If sensation and motor function as tested with the ISNCSCI are graded as normal in all segments, and the patient had prior deficits, then the AIS grade is E. Someone without an initial SCI does not receive an AIS grade.`,
-        boxWidth - 6
-    );
-
-    // Using ND
-    printBullet(
-        'Using ND:',
-        ` To document the sensory, motor and NLI levels, the ASIA Impairment Scale grade, and/or the zone of partial preservation (ZPP) when they are unable to be determined based on the examination results.`,
-        boxWidth - 6
-    );
-
-
-    // ------------- STEPS IN CLASSIFICATION --------------
-
-    const addStepsColumn = (
-        startX: number,
-        startY: number,
-        columnWidth: number
-    ) => {
-        const printWrapped = (text: string, fontSize: number = 7.5, style: 'normal' | 'bold' | 'italic' | 'bolditalic' = 'normal') => {
-            doc.setFontSize(fontSize);
-            doc.setFont('helvetica', style);
-        
-            const lines = doc.splitTextToSize(text.trim(), columnWidth);
-            lines.forEach((line: string) => {
-                doc.text(line, startX, currentY);
-                currentY += lineSpacing;
-            });
-        }
-
-        type TextSegment = {
-            text: string;
-            style: 'normal' | 'bold' | 'italic' | 'bolditalic';
+            secondpageY += 4;
         };
-
-        interface WordObject {
-            word: string;
-            style: 'normal' | 'bold' | 'italic' | 'bolditalic';
-        }
-
-        const printWrappedSegments = (
-            segments: TextSegment[],      
-            startX: number,
-            startY: number,
-            columnWidth: number,
-            lineSpacing = 3.5,
-            fontSize = 7.5
-        ) => {
-            doc.setFontSize(fontSize);
-        
-            let currentY = startY;
-        
-            const wordObjects: WordObject[] = [];
-            segments.forEach(({ text, style }) => {
-            const words = text.split(/\s+/);
-            words.forEach((w, i) => {
-                const withSpace = (i < words.length - 1) ? (w + ' ') : w;
-                wordObjects.push({ word: withSpace, style });
-            });
-            });
-        
-            let currentLine: WordObject[] = [];
-            let currentLineWidth = 0;
-        
-            const printLine = () => {
-                let offsetX = startX;
-                for (const wObj of currentLine) {
-                    doc.setFont('helvetica', wObj.style);
-                    const wordWidth = doc.getTextWidth(wObj.word);
-                    doc.text(wObj.word, offsetX, currentY);
-                    offsetX += wordWidth;
-                }
-                currentY += lineSpacing;
-                currentLine = [];
-                currentLineWidth = 0;
-            };
-        
-            for (const wObj of wordObjects) {
-            doc.setFont('helvetica', wObj.style);
-            const wWidth = doc.getTextWidth(wObj.word);
-        
-            if (currentLineWidth + wWidth > columnWidth && currentLine.length > 0) {
-                printLine();
-            }
-        
-            currentLine.push(wObj);
-            currentLineWidth += wWidth;
-            }
-        
-            if (currentLine.length > 0) {
-            printLine();
-            }
-
-            return currentY;
-        }
     
-        let currentY = startY;
-        const lineSpacing = 3.5;
+        const leftColumnWrapWidth = 98;
+        muscleFunctionBullets.forEach((item) => {
+            printBulletFirstColumn(item.boldLabel, item.text, leftColumnWrapWidth);
+        });
     
-        //"Steps in Classification"
-        doc.setFontSize(14);
+        // ---------------- SENSORY GRADING ----------------
+        secondpageY += 5;
         doc.setFont('helvetica', 'bold');
         doc.setCharSpace(-0.1);
-        currentY += lineSpacing + 2;
-        const stepsTitleX = startX + 15;
-
-        const stepsTitle = "Steps in Classification";
-        doc.text(stepsTitle, stepsTitleX, startY);
-        const stepsTitleWidth = doc.getTextWidth(stepsTitle);
+        doc.setFontSize(14);
+    
+        const sensoryTitle = "Sensory Grading";
+        doc.text(sensoryTitle, titleX, secondpageY);
+        const sensoryTitleWidth = doc.getTextWidth(sensoryTitle);
         doc.setLineWidth(0.2);
-        doc.line(stepsTitleX, startY + 1, stepsTitleX + stepsTitleWidth - 2, startY + 1);
-
-        
-        doc.setCharSpace(-0.05);
-            // Intro
-            printWrapped(
-            `The following order is recommended for determining the classification of individuals with SCI.`,
-            7.5,
-            'normal'
-            );
-            currentY += 2;
-        
-            // Step 1
-            printWrapped(`1. Determine sensory levels for right and left sides.`, 8, 'bold');
-            printWrapped(
-            `The sensory level is the most caudal, intact dermatome for both pin prick and light touch sensation.`,
-            7.5,
-            'italic'
-            );
-            currentY += 2;
-        
-            // Step 2
-            printWrapped(`2. Determine motor levels for right and left sides.`, 8, 'bold');
-            printWrapped(
-            `Defined by the lowest key muscle function that has a grade of at least 3 (on supine testing), providing the key muscle functions represented by segments above that level are judged to be intact (graded as a 5). 
-        Note: in regions where there is no myotome to test, the motor level is presumed to be the same as the sensory level, if testable motor function above that level is also normal.`,
-            7.5,
-            'italic'
-            );
-            currentY += 2;
-        
-            // Step 3
-            printWrapped(`3. Determine the neurological level of injury (NLI)`, 8, 'bold');
-            printWrapped(
-            `This refers to the most caudal segment of the cord with intact sensation and antigravity (3 or more) muscle function strength, provided that there is normal (intact) sensory and motor function rostrally respectively. The NLI is the most cephalad of the sensory and motor levels determined in steps 1 and 2.`,
-            7.5,
-            'italic'
-            );
-            currentY += 2;
-        
-            // Step 4
-            printWrapped(`4. Determine whether the injury is Complete or Incomplete.`, 8, 'bold');
-
-        const paragraphSegments: TextSegment[] = [
-        {
-            text: `(i.e. absence or presence of sacral sparing).\nIf voluntary anal contraction = `,
-            style: 'italic'
-        },
-        {
-            text: `No`,
-            style: 'bolditalic'
-        },
-        {
-            text: ` AND all S4-5 sensory scores = `,
-            style: 'italic'
-        },
-        {
-            text: `0`,
-            style: 'bolditalic'
-        },
-        {
-            text: ` AND deep anal pressure = `,
-            style: 'italic'
-        },
-        {
-            text: `No`,
-            style: 'bolditalic'
-        },
-        {
-            text: `, then injury is `,
-            style: 'italic'
-        },
-        {
-            text: `Complete`,
-            style: 'bolditalic'
-        },
-        {
-            text: `. Otherwise, injury is `,
-            style: 'italic'
-        },
-        {
-            text: `Incomplete`,
-            style: 'bolditalic'
-        },
-        { 
-            text: `.`, 
-            style: 'italic' 
-        }
+        doc.line(titleX, secondpageY + 1, titleX + sensoryTitleWidth - 1, secondpageY + 1);
+    
+        secondpageY += 5;
+    
+        const printSensoryLine = (lines: { text: string; bold?: boolean }[], startX: number, startY: number): number => {
+            let currentX = startX;
+            lines.forEach((line) => {
+                if (line.bold) {
+                    doc.setFont('helvetica', 'bold');
+                } else {
+                    doc.setFont('helvetica', 'normal');
+                }
+                const segmentWidth = doc.getTextWidth(line.text);
+                doc.text(line.text, currentX, startY);
+                currentX += segmentWidth;
+            });
+            return currentX;
+        };
+    
+        const line1Segments = [
+            { text: "0", bold: true },
+            { text: " = Absent ", bold: false },
+            { text: "1", bold: true },
+            { text: " = Altered, either decreased/impaired sensation or hypersensitivity", bold: false },
         ];
-
-        currentY = printWrappedSegments(
-        paragraphSegments,
-        startX,
-        currentY,
-        columnWidth
-        );
-        currentY += 2;
-        
-
-        //Step 5
-        const printUnderlinedCompleteLine = (
-            prefixText: string,
-            suffixText: string,
+        doc.setFontSize(7.5);
+        doc.setCharSpace(-0.05); 
+        printSensoryLine(line1Segments, titleX, secondpageY);
+        secondpageY += 4;
+    
+        const line2Segments = [
+            { text: "2", bold: true },
+            { text: " = Normal ", bold: false },
+            { text: "NT", bold: true },
+            { text: " = Not testable", bold: false },
+        ];
+        printSensoryLine(line2Segments, titleX, secondpageY);
+        secondpageY += 4;
+    
+        const line3Segments = [
+            { text: "0*, 1*, NT*", bold: true },
+            { text: " = Non-SCI condition present", bold: false },
+        ];
+        const xEndOfLine3 = printSensoryLine(line3Segments, titleX, secondpageY);
+        doc.setFontSize(5.5);
+        doc.text("a", xEndOfLine3, secondpageY - 1.2);
+        doc.setFontSize(7.5);
+        printSensoryLine(line3Segments, titleX, secondpageY);
+        secondpageY += 5;
+    
+        doc.setFontSize(5.5);
+        doc.text("a", titleX, secondpageY - 1.2);
+        doc.setFontSize(7.5);
+    
+        const noteText = `   Note: Abnormal motor and sensory scores should be tagged with a “*” to indicate an impairment due to a non-SCI condition. The non-SCI condition should be explained in the comments box together with information about how the score is rated for classification purposes (at least normal / not normal for classification).`;
+        const printWrappedParagraph = (text: string, wrapWidth: number, fontSize: number = 7.5) => {
+            doc.setCharSpace(-0.05);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(fontSize);
+            const lines = doc.splitTextToSize(text, wrapWidth);
+            lines.forEach((line: string) => {
+                doc.text(line, titleX, secondpageY);
+                secondpageY += 3.5; 
+            });
+            secondpageY += 2;
+        };
+        printWrappedParagraph(noteText, leftColumnWrapWidth, 7.2);
+    
+        // ---------------- When to Test Non-Key Muscles: ----------------
+        secondpageY += 5; 
+        doc.setFont('helvetica', 'bold');
+        doc.setCharSpace(-0.1);
+        doc.setFontSize(14);
+        const whenToTestTitle = "When to Test Non-Key Muscles:";
+        doc.text(whenToTestTitle, titleX, secondpageY);
+        const whenToTestTitleWidth = doc.getTextWidth(whenToTestTitle);
+        doc.setLineWidth(0.2);
+        doc.line(titleX, secondpageY + 1, titleX + whenToTestTitleWidth - 1.2, secondpageY + 1);
+        secondpageY += 5;
+        const whenToTestText = `
+        In a patient with an apparent AIS B classification, non-key muscle functions more than 3 levels below the motor level on each side should be tested to most accurately classify the injury (differentiate between AIS B and C).`.trim();
+        printWrappedParagraph(whenToTestText, leftColumnWrapWidth, 7.5);
+    
+        // ---------------- MOVEMENT ROOT LEVEL SECTION  ----------------
+        const movementPairs = [
+            {
+                lines: [
+                    { label: "Shoulder:", rest: " Flexion, extension, abduction, adduction, internal and external rotation" },
+                    { label: "Elbow:", rest: " Supination" }
+                ],
+                root: "C5"
+            },
+            {
+                lines: [
+                    { label: "Elbow:", rest: " Pronation" },
+                    { label: "Wrist:", rest: " Flexion" }
+                ],
+                root: "C6"
+            },
+            {
+                lines: [
+                    { label: "Finger:", rest: " Flexion at proximal joint, extension" },
+                    { label: "Thumb:", rest: " Flexion, extension and abduction in plane of thumb" }
+                ],
+                root: "C7"
+            },
+            {
+                lines: [
+                    { label: "Finger:", rest: " Flexion at MCP joint" },
+                    { label: "Thumb:", rest: " Opposition, adduction and abduction perpendicular to palm" }
+                ],
+                root: "C8"
+            },
+            {
+                lines: [
+                    { label: "Finger:", rest: " Abduction of the index finger" }
+                ],
+                root: "T1"
+            },
+            {
+                lines: [
+                    { label: "Hip:", rest: " Adduction" }
+                ],
+                root: "L2"
+            },
+            {
+                lines: [
+                    { label: "Hip:", rest: " External rotation" }
+                ],
+                root: "L3"
+            },
+            {
+                lines: [
+                    { label: "Hip:", rest: " Extension, abduction, internal rotation" },
+                    { label: "Knee:", rest: " Flexion" },
+                    { label: "Ankle:", rest: " Inversion and eversion" },
+                    { label: "Toe:", rest: " MP and IP extension" }
+                ],
+                root: "L4"
+            },
+            {
+                lines: [
+                    { label: "Hallux and Toe:", rest: " DIP and PIP flexion and abduction" }
+                ],
+                root: "L5"
+            },
+            {
+                lines: [
+                    { label: "Hallux:", rest: " Adduction" }
+                ],
+                root: "S1"
+            },
+        ];
+    
+        const printMovementPairs = (
+            pairs: { lines: { label: string; rest: string }[]; root: string; }[],
             startX: number,
-            currentY: number
-        ): number => {
-            doc.setFont("helvetica", "bold");
+            secondpageY: number,
+            widthLeft: number,
+            widthRight: number
+        ) => {
+            const pairSpacing = 1.5; 
+            const lineSpacing = 3;
+        
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(9);
+        
+            doc.text('Movement', startX, secondpageY);
+        
+            const rootHeadingX = startX + widthLeft - 5; 
+            doc.text('Root Level', rootHeadingX, secondpageY);
+        
+            doc.setFont('helvetica');
+            doc.setFontSize(7.2);
+        
+            let currentY = secondpageY + 5;
+        
+            pairs.forEach((pair) => {
+                interface WrappedLine { text: string; labelLen: number; isFirstSubline: boolean; }
+                const allSublines: WrappedLine[] = [];
+                pair.lines.forEach(({ label, rest }) => {
+                    const fullLine = label + ' ' + rest;
+                    const sublines: string[] = doc.splitTextToSize(fullLine, widthLeft);
+                    const labelLen = (label + ' ').length;
+                    sublines.forEach((sub: string, i: number) => {
+                        allSublines.push({ text: sub, labelLen, isFirstSubline: i === 0 });
+                    });
+                });
+        
+                const totalHeight = allSublines.length * lineSpacing + 1;
+                doc.setFillColor(245, 245, 245);
+                const totalWidth = widthLeft + widthRight - 5;
+                doc.rect(startX, currentY - 3, totalWidth, totalHeight, 'F');
+        
+                let localY = currentY;
+                allSublines.forEach(({ text, labelLen, isFirstSubline }) => {
+                    if (isFirstSubline) {
+                        doc.setFont('helvetica', 'bold');
+                        const labelPart = text.slice(0, labelLen);
+                        doc.text(labelPart, startX, localY);
+                        doc.setFont('helvetica', 'normal');
+                        const remainder = text.slice(labelLen);
+                        const boldWidth = doc.getTextWidth(labelPart);
+                        doc.text(remainder, startX + boldWidth, localY);
+                    } else {
+                        doc.setFont('helvetica', 'normal');
+                        doc.text(text, startX, localY);
+                    }
+                    localY += lineSpacing;
+                });
+        
+                doc.setFont('helvetica', 'bold');
+                const rootX = startX + widthLeft + 3;
+                const rootCenterY = currentY - 1.8 + (totalHeight / 2);
+                doc.text(pair.root, rootX, rootCenterY);
+        
+                currentY += totalHeight + pairSpacing;
+            });
+        };
+    
+        const widthLeft = 75;
+        const widthRight = 17;
+        printMovementPairs(movementPairs, titleX, secondpageY, widthLeft, widthRight);
+    
+        // ---------------- MIDDLE COLUMN BOX ----------------
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(14);
+        doc.setCharSpace(-0.1);
+        const AISTitleX = 110;
+        const AISTitleXY = 8;
+        
+        const AISTitle = "ASIA Impairment Scale (AIS)";
+        doc.text(AISTitle, AISTitleX, AISTitleXY);
+        const AISTitleWidth = doc.getTextWidth(AISTitle);
+        doc.setLineWidth(0.2);
+        doc.line(AISTitleX, AISTitleXY + 1, AISTitleX + AISTitleWidth - 2, AISTitleXY + 1);
+        
+        const boxX = 104;
+        const boxY = 13;
+        const boxWidth = 76;
+        const boxHeight = 131;
+        
+        doc.setLineWidth(0.5);
+        doc.rect(boxX, boxY, boxWidth, boxHeight);
+        
+        const textX = boxX + 3;
+        let textY = boxY + 6;
+        
+        doc.setFontSize(7.5);
+        doc.setFont('helvetica', 'normal');
+        
+        const printBullet = (boldLabel: string, normalText: string, maxWidth: number) => {
+            doc.setCharSpace(-0.05);
+            doc.setFont('helvetica', 'normal');
             doc.setFontSize(7.5);
         
-            doc.text(prefixText, startX, currentY);
+            const fullString = `${boldLabel} ${normalText}`.trim();
+            const wrappedLines = doc.splitTextToSize(fullString, maxWidth);
+            if (wrappedLines.length > 0) {
+                const firstLine = wrappedLines[0];
+                const labelWidth = doc.getTextWidth(boldLabel + ' ');
+                doc.setFont('helvetica', 'bold');
+                doc.text(boldLabel, textX, textY);
+                doc.setFont('helvetica', 'normal');
+                const remainder = firstLine.slice((boldLabel + ' ').length);
+                doc.text(remainder, textX + labelWidth, textY);
+                for (let i = 1; i < wrappedLines.length; i++) {
+                    textY += 3.3;
+                    doc.text(wrappedLines[i], textX, textY);
+                }
+                textY += 8;
+            }
+        };
         
-            let offsetX = startX + doc.getTextWidth(prefixText);
+        printBullet('A = Complete.', ` No sensory or motor function is preserved in the sacral segments S4-5.`, boxWidth - 6);
+        printBullet('B = Sensory Incomplete.', `  Sensory but not motor function is preserved below the neurological level and includes the sacral segments S4-5 (light touch or pin prick at S4-5 or deep anal pressure) AND no motor function is preserved more than three levels below the motor level on either side of the body.`, boxWidth - 6);
+        printBullet('C = Motor Incomplete.', `  Motor function is preserved at the most caudal sacral segments for voluntary anal contraction (VAC) OR the patient meets the criteria for sensory incomplete status (sensory function preserved at the most caudal sacral segments (S4-S5) by LT, PP or DAP), and has some sparing of motor function more than three levels below the ipsilateral motor level on either side of the body. (This includes key or non-key muscle functions to determine motor incomplete status.) For AIS C – less than half of key muscle functions below the single NLI have a muscle grade >= 3.`, boxWidth - 6);
+        printBullet('D = Motor Incomplete.', `  Motor incomplete status as defined above, with at least half (half or more) of key muscle functions below the single NLI having a muscle grade >= 3.`, boxWidth - 6);
+        printBullet('E = Normal.', ` If sensation and motor function as tested with the ISNCSCI are graded as normal in all segments, and the patient had prior deficits, then the AIS grade is E. Someone without an initial SCI does not receive an AIS grade.`, boxWidth - 6);
+        printBullet('Using ND:', ` To document the sensory, motor and NLI levels, the ASIA Impairment Scale grade, and/or the zone of partial preservation (ZPP) when they are unable to be determined based on the examination results.`, boxWidth - 6);
         
-            const completeWord = "Complete";
-            doc.text(completeWord, offsetX, currentY);
-        
-            doc.setDrawColor(0, 0, 0);
-            doc.setLineWidth(0.2);
-            const underlineY = currentY + 1;
-            const completeWidth = doc.getTextWidth(completeWord);
-            doc.line(offsetX, underlineY, offsetX + completeWidth, underlineY);
-        
-            offsetX += completeWidth;
-            doc.text(suffixText, offsetX, currentY);
-        
-            return currentY + 6;
-        }
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(8);
-        doc.text("5. Determine ASIA Impairment Scale (AIS) Grade:", startX, currentY);
-        currentY += 5;
-        
-        // 1) "Is injury Complete? If YES, AIS = A"
-        currentY = printUnderlinedCompleteLine(
-            "Is injury ",
-            "? If YES, AIS = A",
-            startX + 3,
-            currentY
-        );
-        
-        // 1a) "NO" + down arrow
-        doc.setFont("helvetica", "bold");
-        const boldNo1 = "NO ";
-        doc.text(boldNo1, startX + 13.5, currentY);
-        const noX1 = startX + 13.5 + doc.getTextWidth(boldNo1);
-        
-        const drawDownArrow = (
-            doc: jsPDF,
-            x: number,
-            y: number,
-            stemLen = 2.5,
-            tipSize = 2
-        ): void => {
-            doc.setLineWidth(0.8);
-            doc.setDrawColor(0, 0, 0);
-            doc.line(x, y - stemLen, x, y);
-        
-            doc.setFillColor(0, 0, 0);
-            doc.triangle(x - 1.2, y, x + 1.2, y, x, y + tipSize, "F");
-        }
-
-        // Arrow
-        drawDownArrow(doc, noX1 + 2, currentY, 3, 2);
-        
-        doc.setFont("helvetica", "normal");
-        currentY += 5;
-        
-        // 2) "Is injury Motor Complete? If YES, AIS = B"
-        currentY = printUnderlinedCompleteLine(
-            "Is injury Motor ",
-            "? If YES, AIS = B",
-            startX + 3,
-            currentY
-        );
-        
-        // 2a) "NO" + down arrow + wrapped text (~55mm wide)
-        doc.setFont("helvetica", "bold");
-        const boldNo2 = "NO ";
-        doc.text(boldNo2, startX + 13.5, currentY);
-        const noX2 = startX + 13.5 + doc.getTextWidth(boldNo2);
-        
-        drawDownArrow(doc, noX2 + 2, currentY, 3, 2);
-        
-        doc.setFont("helvetica", "normal");
-        const wrapStartX2 = noX2 + 8;
-        const wrapWidth = 57;
-        const noText2 = `(No=voluntary anal contraction OR motor function more than three levels below the motor level on a given side, if the patient has sensory incomplete classification)`;
-        
-        const wrapped2 = doc.splitTextToSize(noText2, wrapWidth);
-        wrapped2.forEach((line: string) => {
-            doc.text(line, wrapStartX2, currentY);
-            currentY += 3.2;
-        });
-        currentY += 2;
-        
-        const underlineSubstring = (
-            text: string,
-            substr: string,
-            x: number,
-            y: number
-        ): void => {
-            doc.text(text, x, y);
-        
-            const index = text.indexOf(substr);
-            if (index < 0) return; // substring not found => do nothing
-        
-            // Measure text up to that substring
-            const prefix = text.slice(0, index);
-            const prefixWidth = doc.getTextWidth(prefix);
-        
-            // Now measure the substring itself
-            const substrWidth = doc.getTextWidth(substr);
-        
-            const underlineY = y + 0.5; 
-            const startX = x + prefixWidth;
-            const endX = startX + substrWidth;
-        
-            // Draw the line
-            doc.setDrawColor(0);
-            doc.setLineWidth(0.2);
-            doc.line(startX, underlineY, endX, underlineY);
-        }
-        
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(8);
-        
-        // question in two lines, underlining "at least" and "neurological".
-        
-        
-        const line1 = "Are at least half (half or more) of the key muscles below the";
-        const line2 = "neurological level of injury graded 3 or better?";
-        
-        // Print line 1 and underline "at least"
-        underlineSubstring(line1, "at least", startX, currentY);
-        currentY += 3.5;
-        
-        // Print line 2 and underline "neurological"
-        underlineSubstring(line2, "neurological", startX, currentY);
-        currentY += 6;
-        
-        doc.setFont("helvetica", "bold");
-        
-        const noX = startX + 20;
-        const yesX = startX + 45;
-        
-        doc.text("NO", noX-4, currentY);
-        
-        doc.text("YES", yesX-5, currentY);
-        
-        const arrowStemY = currentY + 1;
-        
-        const noTextWidth = doc.getTextWidth("NO");
-        drawDownArrow(doc, noX + noTextWidth / 2, arrowStemY, 3, 2);
-        
-        const yesTextWidth = doc.getTextWidth("YES");
-        drawDownArrow(doc, yesX + yesTextWidth / 2, arrowStemY, 3, 2);
-        
-        // "AIS=C" and "AIS=D" below each arrow
-        currentY += 6.5;
-        doc.text("AIS=C", noX - 2.5, currentY);
-        doc.text("AIS=D", yesX - 2, currentY);
-        
-        currentY += 6;
-        
-        
-        // "If sensation... AIS=E"
-        
-        doc.text("If sensation and motor function is normal in all segments, AIS=E", startX, currentY);
-        currentY += 3.5;
-        
-        //Final note
-        
-        doc.setFont("helvetica", "italic");
-        doc.setFontSize(7.5);
-        doc.setCharSpace(-0.1);
-        const noteLines = doc.splitTextToSize(
-            `Note: AIS E is used in follow-up testing when an individual with a documented SCI has recovered normal function. If at initial testing no deficits are found, the individual is neurologically intact: the ASIA Impairment Scale does not apply.`,
-            95
-        );
-        noteLines.forEach((line: string) => {
-            doc.text(line, startX, currentY);
-            currentY += 4;
-        });
-        currentY += 2;
-    
-        //Step 6
-        printWrapped(`6. Determine the zone of partial preservation (ZPP)`, 8, 'bold');
-        printWrapped(
-        `The ZPP is used only in injuries with absent motor (no VAC) OR sensory function (no DAP and no LT and no PP sensation) in the lowest sacral segments S4-5, and refers to those dermatomes and myotomes caudal to the sensory and motor levels that remain partially innervated. With sacral sparing of sensory function, the sensory ZPP is not applicable and therefore “NA” is recorded in the block of the worksheet. Accordingly, if VAC is present, the motor ZPP is not applicable and is noted as “NA”.`,
-        7.5,
-        'italic'
-        );
-    }
-
-    addStepsColumn(186, 8, 85);
-    
-    // Generate the PDF as a blob
-    const pdfOutput = doc.output('blob');
-
-    const pdfFilename = filename.endsWith('.pdf') ? filename : `${filename}.pdf`;
-
-    // Save the PDF file
-    if (Capacitor.isNativePlatform()) {
-        try {
-            const reader = new FileReader();
-            reader.readAsDataURL(pdfOutput);
-            reader.onloadend = async () => {
-                const base64data = reader.result as string;
-                const base64Content = base64data.split(',')[1];
-
-                await Filesystem.writeFile({
-                    path: pdfFilename,
-                    data: base64Content,
-                    directory: Directory.Documents,
-                    recursive: true,
+        // ------------- STEPS IN CLASSIFICATION --------------
+        const addStepsColumn = (startX: number, startY: number, columnWidth: number) => {
+            const printWrapped = (text: string, fontSize: number = 7.5, style: 'normal' | 'bold' | 'italic' | 'bolditalic' = 'normal') => {
+                doc.setFontSize(fontSize);
+                doc.setFont('helvetica', style);
+                const lines = doc.splitTextToSize(text.trim(), columnWidth);
+                lines.forEach((line: string) => {
+                    doc.text(line, startX, currentY);
+                    currentY += lineSpacing;
                 });
-
-                console.log('PDF file saved successfully.');
             };
-        } catch (error) {
-            console.error('Error saving PDF file', error);
+        
+            type TextSegment = { text: string; style: 'normal' | 'bold' | 'italic' | 'bolditalic'; };
+            interface WordObject { word: string; style: 'normal' | 'bold' | 'italic' | 'bolditalic'; }
+        
+            const printWrappedSegments = (segments: TextSegment[], startX: number, startY: number, columnWidth: number, lineSpacing = 3.5, fontSize = 7.5) => {
+                doc.setFontSize(fontSize);
+                let currentY = startY;
+                const wordObjects: WordObject[] = [];
+                segments.forEach(({ text, style }) => {
+                    const words = text.split(/\s+/);
+                    words.forEach((w, i) => {
+                        const withSpace = (i < words.length - 1) ? (w + ' ') : w;
+                        wordObjects.push({ word: withSpace, style });
+                    });
+                });
+                let currentLine: WordObject[] = [];
+                let currentLineWidth = 0;
+                const printLine = () => {
+                    let offsetX = startX;
+                    for (const wObj of currentLine) {
+                        doc.setFont('helvetica', wObj.style);
+                        const wordWidth = doc.getTextWidth(wObj.word);
+                        doc.text(wObj.word, offsetX, currentY);
+                        offsetX += wordWidth;
+                    }
+                    currentY += lineSpacing;
+                    currentLine = [];
+                    currentLineWidth = 0;
+                };
+                for (const wObj of wordObjects) {
+                    doc.setFont('helvetica', wObj.style);
+                    const wWidth = doc.getTextWidth(wObj.word);
+                    if (currentLineWidth + wWidth > columnWidth && currentLine.length > 0) {
+                        printLine();
+                    }
+                    currentLine.push(wObj);
+                    currentLineWidth += wWidth;
+                }
+                if (currentLine.length > 0) {
+                    printLine();
+                }
+                return currentY;
+            };
+        
+            let currentY = startY;
+            const lineSpacing = 3.5;
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.setCharSpace(-0.1);
+            currentY += lineSpacing + 2;
+            const stepsTitleX = startX + 15;
+            const stepsTitle = "Steps in Classification";
+            doc.text(stepsTitle, stepsTitleX, startY);
+            const stepsTitleWidth = doc.getTextWidth(stepsTitle);
+            doc.setLineWidth(0.2);
+            doc.line(stepsTitleX, startY + 1, stepsTitleX + stepsTitleWidth - 2, startY + 1);
+            doc.setCharSpace(-0.05);
+            printWrapped(`The following order is recommended for determining the classification of individuals with SCI.`, 7.5, 'normal');
+            currentY += 2;
+            printWrapped(`1. Determine sensory levels for right and left sides.`, 8, 'bold');
+            printWrapped(`The sensory level is the most caudal, intact dermatome for both pin prick and light touch sensation.`, 7.5, 'italic');
+            currentY += 2;
+            printWrapped(`2. Determine motor levels for right and left sides.`, 8, 'bold');
+            printWrapped(`Defined by the lowest key muscle function that has a grade of at least 3 (on supine testing), providing the key muscle functions represented by segments above that level are judged to be intact (graded as a 5). 
+            Note: in regions where there is no myotome to test, the motor level is presumed to be the same as the sensory level, if testable motor function above that level is also normal.`, 7.5, 'italic');
+            currentY += 2;
+            printWrapped(`3. Determine the neurological level of injury (NLI)`, 8, 'bold');
+            printWrapped(`This refers to the most caudal segment of the cord with intact sensation and antigravity (3 or more) muscle function strength, provided that there is normal (intact) sensory and motor function rostrally respectively. The NLI is the most cephalad of the sensory and motor levels determined in steps 1 and 2.`, 7.5, 'italic');
+            currentY += 2;
+            printWrapped(`4. Determine whether the injury is Complete or Incomplete.`, 8, 'bold');
+        
+            const paragraphSegments: TextSegment[] = [
+                { text: `(i.e. absence or presence of sacral sparing).\nIf voluntary anal contraction = `, style: 'italic' },
+                { text: `No`, style: 'bolditalic' },
+                { text: ` AND all S4-5 sensory scores = `, style: 'italic' },
+                { text: `0`, style: 'bolditalic' },
+                { text: ` AND deep anal pressure = `, style: 'italic' },
+                { text: `No`, style: 'bolditalic' },
+                { text: `, then injury is `, style: 'italic' },
+                { text: `Complete`, style: 'bolditalic' },
+                { text: `. Otherwise, injury is `, style: 'italic' },
+                { text: `Incomplete`, style: 'bolditalic' },
+                { text: `.`, style: 'italic' }
+            ];
+        
+            currentY = printWrappedSegments(paragraphSegments, startX, currentY, 95);
+            currentY += 2;
+            const printUnderlinedCompleteLine = (prefixText: string, suffixText: string, startX: number, currentY: number): number => {
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(7.5);
+                doc.text(prefixText, startX, currentY);
+                let offsetX = startX + doc.getTextWidth(prefixText);
+                const completeWord = "Complete";
+                doc.text(completeWord, offsetX, currentY);
+                doc.setDrawColor(0, 0, 0);
+                doc.setLineWidth(0.2);
+                const underlineY = currentY + 1;
+                const completeWidth = doc.getTextWidth(completeWord);
+                doc.line(offsetX, underlineY, offsetX + completeWidth, underlineY);
+                offsetX += completeWidth;
+                doc.text(suffixText, offsetX, currentY);
+                return currentY + 6;
+            };
+        
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(8);
+            doc.text("5. Determine ASIA Impairment Scale (AIS) Grade:", startX, currentY);
+            currentY += 5;
+            currentY = printUnderlinedCompleteLine("Is injury ", "? If YES, AIS = A", startX + 3, currentY);
+            doc.setFont("helvetica", "bold");
+            const boldNo1 = "NO ";
+            doc.text(boldNo1, startX + 13.5, currentY);
+            const noX1 = startX + 13.5 + doc.getTextWidth(boldNo1);
+            const drawDownArrow = (doc: jsPDF, x: number, y: number, stemLen = 2.5, tipSize = 2): void => {
+                doc.setLineWidth(0.8);
+                doc.setDrawColor(0, 0, 0);
+                doc.line(x, y - stemLen, x, y);
+                doc.setFillColor(0, 0, 0);
+                doc.triangle(x - 1.2, y, x + 1.2, y, x, y + tipSize, "F");
+            };
+            drawDownArrow(doc, noX1 + 2, currentY, 3, 2);
+            doc.setFont("helvetica", "normal");
+            currentY += 5;
+            currentY = printUnderlinedCompleteLine("Is injury Motor ", "? If YES, AIS = B", startX + 3, currentY);
+            doc.setFont("helvetica", "bold");
+            const boldNo2 = "NO ";
+            doc.text(boldNo2, startX + 13.5, currentY);
+            const noX2 = startX + 13.5 + doc.getTextWidth(boldNo2);
+            drawDownArrow(doc, noX2 + 2, currentY, 3, 2);
+            doc.setFont("helvetica", "normal");
+            const wrapStartX2 = noX2 + 8;
+            const wrapWidth = 57;
+            const noText2 = `(No=voluntary anal contraction OR motor function more than three levels below the motor level on a given side, if the patient has sensory incomplete classification)`;
+            const wrapped2 = doc.splitTextToSize(noText2, wrapWidth);
+            wrapped2.forEach((line: string) => {
+                doc.text(line, wrapStartX2, currentY);
+                currentY += 3.2;
+            });
+            currentY += 2;
+            const underlineSubstring = (text: string, substr: string, x: number, y: number): void => {
+                doc.text(text, x, y);
+                const index = text.indexOf(substr);
+                if (index < 0) return;
+                const prefix = text.slice(0, index);
+                const prefixWidth = doc.getTextWidth(prefix);
+                const substrWidth = doc.getTextWidth(substr);
+                const underlineY = y + 0.5; 
+                const startX = x + prefixWidth;
+                const endX = startX + substrWidth;
+                doc.setDrawColor(0);
+                doc.setLineWidth(0.2);
+                doc.line(startX, underlineY, endX, underlineY);
+            };
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(8);
+            underlineSubstring("Are at least half (half or more) of the key muscles below the", "at least", startX, currentY);
+            currentY += 3.5;
+            underlineSubstring("neurological level of injury graded 3 or better?", "neurological", startX, currentY);
+            currentY += 6;
+            doc.setFont("helvetica", "bold");
+            const noX = startX + 20;
+            const yesX = startX + 45;
+            doc.text("NO", noX-4, currentY);
+            doc.text("YES", yesX-5, currentY);
+            const arrowStemY = currentY + 1;
+            const noTextWidth = doc.getTextWidth("NO");
+            drawDownArrow(doc, noX + noTextWidth / 2, arrowStemY, 3, 2);
+            const yesTextWidth = doc.getTextWidth("YES");
+            drawDownArrow(doc, yesX + yesTextWidth / 2, arrowStemY, 3, 2);
+            currentY += 6.5;
+            doc.text("AIS=C", noX - 2.5, currentY);
+            doc.text("AIS=D", yesX - 2, currentY);
+            currentY += 6;
+            doc.text("If sensation and motor function is normal in all segments, AIS=E", startX, currentY);
+            currentY += 3.5;
+            doc.setFont("helvetica", "italic");
+            doc.setFontSize(7.5);
+            doc.setCharSpace(-0.1);
+            const noteLines = doc.splitTextToSize(
+                `Note: AIS E is used in follow-up testing when an individual with a documented SCI has recovered normal function. If at initial testing no deficits are found, the individual is neurologically intact: the ASIA Impairment Scale does not apply.`,
+                95
+            );
+            noteLines.forEach((line: string) => {
+                doc.text(line, startX, currentY);
+                currentY += 4;
+            });
+            currentY += 2;
+            printWrapped(`6. Determine the zone of partial preservation (ZPP)`, 8, 'bold');
+            printWrapped(
+            `The ZPP is used only in injuries with absent motor (no VAC) OR sensory function (no DAP and no LT and no PP sensation) in the lowest sacral segments S4-5, and refers to those dermatomes and myotomes caudal to the sensory and motor levels that remain partially innervated. With sacral sparing of sensory function, the sensory ZPP is not applicable and therefore “NA” is recorded in the block of the worksheet. Accordingly, if VAC is present, the motor ZPP is not applicable and is noted as “NA”.`,
+            7.5,
+            'italic'
+            );
+        };
+    
+        addStepsColumn(186, 8, 85);
+    
+        // Generate the PDF as a blob
+        const pdfOutput = doc.output('blob');
+        const pdfFilename = filename.endsWith('.pdf') ? filename : `${filename}.pdf`;
+        if (Capacitor.isNativePlatform()) {
+            try {
+                const reader = new FileReader();
+                reader.readAsDataURL(pdfOutput);
+                reader.onloadend = async () => {
+                    const base64data = reader.result as string;
+                    const base64Content = base64data.split(',')[1];
+                    await Filesystem.writeFile({
+                        path: pdfFilename,
+                        data: base64Content,
+                        directory: Directory.Documents,
+                        recursive: true,
+                    });
+                    console.log('PDF file saved successfully.');
+                };
+            } catch (error) {
+                console.error('Error saving PDF file', error);
+            }
+        } 
+        // else {
+        //     doc.save(pdfFilename);
+        // }
+        return doc.output("blob");
+    };
+
+    const blobToBase64 = (blob: Blob): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const dataUrl = reader.result as string;
+                const base64 = dataUrl.split(',')[1];
+                resolve(base64);
+            };
+            reader.onerror = () => reject(new Error('Error reading PDF blob'));
+            reader.readAsDataURL(blob);
+            });
+    };
+    
+    export const exportPDF = async (
+        examData: ExamData,
+        filename: string,
+        examDate?: Date
+    ): Promise<void> => {
+        const pdfBlob = await generatePDFBlob(examData, filename, examDate);
+        const pdfFilename = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
+        if (Capacitor.isNativePlatform()) {
+            try {
+            const base64Content = await blobToBase64(pdfBlob);
+            await Filesystem.writeFile({
+                path: pdfFilename,
+                data: base64Content,
+                directory: Directory.Documents,
+                recursive: true,
+            });
+            console.log("PDF file saved successfully.");
+            } catch (error) {
+            console.error("Error saving PDF file", error);
+            }
+        } else {
+            const url = URL.createObjectURL(pdfBlob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = pdfFilename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
         }
-    } else {
-        doc.save(pdfFilename);
+    };
+    
+
+    export async function exportPDFtoEmail(
+        examData: ExamData,
+        filename: string,
+        examDate: Date | undefined,
+        contactMessage: string
+    ): Promise<{ pdfBase64: string; pdfFilename: string; textBody: string; subject: string }> {
+        const pdfBlob = await generatePDFBlob(examData, filename, examDate, true);
+    
+        let pdfBase64: string;
+        try {
+        pdfBase64 = await blobToBase64(pdfBlob);
+        } catch (error) {
+        console.error("Error converting PDF to Base64", error);
+        throw new Error("PDF conversion failed.");
+        }
+    
+        const pdfFilename = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
+    
+        const subject = `Contact via ISNCSCI App: ${filename}`;
+        const textBody = `User message:\n\n${contactMessage}\n\n`;
+    
+        return {
+        pdfBase64,
+        pdfFilename,
+        textBody,
+        subject
+        };
     }
-};

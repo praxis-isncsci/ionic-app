@@ -23,7 +23,7 @@
     "@ionic/vue-router": "^7.0.0",
     "cordova-sqlite-storage": "^6.1.0",
     "ionicons": "^7.0.0",
-    "isncsci-ui": "^1.0.26",
+    "isncsci-ui": "^1.0.33",
     "jspdf": "^2.5.2",
     "localforage-cordovasqlitedriver": "^1.8.0",
     "update": "^0.7.4",

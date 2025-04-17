@@ -1,5 +1,5 @@
 <template>
-    <MainLayout title="Saved Worksheets"  :showNavbar="false" :showFooter="false">
+    <MainLayout title="Saved Worksheets"  :showNavbar="false" :showFooter="false" :helpMode="false" >
         <template #header-buttons>
             <ion-buttons slot="end">
             <ion-button @click="close_onClick" fill="clear">
@@ -40,7 +40,6 @@ import { IonButtons, IonButton, IonIcon, IonItem, IonLabel, IonList } from '@ion
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import { closeOutline, createOutline, pencilOutline, trashOutline } from 'ionicons/icons';
-import { APP_PREFIX } from '@/config';
 import { IWorksheetMetaItem, WorksheetDetails, Worksheets } from '@/utils/worksheetUtils';
 import { promptFoNameExist, promptForWorksheetDetails, showConfirmDeleteAlert } from '@/utils/alertsPrompts';
 

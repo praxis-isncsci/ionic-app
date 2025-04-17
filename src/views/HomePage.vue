@@ -1,5 +1,6 @@
 <template>
-  <MainLayout title="ISNCSCI" :showFooter="true">
+  <MainLayout title="ISNCSCI" :showFooter="true" :helpMode="helpMode" @update:helpMode="val => helpMode = val">
+    <HelpMode ref="helpModeRef" :helpMode="helpMode" @update:helpMode="val => helpMode = val" />
     <template #worksheet-info-slot>
       <div v-if="currentMeta" class="worksheet-info">
         <div class="worksheet-name">Worksheet Name: {{ currentMeta.name }}</div>
@@ -8,13 +9,18 @@
       </div>
     </template>
 
-    <IsncsciControl ref="isncsciControlRef"></IsncsciControl>
+    <IsncsciControl 
+    ref="isncsciControlRef" 
+    :helpMode="helpMode" 
+    @open-doc="onOpenDoc"
+      ></IsncsciControl>
 
     <template #footer-buttons>
       <AppNavbar :calculateOnClick="calculate_onClick" :saveOnClick="save_onClick" :clearExam="clearExam"
-        :exportToPDF="exportToPDF" :onNavigate="handleNavigation" :showChart="showChart">
+        :exportToPDF="exportToPDF" :contactUs="contactUs" :onNavigate="handleNavigation" :showChart="showChart">
       </AppNavbar>
     </template>
+    <ContactUs :isOpen="showContactModal" @update:isOpen="val => showContactModal = val" />
   </MainLayout>
 </template>
 
@@ -29,6 +35,17 @@ import { useRoute } from 'vue-router';
 import router from '@/router';
 import { promptFoNameExist, promptForWorksheetDetails, showToast, showUnsavedDataAlert } from '@/utils/alertsPrompts';
 import { exportPDF } from '@/utils/examDataHelpers';
+import HelpMode from '@/components/HelpMode.vue';
+import ContactUs from '@/components/ContactUs.vue';
+
+const showContactModal = ref(false);
+const helpMode = ref(false);
+
+const helpModeRef = ref<InstanceType<typeof HelpMode> | null>(null);
+
+const onOpenDoc = (payload:any) => {
+  helpModeRef.value?.openHelpDoc(payload.docName, payload.anchor);
+}
 
 const worksheets = Worksheets.getInstance();
 const route = useRoute();
@@ -44,6 +61,14 @@ interface IsncsciControlMethods {
   showChart: () => void;
 }
 const isncsciControlRef = ref<IsncsciControlMethods | null>(null);
+
+const contactUs = () => {
+  if (!navigator.onLine) {
+    showToast('Contact Us is only available when you have an internet connection.');
+  } else {
+    showContactModal.value = true;
+  }
+};
 
 const exportToPDF = async () => {
   if (!isncsciControlRef.value) return;
@@ -69,7 +94,7 @@ const exportToPDF = async () => {
 
 const isLoading = ref(false);
 
-function deepEqual(obj1: any, obj2: any): boolean {
+const deepEqual = (obj1: any, obj2: any): boolean => {
   if (obj1 === obj2) return true;
 
   if (typeof obj1 !== typeof obj2) return false;
@@ -92,7 +117,7 @@ function deepEqual(obj1: any, obj2: any): boolean {
   return true;
 }
 
-function examDataEqual(examData1: ExamData, examData2: ExamData): boolean {
+const examDataEqual = (examData1: ExamData, examData2: ExamData): boolean => {
   return deepEqual(examData1, examData2);
 }
 

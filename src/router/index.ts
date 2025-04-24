@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import HomePage from '../views/HomePage.vue';
 import EulaPage from '../views/EulaPage.vue';
 import SavedWorksheetsPage from '../views/SavedWorksheetsPage.vue';
+import TrainingModePage from '../views/TrainingModePage.vue';
 
 const routes = [
   {
@@ -22,6 +23,11 @@ const routes = [
     path: '/saved-worksheets',
     name: 'Saved Worksheets',
     component: SavedWorksheetsPage
+  },
+  {
+    path: '/training-mode',
+    name: 'Learning Mode',
+    component: TrainingModePage
   }
 ]
 

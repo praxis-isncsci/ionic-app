@@ -129,9 +129,10 @@ import {
         }
 
         const payload: any = {
-            Email:   senderEmail.value,
-            Name:    `ISNCSCI App User — ${senderEmail.value}`,
+            Email:   senderEmail.value.trim(),
+            Name:    `ISNCSCI App User — ${senderEmail.value.trim()}`,
             Comment: contactMessage.value,
+            NeurologyModel: null
         };
 
         if (selectedWorksheetId.value) {
@@ -141,7 +142,7 @@ import {
                 sending.value = false;
                 return;
             }
-            payload.ExamData = worksheet.examData;
+            payload.NeurologyModel = worksheet.examData;
         }
 
         console.log("sending to BE w/ examData:", payload);
@@ -152,7 +153,9 @@ import {
             headers: { "Content-Type": "application/json" },
             body:    JSON.stringify(payload)
             });
-            if (!response.ok) throw new Error("network");
+            if (!response.ok) {
+            console.error(await response.text()); 
+        throw new Error("network");}
             await showToast(
             selectedWorksheetId.value
                 ? "Message with attachment sent. Thanks for contacting us."

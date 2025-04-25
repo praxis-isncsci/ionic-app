@@ -586,11 +586,14 @@ const addSubscores = (doc: jsPDF, examData: ExamData) => {
 // --------------- helper to remove ND range from classification and export as ND
 const removeNDRange = (value?: string): string => {
     if (!value) return '';
-    if (value.includes('ND:')) {
+    if (value.startsWith('ND*:')) {
+        return 'ND*';
+    }
+    if (value.startsWith('ND:')) {
         return 'ND';
     }
     return value;
-}
+};
 // --------------- Classification Box --------------------
 const addClassificationBox = (doc: jsPDF, examData: ExamData) => {
     const boxWidth = 262;

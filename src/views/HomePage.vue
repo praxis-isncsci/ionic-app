@@ -1,5 +1,5 @@
 <template>
-  <MainLayout title="ISNCSCI" :showFooter="true" :helpMode="helpMode" @update:helpMode="val => helpMode = val">
+  <MainLayout title="ISNCSCI" :showNavbar="true" :showFooter="true" :helpMode="helpMode" @update:helpMode="val => helpMode = val">
     <HelpMode ref="helpModeRef" :helpMode="helpMode" @update:helpMode="val => helpMode = val" />
     <template #worksheet-info-slot>
       <div v-if="currentMeta" class="worksheet-info">

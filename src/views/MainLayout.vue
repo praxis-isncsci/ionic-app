@@ -1,9 +1,10 @@
 <template>
   <ion-page>
-    <ion-header>
+    <ion-header v-if="showNavbar">
       <ion-toolbar>
         <ion-title @click="handleTitleClick">{{ title }}</ion-title>
 
+        <slot name="header-buttons"></slot>
         <ion-buttons slot="end">
           <template v-if="title === 'ISNCSCI'">
 
@@ -22,7 +23,6 @@
             ></ion-icon>
           </template>
         </ion-buttons>
-        <!-- /end slot -->
       </ion-toolbar>
     </ion-header>
 
@@ -53,6 +53,7 @@ import { IonIcon, IonButtons } from '@ionic/vue';
 
 const props = defineProps<{
   title: string;
+  showNavbar: boolean;
   showFooter: boolean;
   helpMode: boolean;
 }>();

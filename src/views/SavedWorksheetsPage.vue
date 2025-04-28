@@ -1,5 +1,5 @@
 <template>
-    <MainLayout title="Saved Worksheets"  :showNavbar="false" :showFooter="false" :helpMode="false" >
+    <MainLayout title="Saved Worksheets"  :showNavbar="true" :showFooter="false" :helpMode="false" >
         <template #header-buttons>
             <ion-buttons slot="end">
             <ion-button @click="close_onClick" fill="clear">

@@ -138,12 +138,12 @@ const forceInlineFill = (svgEl: SVGElement) => {
 // Try to locate the live, fully-rendered <svg> from <praxis-isncsci-key-points-diagram>
 async function getDiagramSvgElementOrNull(): Promise<SVGElement | null> {
 
-    const candidates: (HTMLElement | null)[] = [
+    const diagramHosts: (HTMLElement | null)[] = [
         document.querySelector('praxis-isncsci-key-points-diagram'),
         document.querySelector('ion-modal praxis-isncsci-key-points-diagram'),
     ];
 
-    for (const host of candidates) {
+    for (const host of diagramHosts) {
         if (!host) continue;
 
         await new Promise(r => requestAnimationFrame(r));

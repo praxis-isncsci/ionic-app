@@ -17,10 +17,8 @@
                     <ion-label position="stacked">Your Email</ion-label>
                     <ion-input
                     type="email"
-                    :value="senderEmail"
-                    @ionInput="handleEmailInput"
-                    placeholder="Email to contact you"
-                    ></ion-input>
+                    v-model="senderEmail"
+                    placeholder="Email to contact you" />
                 </ion-item>
     
                 <ion-item>
@@ -76,6 +74,7 @@ import {
     IonList,
     IonItem,
     IonLabel,
+    IonInput,
     IonSelect,
     IonSelectOption,
     IonTextarea,
@@ -98,10 +97,6 @@ import {
         await worksheets.loadMeta();
         allWorksheets.value = worksheets.getAllMeta();
     });
-
-    const handleEmailInput = (event: CustomEvent<{ value: string }>) => {
-        senderEmail.value = event.detail.value;
-    };
 
     const closeModal = () => {
         emit("update:isOpen", false);

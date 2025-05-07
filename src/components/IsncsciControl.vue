@@ -103,10 +103,15 @@
                         slot="key-points-diagram"
                         ref="keyPointsDiagramRef"
                     ></praxis-isncsci-key-points-diagram>
+                    <praxis-isncsci-key-points-diagram
+                        ref="hiddenKeyPointsDiagramRef"
+                        class="pdf-helper-diagram"
+                    ></praxis-isncsci-key-points-diagram>
 
                     <!-- Modal for small screens -->
                     <ion-modal
                         :is-open="isChartModalOpen"
+                        keep-contents-mounted
                         @didDismiss="onModalDidDismiss"
                         @didPresent="onModalDidPresent"
                     >
@@ -330,6 +335,7 @@ const isChartModalOpen = ref(false);
 const isLoading = ref(false);
 const lastCalculatedExamData = ref<ExamData | undefined>(undefined);
 const diagramRef = ref<HTMLElement | null>(null);
+const hiddenKeyPointsDiagramRef = ref<HTMLElement | null>(null);
 
 let ready = false;
 
@@ -383,6 +389,10 @@ onMounted(() => {
     if (isLargeScreen.value) {
         diagramRef.value = keyPointsDiagramRef.value;
         initializeKeyPointDiagram();
+    }
+
+    if (hiddenKeyPointsDiagramRef.value) {
+        new KeyPointDiagramController(appStore, hiddenKeyPointsDiagramRef.value);
     }
 
     initializeAppUseCase(appStoreProvider);
@@ -591,6 +601,14 @@ defineExpose({
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.pdf-helper-diagram{
+    position:absolute;
+    width:0;
+    height:0;
+    overflow:hidden;
+    pointer-events:none;
 }
 
 select {

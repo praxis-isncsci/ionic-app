@@ -1,11 +1,11 @@
 <template>
     <div>
         <div v-if="helpMode" class="help-icons">
-            <ion-button  size="small" @click="openHelpDoc('Motor_Exam')">
-                Motor Exam Guide
+            <ion-button size="small" class="help-btn" @click="openHelpDoc('Motor_Exam')">
+                <ion-label class="ion-text-wrap">Motor Exam Guide</ion-label>
             </ion-button>
-            <ion-button class="btn-sensory" size="small" @click="openHelpDoc('Key_Sensory')">
-                Key Sensory Point Guide
+            <ion-button size="small" class="help-btn btn-sensory" @click="openHelpDoc('Key_Sensory')">
+                <ion-label class="ion-text-wrap">Key Sensory Point Guide</ion-label>
             </ion-button>
         </div>
 
@@ -184,8 +184,8 @@ onBeforeUnmount(() => {
 
 .help-icons ion-button {
     --border-radius: 4px;
-    --padding-start: 6px;
-    --padding-end: 6px;
+    --padding-start: 8px;
+    --padding-end: 8px;
     --padding-top: 0;
     --padding-bottom: 0;
     font-size: 0.5rem;
@@ -193,11 +193,27 @@ onBeforeUnmount(() => {
     width: 7.8rem;
 }
 
+.help-icons ion-button.help-btn .button-native{
+    white-space: normal;
+}
+
+.help-icons ion-button.help-btn{
+    --border-radius: 4px;
+    --padding-start: 4px;
+    --padding-end: 4px;
+    --padding-top: 4px;
+    --padding-bottom: 4px;
+    font-size: .55rem;
+    width: 6.5rem;
+    text-align: center;
+}
+
 .btns-exam-points {
     padding: 1em;
     background: #f0f0f0;
     text-align: center;
 }
+
 .btns-exam-points button {
     margin: 0 0.5em;
     padding: 0.5em 1em;
@@ -223,6 +239,7 @@ ion-toolbar.nav-toolbar .nav-buttons ion-button {
 
 .help-icons {
     justify-content: space-between;
+    padding: 0 5px;
     /* display: flex;
     justify-content: center; */
 }

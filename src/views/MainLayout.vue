@@ -12,14 +12,14 @@
               :icon="informationCircleOutline"
               v-if="!helpMode"
               @click="enableHelp"
-              style="font-size: 1.4rem; margin-right: 12px;"
+              style="font-size: 2rem; margin-right: 12px;"
             ></ion-icon>
 
             <ion-icon
               v-else
               :icon="informationCircle"
               @click="disableHelp"
-              style="color: #428cff; font-size: 1.4rem; margin-right: 12px;"
+              style="color: #428cff; font-size: 2rem; margin-right: 12px;"
             ></ion-icon>
           </template>
         </ion-buttons>

@@ -137,23 +137,26 @@ const forceInlineFill = (svgEl: SVGElement) => {
 
 // Try to locate the live, fully-rendered <svg> from <praxis-isncsci-key-points-diagram>
 async function getDiagramSvgElementOrNull(): Promise<SVGElement | null> {
-    const diagramEl = document.querySelector('praxis-isncsci-key-points-diagram') as HTMLElement | null;
-    if (!diagramEl) {
-        return null; 
-    }
-    // Let the component do its final rendering in the next frame
-    await new Promise((res) => requestAnimationFrame(res));
 
-    const shadow = (diagramEl as any).shadowRoot;
-    if (!shadow) {
-        return null;
-    }
-    const svg = shadow.querySelector('svg') as SVGElement | null;
-    if (!svg) return null;
+    const candidates: (HTMLElement | null)[] = [
+        document.querySelector('praxis-isncsci-key-points-diagram'),
+        document.querySelector('ion-modal praxis-isncsci-key-points-diagram'),
+    ];
 
-    // Force inline fills so the final serialized SVG actually has color
-    forceInlineFill(svg);
-    return svg;
+    for (const host of candidates) {
+        if (!host) continue;
+
+        await new Promise(r => requestAnimationFrame(r));
+
+        const root = (host as any).shadowRoot ?? host;
+        const svg  = root.querySelector('svg') as SVGElement | null;
+        if (!svg) continue;
+
+        forceInlineFill(svg);
+        return svg;
+    }
+
+    return null;
 }
 
 // --------------- BODY DIAGRAM --------------------

@@ -252,3 +252,9 @@ html, body {
   -webkit-text-size-adjust: 100% !important;
   text-size-adjust: 100% !important;
 }
+
+.pdf-snapshot-modal {
+  opacity: 0;
+  transform: translateX(-9999px);
+  pointer-events: none;
+}

@@ -138,28 +138,29 @@ const forceInlineFill = (svgEl: SVGElement) => {
 
 // Try to locate the live, fully-rendered <svg> from <praxis-isncsci-key-points-diagram>
 async function getDiagramSvgElementOrNull(): Promise<SVGElement | null> {
-
-    const diagramHosts: (HTMLElement | null)[] = [
-        document.querySelector('praxis-isncsci-key-points-diagram'),
-        document.querySelector('.pdf-helper-diagram'),
-        document.querySelector('ion-modal praxis-isncsci-key-points-diagram'),
-    ];
-
-    for (const host of diagramHosts) {
-        if (!host) continue;
-
+        /* 1️⃣ locate the active (non-cached) page */
+        const activePage = document.querySelector(
+            'ion-router-outlet .ion-page:not(.ion-page-hidden)'
+        ) as HTMLElement | null;
+        if (!activePage) return null;
+    
+        /* 2️⃣ inside that page, find the diagram component */
+        const host = activePage.querySelector(
+            'praxis-isncsci-key-points-diagram'
+        ) as HTMLElement | null;
+        if (!host) return null;
+    
+        /* 3️⃣ wait one paint so that shadow–DOM is up-to-date */
         await new Promise(r => requestAnimationFrame(r));
-
-        const root = (host as any).shadowRoot ?? host;
-        const svg  = root.querySelector('svg') as SVGElement | null;
-        if (!svg) continue;
-
-        forceInlineFill(svg);
-        return svg;
+    
+        const root  = (host as any).shadowRoot ?? host;
+        const svgEl = root.querySelector('svg') as SVGElement | null;
+        if (!svgEl) return null;
+    
+        /* 4️⃣ inline computed colours so they survive serialization */
+        forceInlineFill(svgEl);
+        return svgEl;
     }
-
-    return null;
-}
 
 // --------------- BODY DIAGRAM --------------------
 const addBodyDiagram = async (doc: jsPDF) => {
@@ -173,16 +174,21 @@ const addBodyDiagram = async (doc: jsPDF) => {
     const fallbackWidth = 80;
     const fallbackHeight = 150;
 
+    let usedFallback  = false;
+    let finalSvgString: string | null;
 
-    let usedFallback = false;
-    let finalSvgString: string | null = null;
-    const liveSvg = await getDiagramSvgElementOrNull();
-    if (liveSvg) {
-        finalSvgString = new XMLSerializer().serializeToString(liveSvg);
-    }
+    /* 📱  On native platforms ALWAYS build a fresh off-screen diagram.
+            The helper component inside the page stops updating after the
+            first paint in WKWebView, so we can’t rely on it.            */
 
-    if (!finalSvgString && Capacitor.isNativePlatform()) {
+    if (Capacitor.isNativePlatform()) {
         finalSvgString = await captureDiagramSvg();
+    } else {
+        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+        const liveSvg = await getDiagramSvgElementOrNull();
+        finalSvgString = liveSvg
+            ? new XMLSerializer().serializeToString(liveSvg)
+            : null;
     }
 
     if (!finalSvgString) {
@@ -1735,21 +1741,39 @@ let pageWidth: number,
     const captureDiagramSvg = async (): Promise<string | null> => {
         const modal = await modalController.create({
             component: 'praxis-isncsci-key-points-diagram',
-            cssClass : 'invisible',
-        });
-        await modal.present();
-    
-        await new Promise(r => setTimeout(r, 50));
+            cssClass : 'pdf-snapshot-modal',
+            backdropDismiss: false,
+            showBackdrop   : false,
+          });
         
-        const svg = (modal as any).shadowRoot?.querySelector('svg') as SVGSVGElement | null;
-        if (!svg) { await modal.dismiss(); return null; }
+          await modal.present();
+          await new Promise<void>(resolve =>
+                modal.addEventListener('didPresent', () => resolve(), { once: true })
+            );        
+          await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
         
-        forceInlineFill(svg);
-        const svgString = new XMLSerializer().serializeToString(svg);
+          const root = modal.shadowRoot ?? modal; 
+          const live  = root.querySelector('svg') as SVGElement | null;
+          if (!live) { await modal.dismiss(); return null; }
         
-        await modal.dismiss();
-        return svgString;
+          const clone = live.cloneNode(true) as SVGElement;
+          inlineComputedColours(clone);
+        
+          const svgString = new XMLSerializer().serializeToString(clone);
+        
+          await modal.dismiss();
+          return svgString;
     };
+
+    function inlineComputedColours(svg: SVGElement) {
+        svg.querySelectorAll<SVGGraphicsElement>(
+            'path,polygon,circle,rect,ellipse,line'
+        ).forEach(el => {
+          const cs = getComputedStyle(el);
+          if (cs.fill   && cs.fill   !== 'none') el.setAttribute('fill',   cs.fill);
+          if (cs.stroke && cs.stroke !== 'none') el.setAttribute('stroke', cs.stroke);
+        });
+      }
     
     export const exportPDF = async (
         examData: ExamData,
@@ -1757,7 +1781,9 @@ let pageWidth: number,
         examDate?: Date
     ): Promise<void> => {
         const pdfBlob = await generatePDFBlob(examData, filename, examDate);
-        const pdfFilename = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
+        const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const base  = filename.replace(/\.pdf$/i, '');
+        const pdfFilename = `${base}_${stamp}.pdf`;
         if (Capacitor.isNativePlatform()) {
             try {
             const base64Content = await blobToBase64(pdfBlob);

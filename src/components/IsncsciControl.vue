@@ -103,10 +103,6 @@
                         slot="key-points-diagram"
                         ref="keyPointsDiagramRef"
                     ></praxis-isncsci-key-points-diagram>
-                    <praxis-isncsci-key-points-diagram
-                        ref="hiddenKeyPointsDiagramRef"
-                        class="pdf-helper-diagram"
-                    ></praxis-isncsci-key-points-diagram>
 
                     <!-- Modal for small screens -->
                     <ion-modal

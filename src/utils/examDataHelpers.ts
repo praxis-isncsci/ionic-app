@@ -2,6 +2,7 @@ import { ExamData } from "isncsci-ui/dist/esm/core/domain";
 import { jsPDF } from 'jspdf';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Capacitor } from '@capacitor/core';
+import { modalController } from "@ionic/vue";
 
 // --------------- GRID AND SPACING --------------------
 const sensoryLevels = [
@@ -140,6 +141,7 @@ async function getDiagramSvgElementOrNull(): Promise<SVGElement | null> {
 
     const diagramHosts: (HTMLElement | null)[] = [
         document.querySelector('praxis-isncsci-key-points-diagram'),
+        document.querySelector('.pdf-helper-diagram'),
         document.querySelector('ion-modal praxis-isncsci-key-points-diagram'),
     ];
 
@@ -174,34 +176,34 @@ const addBodyDiagram = async (doc: jsPDF) => {
 
     let usedFallback = false;
     let finalSvgString: string | null = null;
-    try {
-        const realSvgElement = await getDiagramSvgElementOrNull();
-        if (realSvgElement) {
-            // Serialize inline-styled <svg> to string
-            finalSvgString = new XMLSerializer().serializeToString(realSvgElement);
-        }
-    } catch(e) {
-        console.warn('No colorized diagram from component, fallback to local file.', e);
+    const liveSvg = await getDiagramSvgElementOrNull();
+    if (liveSvg) {
+        finalSvgString = new XMLSerializer().serializeToString(liveSvg);
+    }
+
+    if (!finalSvgString && Capacitor.isNativePlatform()) {
+        finalSvgString = await captureDiagramSvg();
     }
 
     if (!finalSvgString) {
         usedFallback = true;
-        try {
-            const diagramUrl = Capacitor.isNativePlatform()
-                ? Capacitor.convertFileSrc('assets/c-isncsci-body-diagram.svg')
-                : 'assets/c-isncsci-body-diagram.svg';
+        const url = Capacitor.isNativePlatform()
+            ? Capacitor.convertFileSrc('assets/c-isncsci-body-diagram.svg')
+            : 'assets/c-isncsci-body-diagram.svg';
+        finalSvgString = await (await fetch(url)).text();
+    }
 
-            const resp = await fetch(diagramUrl);
-            finalSvgString = await resp.text();
-        } catch(err) {
-            console.error('Error fetching fallback SVG', err);
-            // no diagram to show
-            return;
-        }
+    if (!finalSvgString) return;
+        
+    const png64 = await svgToPngBase64(finalSvgString, diagramWidth, diagramHeight);
+    
+    if (usedFallback) {
+        doc.addImage(png64,'PNG', fallbackX, fallbackY, fallbackWidth, fallbackHeight);
+    } else {
+        doc.addImage(png64,'PNG', diagramX, diagramY, diagramWidth, diagramHeight);
     }
 
     try {
-
         // Convert final SVG to base64 PNG
         const diagramBase64 = await svgToPngBase64(finalSvgString, diagramWidth, diagramHeight);
 
@@ -1728,6 +1730,25 @@ let pageWidth: number,
             reader.onerror = () => reject(new Error('Error reading PDF blob'));
             reader.readAsDataURL(blob);
             });
+    };
+
+    const captureDiagramSvg = async (): Promise<string | null> => {
+        const modal = await modalController.create({
+            component: 'praxis-isncsci-key-points-diagram',
+            cssClass : 'invisible',
+        });
+        await modal.present();
+    
+        await new Promise(r => setTimeout(r, 50));
+        
+        const svg = (modal as any).shadowRoot?.querySelector('svg') as SVGSVGElement | null;
+        if (!svg) { await modal.dismiss(); return null; }
+        
+        forceInlineFill(svg);
+        const svgString = new XMLSerializer().serializeToString(svg);
+        
+        await modal.dismiss();
+        return svgString;
     };
     
     export const exportPDF = async (

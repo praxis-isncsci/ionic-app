@@ -82,6 +82,7 @@ import {
     } from "@ionic/vue";
     import { showToast } from "@/utils/alertsPrompts";
     import { IWorksheetMetaItem, Worksheets } from "@/utils/worksheetUtils";
+    import { CapacitorHttp } from "@capacitor/core";
 
     defineProps<{ isOpen: boolean }>();
     const emit = defineEmits(["update:isOpen"]);
@@ -143,14 +144,26 @@ import {
         console.log("sending to BE w/ examData:", payload);
 
         try {
-            const response = await fetch("https://isncscialgorithm.com/Contact/Feedback2", {
-            method:  "POST",
-            headers: { "Content-Type": "application/json" },
-            body:    JSON.stringify(payload)
-            });
-            if (!response.ok) {
-            console.error(await response.text()); 
-        throw new Error("network");}
+        //     const response = await fetch("https://isncscialgorithm.com/Contact/Feedback2", {
+        //     method:  "POST",
+        //     headers: { "Content-Type": "application/json" },
+        //     body:    JSON.stringify(payload)
+        //     });
+        //     if (!response.ok) {
+        //     console.error(await response.text()); 
+        // throw new Error("network");}
+        
+        const options = {
+            url:    'https://isncscialgorithm.com/Contact/Feedback2',
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data:    payload,
+        };
+
+        const { status } = await CapacitorHttp.request(options);
+            if (status < 200 || status >= 300) {
+            throw new Error('network');
+        }
             await showToast(
             selectedWorksheetId.value
                 ? "Message with attachment sent. Thanks for contacting us."

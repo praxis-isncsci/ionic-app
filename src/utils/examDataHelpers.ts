@@ -1741,8 +1741,13 @@ let pageWidth: number,
         filename: string,
         examDate?: Date
     ): Promise<void> => {
-        const pdfBlob = await generatePDFBlob(examData, filename, examDate);
-        const pdfFilename = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
+        const timeStamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const baseName  = filename.replace(/\.pdf$/i, "");
+        const pdfFilename = Capacitor.isNativePlatform()
+            ? `${baseName}_${timeStamp}.pdf`
+            : (filename.endsWith(".pdf") ? filename : `${filename}.pdf`);
+
+        const pdfBlob   = await generatePDFBlob(examData, baseName, examDate)
         if (Capacitor.isNativePlatform()) {
             try {
             const base64Content = await blobToBase64(pdfBlob);

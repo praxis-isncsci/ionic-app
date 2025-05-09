@@ -1742,33 +1742,22 @@ let pageWidth: number,
         examDate?: Date
     ): Promise<void> => {
         const timeStamp = new Date().toISOString().replace(/[:.]/g, "-");
-        const baseName  = filename.replace(/\.pdf$/i, "");
-        const pdfFilename = Capacitor.isNativePlatform()
-            ? `${baseName}_${timeStamp}.pdf`
-            : (filename.endsWith(".pdf") ? filename : `${filename}.pdf`);
-
-        const pdfBlob   = await generatePDFBlob(examData, baseName, examDate)
-        if (Capacitor.isNativePlatform()) {
-            try {
-            const base64Content = await blobToBase64(pdfBlob);
-            await Filesystem.writeFile({
-                path: pdfFilename,
-                data: base64Content,
-                directory: Directory.Documents,
-                recursive: true,
-            });
-            console.log("PDF file saved successfully.");
-            } catch (error) {
-            console.error("Error saving PDF file", error);
-            }
-        } else {
+        const base = filename.replace(/\.pdf$/i, "");
+        const needsStamp = !/_\d{4}-\d{2}-\d{2}T/.test(base);   // crude check
+        const finalName = Capacitor.isNativePlatform() && needsStamp
+                ? `${base}_${timeStamp}`
+                : base;
+        
+        const pdfBlob = await generatePDFBlob(examData, finalName, examDate);
+        
+        if (!Capacitor.isNativePlatform()) {
             const url = URL.createObjectURL(pdfBlob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = pdfFilename;
+            const link = Object.assign(document.createElement("a"), {
+                href: url, download: `${finalName}.pdf`,
+            });
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
+            link.remove();
             URL.revokeObjectURL(url);
         }
-    };
+    }

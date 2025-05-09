@@ -78,9 +78,7 @@ const exportToPDF = async () => {
   await isncsciControlRef.value.ensureDiagramVisibleForPdf();
   const examData = isncsciControlRef.value.examData();
 
-  // Use worksheet name if available, otherwise default name
-  const currentDateTime = new Date();
-  let name = `ISNCSCI_${currentDateTime.toISOString().replace(/[:.]/g, '-')}`;
+  let name = 'ISNCSCI';
 
   if (currentMeta.value && currentMeta.value.name) {
     name = currentMeta.value.name;

@@ -1743,7 +1743,7 @@ let pageWidth: number,
     ): Promise<void> => {
         const timeStamp = new Date().toISOString().replace(/[:.]/g, "-");
         const base = filename.replace(/\.pdf$/i, "");
-        const needsStamp = !/_\d{4}-\d{2}-\d{2}T/.test(base);   // crude check
+        const needsStamp = !/_\d{4}-\d{2}-\d{2}T/.test(base);
         const finalName = Capacitor.isNativePlatform() && needsStamp
                 ? `${base}_${timeStamp}`
                 : base;

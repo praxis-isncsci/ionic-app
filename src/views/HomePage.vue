@@ -59,6 +59,8 @@ interface IsncsciControlMethods {
   isFormEmpty: () => boolean;
   examData: () => ExamData;
   showChart: () => void;
+  ensureDiagramVisibleForPdf: () => Promise<void>;
+  hideDiagramAfterPdf: () => void;
 }
 const isncsciControlRef = ref<IsncsciControlMethods | null>(null);
 
@@ -73,11 +75,10 @@ const contactUs = () => {
 const exportToPDF = async () => {
   if (!isncsciControlRef.value) return;
 
+  await isncsciControlRef.value.ensureDiagramVisibleForPdf();
   const examData = isncsciControlRef.value.examData();
 
-  // Use worksheet name if available, otherwise default name
-  const currentDateTime = new Date();
-  let name = `ISNCSCI_${currentDateTime.toISOString().replace(/[:.]/g, '-')}`;
+  let name = 'ISNCSCI';
 
   if (currentMeta.value && currentMeta.value.name) {
     name = currentMeta.value.name;
@@ -89,6 +90,8 @@ const exportToPDF = async () => {
   } catch (err) {
     console.error('Error exporting PDF:', err);
     await showToast('Export failed.');
+  } finally {
+    isncsciControlRef.value.hideDiagramAfterPdf();
   }
 };
 

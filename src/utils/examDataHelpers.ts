@@ -1,3 +1,4 @@
+
 import { ExamData } from "isncsci-ui/dist/esm/core/domain";
 import { jsPDF } from 'jspdf';
 import { Filesystem, Directory } from '@capacitor/filesystem';
@@ -137,27 +138,32 @@ const forceInlineFill = (svgEl: SVGElement) => {
 
 // Try to locate the live, fully-rendered <svg> from <praxis-isncsci-key-points-diagram>
 async function getDiagramSvgElementOrNull(): Promise<SVGElement | null> {
-
-    const diagramHosts: (HTMLElement | null)[] = [
-        document.querySelector('praxis-isncsci-key-points-diagram'),
-        document.querySelector('ion-modal praxis-isncsci-key-points-diagram'),
-    ];
-
-    for (const host of diagramHosts) {
-        if (!host) continue;
-
-        await new Promise(r => requestAnimationFrame(r));
-
-        const root = (host as any).shadowRoot ?? host;
-        const svg  = root.querySelector('svg') as SVGElement | null;
-        if (!svg) continue;
-
-        forceInlineFill(svg);
-        return svg;
-    }
-
-    return null;
+    const hosts = Array.from(
+        document.querySelectorAll<HTMLElement>('praxis-isncsci-key-points-diagram')
+    );
+    if (!hosts.length) return null;
+    
+        const orderedHosts = [
+        ...hosts.filter((h) => h.offsetParent !== null),
+        ...hosts.filter((h) => h.offsetParent === null),
+        ];
+    
+        for (let i = 0; i < 10; i++) {
+        for (const host of orderedHosts) {
+            const root = (host as any).shadowRoot ?? host;
+            const svg = root.querySelector('svg') as SVGElement | null;
+    
+            if (svg) {
+            forceInlineFill(svg);
+            return svg;
+            }
+        }
+        await new Promise((r) => requestAnimationFrame(r));
+        }
+    
+        return null;
 }
+
 
 // --------------- BODY DIAGRAM --------------------
 const addBodyDiagram = async (doc: jsPDF) => {
@@ -1735,29 +1741,23 @@ let pageWidth: number,
         filename: string,
         examDate?: Date
     ): Promise<void> => {
-        const pdfBlob = await generatePDFBlob(examData, filename, examDate);
-        const pdfFilename = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
-        if (Capacitor.isNativePlatform()) {
-            try {
-            const base64Content = await blobToBase64(pdfBlob);
-            await Filesystem.writeFile({
-                path: pdfFilename,
-                data: base64Content,
-                directory: Directory.Documents,
-                recursive: true,
-            });
-            console.log("PDF file saved successfully.");
-            } catch (error) {
-            console.error("Error saving PDF file", error);
-            }
-        } else {
+        const timeStamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const base = filename.replace(/\.pdf$/i, "");
+        const needsStamp = !/_\d{4}-\d{2}-\d{2}T/.test(base);
+        const finalName = Capacitor.isNativePlatform() && needsStamp
+                ? `${base}_${timeStamp}`
+                : base;
+        
+        const pdfBlob = await generatePDFBlob(examData, finalName, examDate);
+        
+        if (!Capacitor.isNativePlatform()) {
             const url = URL.createObjectURL(pdfBlob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = pdfFilename;
+            const link = Object.assign(document.createElement("a"), {
+                href: url, download: `${finalName}.pdf`,
+            });
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
+            link.remove();
             URL.revokeObjectURL(url);
         }
-    };
+    }

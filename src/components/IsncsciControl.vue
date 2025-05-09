@@ -339,6 +339,10 @@ const hiddenKeyPointsDiagramRef = ref<HTMLElement | null>(null);
 
 let ready = false;
 
+let resolveModalReady: (() => void) | null = null;
+const waitForModalReady = () =>
+new Promise<void>((res) => (resolveModalReady = res));
+
 const externalMessagePortProvider: IExternalMessageProvider = {
     sendOutExamData: () => {
         console.log('externalMessagePortProvider called');
@@ -429,6 +433,7 @@ const showChart = () => {
 const onModalDidPresent = () => {
     diagramRef.value = modalKeyPointsDiagramRef.value;
     initializeKeyPointDiagram();
+    resolveModalReady?.();
 };
 
 const onModalDidDismiss = () => {
@@ -585,6 +590,30 @@ const calculate = async () => {
     }
     return examData;
 };
+const ensureDiagramVisibleForPdf = async () => {
+    if (isLargeScreen.value) {
+        await nextTick();
+        return;
+    }
+    if (!isChartModalOpen.value) {
+        const modalReady = waitForModalReady();
+        isChartModalOpen.value = true;
+        await modalReady;
+    }
+
+    for (let i = 0; i < 20; i++) { 
+        await new Promise((r) => requestAnimationFrame(r));
+        const svg = (diagramRef.value?.shadowRoot ?? diagramRef.value)
+                    ?.querySelector('svg');
+        if (svg) return;
+    }
+};
+
+    const hideDiagramAfterPdf = () => {
+    if (!isLargeScreen.value && isChartModalOpen.value) {
+        isChartModalOpen.value = false;
+    }
+};
 
 defineExpose({
     load,
@@ -593,6 +622,8 @@ defineExpose({
     isFormEmpty,
     examData: getExamData,
     showChart,
+    ensureDiagramVisibleForPdf,
+    hideDiagramAfterPdf
 });
 </script>
 

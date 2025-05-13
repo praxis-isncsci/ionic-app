@@ -68,7 +68,7 @@ export const showConfirmDeleteAlert = async (): Promise<boolean> => {
     });
 };
 
-function formatDateTimeLocal(date: Date): string {
+const formatDateTimeLocal = (date: Date): string => {
     const pad = (n: number) => n.toString().padStart(2, '0');
     const YYYY = date.getFullYear();
     const MM = pad(date.getMonth() + 1);

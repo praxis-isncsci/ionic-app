@@ -2,7 +2,7 @@
     <div class="wrapper">
     <table class="grid">
         <colgroup>
-        <!-- lbl | R M | R LT | R PP | diagram | L LT | L PP | L M | lbl -->
+        <!-- lbl | R M | R LT | R PP | diagram | L LT | L PP | L M | lbl | description -->
         <col style="width:36px" />
         <col style="width:36px" />
         <col style="width:36px" />
@@ -12,6 +12,7 @@
         <col style="width:36px" />
         <col style="width:36px" />
         <col style="width:36px" />
+        <col class="col-description" style="width:100px" />
         </colgroup>
 
         <!-- ------------- HEADERS ------------- -->
@@ -22,6 +23,7 @@
             <th></th>
             <th colspan="3">Left</th>
             <th></th>
+            <th></th>
         </tr>
         <tr class="subHdr">
             <th></th>
@@ -29,6 +31,7 @@
             <th></th>
             <th>LT</th><th>PP</th><th>M</th>
             <th></th>
+            <th class="col-description"></th>
         </tr>
         </thead>
 
@@ -65,6 +68,8 @@
 
             <!-- Leftt‑side label -->
             <td class="lbl-left">{{ lvl }}</td>
+            <!-- Leftt‑side descriptions -->
+            <td class="description"> {{levelDescriptions[lvl] ?? ''}} </td>
         </tr>
 
         <!-- ------------- DAP / VAC ------------- -->
@@ -78,6 +83,7 @@
 
             <td class="empty"></td>
             <td class="lbl-left">VAC</td>
+            <td class="col-description"></td>
         </tr>
         </tbody>
     </table>
@@ -103,6 +109,19 @@ const levels = [
     'L1','L2','L3','L4','L5','S1','S2','S3','S4-5'
 ]
 
+const levelDescriptions: Record<string, string> = {
+    C5: 'Elbow flexors',
+    C6: 'Wrist extensors',
+    C7: 'Elbow extensors',
+    C8: 'Finger flexors',
+    T1: 'Finger abductors (little finger)',
+    L2: 'Hip flexors',
+    L3: 'Knee extensors',
+    L4: 'Ankle dorsiflexors',
+    L5: 'Long toe extensors',
+    S1: 'Ankle plantar flexors'
+}
+
 const motorLevels   = new Set(['C5','C6','C7','C8','T1','L2','L3','L4','L5','S1'])
 const isMotorLevel  = (lvl: string) => motorLevels.has(lvl)
 const motorCellClass= (lvl: string) => ({ cell:true, blank:!isMotorLevel(lvl) })
@@ -119,6 +138,7 @@ const motorCellClass= (lvl: string) => ({ cell:true, blank:!isMotorLevel(lvl) })
 
 /* ------------- GRID ------------- */
 .grid{
+    margin:0 auto;
     table-layout:fixed;
     border-collapse:separate;
     border-spacing:4.5px 0.5px;
@@ -214,13 +234,36 @@ tbody .lbl-right{
     white-space:pre-wrap; 
 }
 
-@media (max-width: 600px) {
-    .diagram {
-        display:none;
+.description {
+    font: 400 0.8rem/1.2 'Inter',sans-serif;
+    color: #000;
+    white-space: nowrap;
+}
+
+@media (max-width: 750px) {
+
+    .diagram { 
+        display: none; 
     }
-    
+
+    .grid thead th:last-child { 
+        display: none; 
+    }
+
+    .grid col.col-description {
+        display: none;
+        width: 0 !important;
+    }
+
     .grid col:nth-child(5) { 
-        width:20px !important; 
+        width: 20px !important; 
+    }
+
+}
+
+@media (max-width: 600px) {
+    .description{ 
+        display: none; 
     }
 }
 

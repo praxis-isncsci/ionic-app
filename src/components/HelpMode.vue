@@ -17,7 +17,7 @@
                     <ion-title slot="start">{{ currentGuideTitle }}</ion-title>
                     <ion-buttons slot="end">
                         <ion-button @click="closeModal">
-                            <ion-icon :icon="closeOutline"></ion-icon>
+                            <ion-icon :ios="closeOutline" :md="close"></ion-icon>
                         </ion-button>
                     </ion-buttons>
                 </ion-toolbar>
@@ -57,7 +57,7 @@ import { onMounted, onBeforeUnmount, computed } from 'vue';
 import { defineProps, ref } from 'vue';
 import { IonModal, IonIcon, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent } from '@ionic/vue';
 import { useExamGuide } from '@/utils/useExamGuides';
-import { bookOutline, closeOutline } from 'ionicons/icons';
+import { bookOutline, close, closeOutline } from 'ionicons/icons';
 
 
 defineProps<{ helpMode: boolean }>();

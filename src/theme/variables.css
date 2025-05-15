@@ -258,3 +258,7 @@ html, body {
   transform: translateX(-9999px);
   pointer-events: none;
 }
+
+.text-description {
+  font-weight: 400;
+}

@@ -628,6 +628,21 @@ defineExpose({
 </script>
 
 <style>
+
+:root {
+    --type-scale-body-1-font-size: bold;
+    --type-scale-body-1-weight: 800;
+}
+
+praxis-isncsci-classification-grid { 
+    --heading-foreground: #303030;
+    --heading-font-size: 0.8rem; 
+}
+
+:root body {
+    font-weight: 300;
+}
+
 .diagram-container {
     display: flex;
     justify-content: center;
@@ -656,7 +671,7 @@ select {
         --cell-width: 32px;
         --cell-height: 32px;
         --isncsci-anal-function-width: 64px;
-        --space-12: 24px;
+        --space-8: 24px;
     }
 
     praxis-isncsci-input-layout {

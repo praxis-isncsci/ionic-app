@@ -38,7 +38,8 @@
                             <ion-icon :icon="downloadOutline"></ion-icon>
                         </ion-fab-button>
                         <ion-fab-button class="fab-list-btn" @click="onNavigate('/saved-worksheets')">
-                            <ion-icon :icon="bookmarksOutline"></ion-icon>
+                            <ion-icon :icon="folderOpenOutline"></ion-icon>
+                            <!-- <ion-icon :icon="bookmarksOutline"></ion-icon> -->
                         </ion-fab-button>
                         <ion-fab-button class="fab-list-btn" @click="onNavigate('/eula')">
                             <ion-icon :icon="newspaperOutline"></ion-icon>
@@ -69,7 +70,7 @@
 <script setup lang="ts">
 
 import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList, IonButton } from '@ionic/vue';
-import { manOutline, documentOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, bookmarksOutline, downloadOutline, mailOutline } from 'ionicons/icons';
+import { manOutline, documentOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, folderOpenOutline, downloadOutline, mailOutline } from 'ionicons/icons';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 defineProps<{ 

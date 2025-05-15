@@ -1,11 +1,13 @@
 <template>
     <div>
         <div v-if="helpMode" class="help-icons">
-            <ion-button size="small" class="help-btn" @click="openHelpDoc('Motor_Exam')">
-                <ion-label class="ion-text-wrap">Motor Exam Guide</ion-label>
+            <ion-button class="help-btn" @click="openHelpDoc('Motor_Exam')">
+                <ion-icon slot="start" :icon="bookOutline"></ion-icon>
+                <ion-label class="ion-text-wrap">Motor</ion-label>
             </ion-button>
-            <ion-button size="small" class="help-btn btn-sensory" @click="openHelpDoc('Key_Sensory')">
-                <ion-label class="ion-text-wrap">Key Sensory Point Guide</ion-label>
+            <ion-button class="help-btn btn-sensory" @click="openHelpDoc('Key_Sensory')">
+                <ion-icon slot="start" :icon="bookOutline"></ion-icon>
+                <ion-label class="ion-text-wrap">Sensory</ion-label>
             </ion-button>
         </div>
 
@@ -14,7 +16,9 @@
                 <ion-toolbar>
                     <ion-title slot="start">{{ currentGuideTitle }}</ion-title>
                     <ion-buttons slot="end">
-                        <ion-button @click="closeModal">Close</ion-button>
+                        <ion-button @click="closeModal">
+                            <ion-icon :icon="closeOutline"></ion-icon>
+                        </ion-button>
                     </ion-buttons>
                 </ion-toolbar>
                 <!-- Second toolbar for navigation buttons (sections) -->
@@ -51,8 +55,10 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, computed } from 'vue';
 import { defineProps, ref } from 'vue';
-import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent } from '@ionic/vue';
+import { IonModal, IonIcon, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent } from '@ionic/vue';
 import { useExamGuide } from '@/utils/useExamGuides';
+import { bookOutline, closeOutline } from 'ionicons/icons';
+
 
 defineProps<{ helpMode: boolean }>();
 
@@ -95,35 +101,39 @@ const currentGuideTitle = computed(() => {
 const sections = computed(() => {
     if (currentGuideName.value === 'Motor_Exam') {
     return [
-        { label: 'C5',  id: 'C5', offsetLg: 0, offsetSm: 0 },
-        { label: 'C6',  id: 'C6', offsetLg: 0, offsetSm: -350 },
-        { label: 'C7',  id: 'C7', offsetLg: -1000, offsetSm: -1750 },
-        { label: 'C8',  id: 'C8', offsetLg: -1040, offsetSm: -2110 },
-        { label: 'T1',  id: 'T1', offsetLg: -2080, offsetSm: -3550 },
-        { label: 'L2',  id: 'L2', offsetLg: -2040, offsetSm: -3850 },
-        { label: 'L3',  id: 'L3', offsetLg: -2800, offsetSm: -5090 },
-        { label: 'L4',  id: 'L4', offsetLg: -4250, offsetSm: -7150 },
-        { label: 'L5',  id: 'L5', offsetLg: -4270, offsetSm: -7510 },
-        { label: 'S1',  id: 'S1', offsetLg: -5180, offsetSm: -8850 }
+        { label: 'C5',  id: 'C5', offsetLg: 0, offsetSm: 0, offsetXs: 0 },
+        { label: 'C6',  id: 'C6', offsetLg: 0, offsetSm: -350, offsetXs: -430 },
+        { label: 'C7',  id: 'C7', offsetLg: -1000, offsetSm: -1750, offsetXs: -1930 },
+        { label: 'C8',  id: 'C8', offsetLg: -1040, offsetSm: -2110, offsetXs: -2380 },
+        { label: 'T1',  id: 'T1', offsetLg: -2080, offsetSm: -3550, offsetXs: -3915 },
+        { label: 'L2',  id: 'L2', offsetLg: -2040, offsetSm: -3850, offsetXs: -4312 },
+        { label: 'L3',  id: 'L3', offsetLg: -2800, offsetSm: -5090, offsetXs: -5665 },
+        { label: 'L4',  id: 'L4', offsetLg: -4250, offsetSm: -7150, offsetXs: -7880 },
+        { label: 'L5',  id: 'L5', offsetLg: -4270, offsetSm: -7510, offsetXs: -8320 },
+        { label: 'S1',  id: 'S1', offsetLg: -5180, offsetSm: -8850, offsetXs: -9765 }
     ];
     } else if (currentGuideName.value === 'Key_Sensory') {
     return [
-    { label: 'C2–C8',   id: 'C2', offsetLg: 0, offsetSm: 0 },
-    { label: 'T1–T2',   id: 'T1', offsetLg: -350, offsetSm: -600 },
-    { label: 'T3–T12',  id: 'T3', offsetLg: -700, offsetSm: -1200 },
-    { label: 'L1–L5',   id: 'L1', offsetLg: -1050, offsetSm: -1800 },
-    { label: 'S1–S4_5', id: 'S1', offsetLg: -1420, offsetSm: -2400 }
+    { label: 'C2–C8',   id: 'C2', offsetLg: 0, offsetSm: 0, offsetXs: 0 },
+    { label: 'T1–T2',   id: 'T1', offsetLg: -350, offsetSm: -600, offsetXs: -650 },
+    { label: 'T3–T12',  id: 'T3', offsetLg: -700, offsetSm: -1200, offsetXs: -1300 },
+    { label: 'L1–L5',   id: 'L1', offsetLg: -1050, offsetSm: -1800, offsetXs: -1980 },
+    { label: 'S1–S4_5', id: 'S1', offsetLg: -1420, offsetSm: -2400, offsetXs: -2620 }
     ];
     }
-    return [];  // default (no buttons) if no guide selected
+    return [];
 });
 
-const scrollToSection = (section: { id: string; offsetLg: number; offsetSm: number }) => {
+
+const scrollToSection = (section: { id: string; offsetLg: number; offsetSm: number; offsetXs: number }) => {
     const ionContentEl = contentRef.value?.$el ?? contentRef.value
     if (!ionContentEl) return
 
-    const isSmallScreen = window.innerWidth < 500
-    const offset = isSmallScreen ? section.offsetSm : section.offsetLg
+    const W = window.innerWidth
+    const offset =
+    W < 380 ? section.offsetXs :
+    W < 500 ? section.offsetSm :
+                section.offsetLg
 
     const targetEl = ionContentEl.querySelector(`[id="${section.id}"]`) as HTMLElement | null
     if (!targetEl) return
@@ -190,7 +200,7 @@ onBeforeUnmount(() => {
     --padding-bottom: 0;
     font-size: 0.5rem;
     height: auto;
-    width: 7.8rem;
+    width: 5rem;
 }
 
 .help-icons ion-button.help-btn .button-native{
@@ -204,7 +214,7 @@ onBeforeUnmount(() => {
     --padding-top: 4px;
     --padding-bottom: 4px;
     font-size: .55rem;
-    width: 6.5rem;
+    width: 5rem;
     text-align: center;
 }
 
@@ -266,6 +276,15 @@ ion-toolbar.nav-toolbar .nav-buttons ion-button {
         font-size: 0.42rem;
         width: 6.5rem;
     }
+}
+
+
+@media (max-width: 380px) {
+    ion-toolbar.nav-toolbar .nav-buttons ion-button {
+    font-size: 0.5rem;
+    min-width: 1.6rem; 
+    width: auto;
+}
 }
 
 </style>

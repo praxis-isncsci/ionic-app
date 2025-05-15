@@ -14,7 +14,7 @@
         <ion-content>
             <ion-list>
                 <ion-item>
-                    <ion-label position="stacked">Your Email</ion-label>
+                    <ion-label position="stacked" class="lbl">Your Email</ion-label>
                     <ion-input
                     type="email"
                     v-model="senderEmail"
@@ -22,10 +22,11 @@
                 </ion-item>
     
                 <ion-item>
-                    <ion-label>Attach Worksheet (optional)</ion-label>
+                    <ion-label class="lbl">Attach Worksheet (optional)</ion-label>
                     <ion-select
                     v-model="selectedWorksheetId"
                     placeholder="Select a Worksheet"
+                    class="lbl"
                     >
                     <ion-select-option
                         v-for="ws in allWorksheets"
@@ -38,7 +39,7 @@
                 </ion-item>
     
                 <ion-item>
-                    <ion-label position="stacked">Your Message</ion-label>
+                    <ion-label position="stacked" class="lbl">Your Message</ion-label>
                     <ion-textarea
                     placeholder="Type your message here..."
                     v-model="contactMessage"
@@ -144,14 +145,6 @@ import {
         console.log("sending to BE w/ examData:", payload);
 
         try {
-        //     const response = await fetch("https://isncscialgorithm.com/Contact/Feedback2", {
-        //     method:  "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body:    JSON.stringify(payload)
-        //     });
-        //     if (!response.ok) {
-        //     console.error(await response.text()); 
-        // throw new Error("network");}
         
         const options = {
             url:    'https://isncscialgorithm.com/Contact/Feedback2',
@@ -184,4 +177,9 @@ import {
 </script>
 
 <style scoped>
+
+.lbl {
+    font-weight: 400;
+}
+
 </style>

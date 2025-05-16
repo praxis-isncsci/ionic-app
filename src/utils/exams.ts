@@ -22,8 +22,11 @@ export interface ExpectedResults {
     answerKey: AnswerKey;
 }
 
+export type Difficulty = 'easy' | 'medium' | 'hard'
+
 export interface ExamData {
     name: string;
+    difficulty: Difficulty;
     rightMotorScores: Record<string, number>;
     leftMotorScores: Record<string, number>;
     rightLightTouchScores: Record<string, number>;
@@ -40,6 +43,7 @@ export interface ExamData {
 export const exams: ExamData[] = [
     {
         name: 'Learning Case 1',
+        difficulty: 'easy',
         rightMotorScores: {
             'C5': 5, 'C6': 4, 'C7': 3, 'C8': 0, 'T1': 0,
             'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
@@ -101,6 +105,7 @@ export const exams: ExamData[] = [
     },
     {
         name: 'Learning Case 2',
+        difficulty: 'easy',
         rightMotorScores: {
             'C5': 5, 'C6': 5, 'C7': 5, 'C8': 5, 'T1': 5,
             'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
@@ -162,6 +167,7 @@ export const exams: ExamData[] = [
     },
     {
         name: 'Learning Case 3',
+        difficulty: 'easy',
         rightMotorScores: {
             'C5': 5, 'C6': 5, 'C7': 5, 'C8': 1, 'T1': 0,
             'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
@@ -223,6 +229,7 @@ export const exams: ExamData[] = [
     },
     {
         name: 'Learning Case 4',
+        difficulty: 'easy',
         rightMotorScores: {
             'C5': 5, 'C6': 4, 'C7': 3, 'C8': 2, 'T1': 1,
             'L2': 3, 'L3': 4, 'L4': 2, 'L5': 2, 'S1': 2
@@ -284,6 +291,7 @@ export const exams: ExamData[] = [
     },
     {
         name: 'Learning Case 5',
+        difficulty: 'easy',
         rightMotorScores: {
             'C5': 4, 'C6': 5, 'C7': 4, 'C8': 5, 'T1': 5,
             'L2': 3, 'L3': 3, 'L4': 2, 'L5': 0, 'S1': 0
@@ -345,6 +353,7 @@ export const exams: ExamData[] = [
     },
     {
         name: 'Learning Case 6',
+        difficulty: 'easy',
         rightMotorScores: {
             'C5': 5, 'C6': 5, 'C7': 5, 'C8': 5, 'T1': 5,
             'L2': 3, 'L3': 1, 'L4': 1, 'L5': 0, 'S1': 0
@@ -406,6 +415,7 @@ export const exams: ExamData[] = [
     },
     {
         name: 'Learning Case 7',
+        difficulty: 'easy',
         rightMotorScores: {
             'C5': 2, 'C6': 1, 'C7': 0, 'C8': 0, 'T1': 0,
             'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
@@ -467,6 +477,7 @@ export const exams: ExamData[] = [
     },
     {
         name: 'Learning Case 8',
+        difficulty: 'easy',
         rightMotorScores: {
             'C5': 3, 'C6': 1, 'C7': 1, 'C8': 1, 'T1': 0,
             'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
@@ -528,6 +539,7 @@ export const exams: ExamData[] = [
     },
     {
         name: 'Learning Case 9',
+        difficulty: 'easy',
         rightMotorScores: {
             'C5': 5, 'C6': 5, 'C7': 5, 'C8': 5, 'T1': 5,
             'L2': 5, 'L3': 3, 'L4': 3, 'L5': 3, 'S1': 0
@@ -589,6 +601,7 @@ export const exams: ExamData[] = [
     },
     {
         name: 'Learning Case 10',
+        difficulty: 'easy',
         rightMotorScores: {
             'C5': 5, 'C6': 5, 'C7': 5, 'C8': 5, 'T1': 5,
             'L2': 5, 'L3': 5, 'L4': 4, 'L5': 2, 'S1': 0
@@ -648,4 +661,1058 @@ export const exams: ExamData[] = [
             }
         }
     },
+    {
+        name: 'Learning Case 11',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 5, 'C6': 5, 'C7': 5, 'C8': 5, 'T1': 5,
+            'L2': 1, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 5, 'C6': 5, 'C7': 5, 'C8': 5, 'T1': 5,
+            'L2': 1, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 2, 'C3': 2, 'C4': 2, 'C5': 2, 'C6': 2, 'C7': 2, 'C8': 2, 'T1': 2,
+            'T2': 2, 'T3': 2, 'T4': 2, 'T5': 2, 'T6': 2, 'T7': 2, 'T8': 2, 'T9': 2,
+            'T10': 2, 'T11': 2, 'T12': 1, 'L1': 1, 'L2': 1, 'L3': 1, 'L4': 1, 'L5': 1,
+            'S1': 1, 'S2': 1, 'S3': 1, 'S4-5': 1
+        },
+        leftLightTouchScores: {
+            'C2': 2, 'C3': 2, 'C4': 2, 'C5': 2, 'C6': 2, 'C7': 2, 'C8': 2, 'T1': 2,
+            'T2': 2, 'T3': 2, 'T4': 2, 'T5': 2, 'T6': 2, 'T7': 2, 'T8': 2, 'T9': 2,
+            'T10': 2, 'T11': 2, 'T12': 1, 'L1': 1, 'L2': 1, 'L3': 1, 'L4': 1, 'L5': 1,
+            'S1': 1, 'S2': 1, 'S3': 1, 'S4-5': 1
+        },
+        rightPinPrickScores: {
+            'C2': 2, 'C3': 2, 'C4': 2, 'C5': 2, 'C6': 2, 'C7': 2, 'C8': 2, 'T1': 2,
+            'T2': 2, 'T3': 2, 'T4': 2, 'T5': 2, 'T6': 2, 'T7': 2, 'T8': 2, 'T9': 2,
+            'T10': 2, 'T11': 2, 'T12': 1, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 1, 'S4-5': 1
+        },
+        leftPinPrickScores: {
+            'C2': 2, 'C3': 2, 'C4': 2, 'C5': 2, 'C6': 2, 'C7': 2, 'C8': 2, 'T1': 2,
+            'T2': 2, 'T3': 2, 'T4': 2, 'T5': 2, 'T6': 2, 'T7': 2, 'T8': 2, 'T9': 2,
+            'T10': 2, 'T11': 2, 'T12': 1, 'L1': 1, 'L2': 1, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 1, 'S4-5': 1
+        },
+        vac: false,
+        dap: true,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: 'T11',
+            sensoryLeft: 'T11',
+            motorRight: 'T11',
+            motorLeft: 'T11',
+            nli: 'T11',
+            ais: 'B',
+            completeness: 'Incomplete',
+            zppSensoryRight: 'NA',
+            zppSensoryLeft: 'NA',
+            zppMotorRight: 'L2',
+            zppMotorLeft: 'L2',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> The sensory level is T11 bilaterally as sensory function is intact from C2 through this dermatome on both sides.',
+                motorLevels: '<u>Motor levels:</u> Bilateral motor levels follow the sensory levels and are T11 because motor function is presumed to be intact from C2 through T11 on both sides.',
+                nli: '<u>NLI:</u> The NLI is T11 as each of the motor and sensory levels is also T11.',
+                completeness: '<u>Completeness:</u> There is sensory sacral sparing (preserved S4-5 PP/LT and DAP sensation), so this is an incomplete injury.',
+                ais: '<u>AIS:</u> The AIS grade is B because this is a sensory incomplete injury. The injury is not motor incomplete because there is no VAC, nor is there any motor function more than 3 levels below the motor level on either side. Although there is motor function at L2 bilaterally, this is exactly 3 levels below the motor level of T11 and therefore does not satisfy the criteria for motor incomplete status.',
+                sensoryZpp: '<u>Sensory ZPPs:</u> The sensory ZPP is NA bilaterally because there is preserved DAP and S4-5 LT/PP sensation.',
+                motorZpp: '<u>Motor ZPPs:</u> Because there is no preservation of VAC, the motor ZPPs are applicable and are L2 bilaterally, as this is the most caudal segment with any motor function.'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    {
+        name: 'Learning Case __',
+        difficulty: 'easy',
+        rightMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        leftMotorScores: {
+            'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+        },
+        rightLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftLightTouchScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        rightPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        leftPinPrickScores: {
+            'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+            'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+            'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+            'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+        },
+        vac: true,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: '-',
+            sensoryLeft: '-',
+            motorRight: '-',
+            motorLeft: '-',
+            nli: '-',
+            ais: '-',
+            completeness: 'Incomplete',
+            zppSensoryRight: '-',
+            zppSensoryLeft: '-',
+            zppMotorRight: '-',
+            zppMotorLeft: '-',
+            answerKey: {
+                sensoryLevels: '<u>Sensory levels:</u> .',
+                motorLevels: '<u>Motor levels:</u> .',
+                nli: '<u>NLI:</u> .',
+                completeness: '<u>Completeness:</u> .',
+                ais: '<u>AIS:</u> .',
+                sensoryZpp: '<u>Sensory ZPPs:</u> .',
+                motorZpp: '<u>Motor ZPPs:</u> .'
+            }
+        }
+    },
+    // {
+    //     name: 'Learning Case __',
+    //     difficulty: 'easy',
+    //     rightMotorScores: {
+    //         'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+    //         'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+    //     },
+    //     leftMotorScores: {
+    //         'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+    //         'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0, 'S1': 0
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+    //         'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+    //         'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+    //         'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+    //         'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+    //         'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+    //         'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+    //         'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+    //         'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+    //         'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': 0, 'C3': 0, 'C4': 0, 'C5': 0, 'C6': 0, 'C7': 0, 'C8': 0, 'T1': 0,
+    //         'T2': 0, 'T3': 0, 'T4': 0, 'T5': 0, 'T6': 0, 'T7': 0, 'T8': 0, 'T9': 0,
+    //         'T10': 0, 'T11': 0, 'T12': 0, 'L1': 0, 'L2': 0, 'L3': 0, 'L4': 0, 'L5': 0,
+    //         'S1': 0, 'S2': 0, 'S3': 0, 'S4-5': 0
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: '<u>Sensory levels:</u> .',
+    //             motorLevels: '<u>Motor levels:</u> .',
+    //             nli: '<u>NLI:</u> .',
+    //             completeness: '<u>Completeness:</u> .',
+    //             ais: '<u>AIS:</u> .',
+    //             sensoryZpp: '<u>Sensory ZPPs:</u> .',
+    //             motorZpp: '<u>Motor ZPPs:</u> .'
+    //         }
+    //     }
+    // },
 ];

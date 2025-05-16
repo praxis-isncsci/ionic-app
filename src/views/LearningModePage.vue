@@ -36,14 +36,26 @@
         @click="openExam(idx)"
         >
         <IonLabel>{{ ex.name }}</IonLabel>
-        <IonNote
-        v-if="progressArr[idx].done"
-        slot="end"
-        color="success"
-        class="ion-text-end"
-        >
-            ✓ {{ formatDate(progressArr[idx].finishedAt) }}
-        </IonNote>
+        <!-- everything that belongs on the right -->
+  <div slot="end" class="end-wrap">
+    <!-- difficulty bar -->
+    <IonIcon
+      v-for="n in 3"
+      :key="n"
+      :icon="n <= filledCount(ex.difficulty) ? star : starOutline"
+      :color="n <= filledCount(ex.difficulty) ? 'warning' : 'medium'"
+      class="diff-icon"
+    />
+
+    <!-- completion mark -->
+    <IonNote
+      v-if="progressArr[idx].done"
+      color="success"
+      class="done-note"
+    >
+      ✓ {{ formatDate(progressArr[idx].finishedAt) }}
+    </IonNote>
+  </div>
         </IonItem>
     </IonList>
 
@@ -74,11 +86,11 @@ import {
     IonNote,
     IonProgressBar
 } from '@ionic/vue'
-import { closeOutline } from 'ionicons/icons'
+import { closeOutline, star, starOutline } from 'ionicons/icons'
 import MainLayout from './MainLayout.vue'
 import LearningGrid from '@/components/LearningGrid.vue'
 import LearningClassification from '@/components/LearningClassification.vue'
-import { exams as presetExams, ExamData } from '@/utils/exams'
+import { exams as presetExams, ExamData, Difficulty } from '@/utils/exams'
 import LearningProgress from '@/utils/learningProgress'
 
 /* ------------------------------------------------------------------ */
@@ -86,10 +98,18 @@ const router        = useRouter()
 const progressStore = LearningProgress.getInstance()
 const examList      = presetExams
 const currentIndex  = ref<number | null>(null)
+const filledCount = (d: Difficulty): number => d === 'easy' ? 1 : d === 'medium' ? 2 : 3;
 
 const currentExam = computed<ExamData | null>(() =>
     currentIndex.value !== null ? examList[currentIndex.value] : null
 )
+
+const selectedDifficulty = ref<'all' | Difficulty>('all');          // ⬅️ add
+const displayedExams = computed(() =>                              // ⬅️ add
+    selectedDifficulty.value === 'all'
+        ? examList
+        : examList.filter(e => e.difficulty === selectedDifficulty.value)
+);
 
 onMounted(async () => {
     await progressStore.init(examList.length)
@@ -150,6 +170,11 @@ iso ? new Intl.DateTimeFormat(undefined,
     font-size:.8rem;
     font-weight:600;
     white-space:nowrap;
+}
+
+.diff-icon {
+    font-size: 1.1rem;
+    margin-left: 0.25rem;
 }
 
 </style>

@@ -43,10 +43,10 @@
 
             <!-- right scores -->
             <td :class="motorCellClass(lvl)">
-            {{ isMotorLevel(lvl) ? exam.rightMotorScores[lvl] ?? '' : '' }}
+            {{ isMotorLevel(lvl) ? exam.rightMotorScores[lvl as MotorLevel] ?? '' : '' }}
             </td>
-            <td class="cell">{{ exam.rightLightTouchScores[lvl] ?? '' }}</td>
-            <td class="cell">{{ exam.rightPinPrickScores[lvl]   ?? '' }}</td>
+            <td class="cell">{{ exam.rightLightTouchScores[lvl as SensoryLevel] ?? '' }}</td>
+            <td class="cell">{{ exam.rightPinPrickScores[lvl as SensoryLevel]   ?? '' }}</td>
 
             <!-- diagram column -->
             <td v-if="rowIndex === 0"
@@ -60,10 +60,10 @@
             </td>
 
             <!-- left scores -->
-            <td class="cell">{{ exam.leftLightTouchScores[lvl] ?? '' }}</td>
-            <td class="cell">{{ exam.leftPinPrickScores[lvl]   ?? '' }}</td>
+            <td class="cell">{{ exam.leftLightTouchScores[lvl as SensoryLevel] ?? '' }}</td>
+            <td class="cell">{{ exam.leftPinPrickScores[lvl as SensoryLevel]   ?? '' }}</td>
             <td :class="motorCellClass(lvl)">
-            {{ isMotorLevel(lvl) ? exam.leftMotorScores[lvl] ?? '' : '' }}
+            {{ isMotorLevel(lvl) ? exam.leftMotorScores[lvl as MotorLevel] ?? '' : '' }}
             </td>
 
             <!-- Leftt‑side label -->
@@ -74,15 +74,15 @@
 
         <!-- ------------- DAP / VAC ------------- -->
         <tr>
-            <td class="lbl-right">DAP</td>
+            <td class="lbl-right">VAC</td>
 
             <td class="empty"></td>
-            <td colspan="2" class="bigCell">{{ exam.dap ? 'Yes' : 'No' }}</td>
-
             <td colspan="2" class="bigCell">{{ exam.vac ? 'Yes' : 'No' }}</td>
 
+            <td colspan="2" class="bigCell">{{ exam.dap ? 'Yes' : 'No' }}</td>
+
             <td class="empty"></td>
-            <td class="lbl-left">VAC</td>
+            <td class="lbl-left">DAP</td>
             <td class="col-description"></td>
         </tr>
         </tbody>
@@ -100,13 +100,15 @@
 </template>
 
 <script setup lang="ts">
-import { ExamData } from '../utils/exams'
-defineProps<{ exam: ExamData }>()
+import { PracticeExam } from '../utils/exams'
+import type { MotorLevel, SensoryLevel } from 'isncsci-ui/dist/esm/core/domain'
+
+defineProps<{ exam: PracticeExam }>()
 
 const levels = [
     'C2','C3','C4','C5','C6','C7','C8',
     'T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12',
-    'L1','L2','L3','L4','L5','S1','S2','S3','S4-5'
+    'L1','L2','L3','L4','L5','S1','S2','S3','S4_5'
 ]
 
 const levelDescriptions: Record<string, string> = {

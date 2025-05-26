@@ -30,14 +30,16 @@
         <fieldset class="box tiny">
             <legend>4.&nbsp;COMPLETE&nbsp;OR&nbsp;INCOMPLETE?</legend>
             <select v-model="a.completeness" :class="cellCls(b.completeness)">
-            <option>Complete</option><option>Incomplete</option>
+            <option>Complete</option>
+            <option>Incomplete</option>
+            <option>ND</option>
             </select>
         </fieldset>
     
         <fieldset class="box tiny">
             <legend>5.&nbsp;ASIA&nbsp;IMPAIRMENT&nbsp;SCALE&nbsp;(AIS)</legend>
             <select v-model="a.ais" :class="cellCls(b.ais)" >
-            <option value=""> </option><option v-for="g in ['A','B','C','D','E']" :key="g">{{g}}</option>
+            <option value=""> </option><option v-for="g in ['A','B','C','C*','D','E', 'ND', 'ND*']" :key="g">{{g}}</option>
             </select>
         </fieldset>
     
@@ -88,11 +90,11 @@ const emit = defineEmits<{ completed: [] }>();
 
 /* ---------- helper data ------------------------------------------- */
 const levels = [
-    'C2','C3','C4','C5','C6','C7','C8','T1','T2','T3','T4','T5','T6','T7','T8',
-    'T9','T10','T11','T12','L1','L2','L3','L4','L5','S1','S2','S3','S4-5'
+    'C1', 'C2','C3','C4','C5','C6','C6*','C7','C8','T1','T2','T3','T4','T5','T6','T6*','T7','T8',
+    'T9','T10','T11','T11*','T12','L1','L2','L3','L4','L5','S1','S2','S3','S4-5', 'INT'
 ];
 
-const zppLevels = [...levels, 'NA']
+const zppLevels = [...levels, 'NA', 'ND']
 
 /* ---------- answers / validation ------------------------------------------- */
 const a = reactive({

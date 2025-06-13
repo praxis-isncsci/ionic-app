@@ -67,7 +67,7 @@
         <p :class="ok ? 'msg ok' : 'msg err'">{{ msg }}</p>
     
         <div class="actions">
-            <IonButton type="submit" color="primary">Submit</IonButton>
+            <IonButton v-if="!ok" type="submit" color="primary">Submit</IonButton>
             <IonButton v-if="showKey" color="medium" @click="reveal">Answer key</IonButton>
         </div>
 
@@ -106,7 +106,9 @@ const b = reactive<Record<keyof typeof a, boolean|null>>(
     Object.fromEntries(Object.keys(a).map(k => [k, null])) as any
 );
 
-const msg = ref('');   const ok = ref(false);   const showKey = ref(false);
+const msg = ref('');
+const ok = ref(false);
+const showKey = ref(false);
 const clean = (s:string)=>s.trim().toUpperCase();
 const answersToShow = ref<string[]>([]) 
 /* ---------- check / reveal ------------------------------------------- */
@@ -199,35 +201,36 @@ const cellCls = (val: boolean|null)=>({
     display:flex;
     flex-direction:column;
     justify-content:center;
-    gap:.2rem
+    gap:.2rem;
+    width: 200px;
 }
 .box>legend {
     font-size:.66rem;
     font-weight:500;
     letter-spacing:-.01em;
-    padding:0 .25rem
+    padding:0 .25rem;
 }
 .sub {
     display:block;
     font-weight:400;
     font-size:.55rem;
-    line-height:1
+    line-height:1;
 }
 .twoRows {
     display:grid;
     grid-template-columns:auto 60px 60px;
     row-gap:.15rem;
     column-gap:.25rem;
-    align-items:center
+    align-items:center;
 }
 .small {
-    min-width:110px
+    min-width:110px;
 }
 .tiny {
-    min-width:90px
+    min-width:90px;
 }
 .nl .twoRows select, .zpp .twoRows select {
-    width:60px
+    width:60px;
 }
 
 select {
@@ -235,28 +238,32 @@ select {
     height:22px;
     font:400 .7rem/1 Inter;
     padding:0 .1rem;
-    text-transform:uppercase
+    text-transform:uppercase;
+}
+
+label {
+    font-size:.66rem;
 }
 .cell.bad {
     border-color:#e84d4d;
-    background:#ffecec
+    background:#ffecec;
 }
 .cell.good {
     border-color:#2e7d32;
-    background:#e8f8e7
+    background:#e8f8e7;
 }
 .msg {
     width:100%;
     text-align:center;
     font-weight:600;
-    margin:.2rem 0 0
+    margin:.2rem 0 0;
 }
 .ok {
-    color:#2e7d32
+    color:#2e7d32;
 }
 
 .err {
-    color:#e84d4d
+    color:#e84d4d;
 }
 
 .actions {
@@ -264,7 +271,7 @@ select {
     display:flex;
     justify-content:center;
     gap:.75rem;
-    margin-top:.25rem
+    margin-top:.25rem;
 }
 
 ul {

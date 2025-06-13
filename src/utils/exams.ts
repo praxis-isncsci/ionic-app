@@ -30,6 +30,7 @@ export interface PracticeExam {
     name: string;
     workbookName: string;
     difficulty: Difficulty;
+    acknowledgment: string;
 
     rightMotorScores:  Partial<Record<MotorLevel, MotorMuscleValue>>;
     leftMotorScores:   Partial<Record<MotorLevel, MotorMuscleValue>>;
@@ -54,6 +55,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 1',
         workbookName: 'Learning Case 1',
         difficulty: 'easy',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '4', 'C7': '3', 'C8': '0', 'T1': '0',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -117,6 +119,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 9',
         workbookName: 'Learning Case 2',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -180,6 +183,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 2',
         workbookName: 'Learning Case 3',
         difficulty: 'easy',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '1', 'T1': '0',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -243,6 +247,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 10',
         workbookName: 'Learning Case 4',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '4', 'C7': '3', 'C8': '2', 'T1': '1',
             'L2': '3', 'L3': '4', 'L4': '2', 'L5': '2', 'S1': '2'
@@ -306,6 +311,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 3',
         workbookName: 'Learning Case 5',
         difficulty: 'easy',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '4', 'C6': '5', 'C7': '4', 'C8': '5', 'T1': '5',
             'L2': '3', 'L3': '3', 'L4': '2', 'L5': '0', 'S1': '0'
@@ -369,6 +375,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 11',
         workbookName: 'Learning Case 6',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
             'L2': '3', 'L3': '1', 'L4': '1', 'L5': '0', 'S1': '0'
@@ -432,6 +439,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 4',
         workbookName: 'Learning Case 7',
         difficulty: 'easy',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '2', 'C6': '1', 'C7': '0', 'C8': '0', 'T1': '0',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -495,6 +503,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 5',
         workbookName: 'Learning Case 8',
         difficulty: 'easy',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '3', 'C6': '1', 'C7': '1', 'C8': '1', 'T1': '0',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -558,6 +567,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 6',
         workbookName: 'Learning Case 9',
         difficulty: 'easy',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
             'L2': '5', 'L3': '3', 'L4': '3', 'L5': '3', 'S1': '0'
@@ -621,6 +631,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 12',
         workbookName: 'Learning Case 10',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
             'L2': '5', 'L3': '5', 'L4': '4', 'L5': '2', 'S1': '0'
@@ -684,6 +695,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 13',
         workbookName: 'Learning Case 11',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
             'L2': '1', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -747,6 +759,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 14',
         workbookName: 'Learning Case 12',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '3', 'C6': '2', 'C7': '1', 'C8': '0', 'T1': '0',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -810,6 +823,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 15',
         workbookName: 'Learning Case 13',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -873,6 +887,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 16',
         workbookName: 'Learning Case 14',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '2', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -936,6 +951,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 17',
         workbookName: 'Learning Case 15',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
             'L2': '5', 'L3': '5', 'L4': '5', 'L5': '5', 'S1': '5'
@@ -999,6 +1015,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 7',
         workbookName: 'Learning Case 16',
         difficulty: 'easy',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '4', 'C6': '1', 'C7': '2', 'C8': '1', 'T1': '1',
             'L2': '2', 'L3': '3', 'L4': '1', 'L5': '1', 'S1': '2'
@@ -1062,6 +1079,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 18',
         workbookName: 'Learning Case 17',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '3',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -1125,6 +1143,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 19',
         workbookName: 'Learning Case 18',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '4', 'C7': '4', 'C8': '2', 'T1': '2',
             'L2': '3', 'L3': '4', 'L4': '3', 'L5': '2', 'S1': '2'
@@ -1188,6 +1207,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 20',
         workbookName: 'Learning Case 19',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -1272,6 +1292,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 23',
         workbookName: 'Learning Case 20',
         difficulty: 'hard',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '1', 'C6': 'NT*', 'C7': '1', 'C8': 'NT*', 'T1': 'NT*',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -1336,6 +1357,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 24',
         workbookName: 'Learning Case 21',
         difficulty: 'hard',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -1400,6 +1422,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 25',
         workbookName: 'Learning Case 22',
         difficulty: 'hard',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
             'L2': '3', 'L3': '3', 'L4': '2', 'L5': '0', 'S1': '0'
@@ -1464,6 +1487,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 26',
         workbookName: 'Learning Case 23',
         difficulty: 'hard',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '3', 'C7': '3', 'C8': '2', 'T1': '2',
             'L2': '2', 'L3': '3', 'L4': '2*', 'L5': '2*', 'S1': '2'
@@ -1528,6 +1552,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 21',
         workbookName: 'Learning Case 24',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
             'L2': '5', 'L3': '5', 'L4': '5', 'L5': '4', 'S1': '3'
@@ -1591,6 +1616,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 8',
         workbookName: 'Learning Case 25',
         difficulty: 'easy',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '3', 'C7': '4', 'C8': '3', 'T1': '4',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -1654,6 +1680,7 @@ export const exams: PracticeExam[] = [
         name: 'Learning Case 22',
         workbookName: 'Learning Case 26',
         difficulty: 'medium',
+        acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
         rightMotorScores: {
             'C5': '5', 'C6': '5', 'C7': '3*', 'C8': '1', 'T1': '0',
             'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
@@ -1717,6 +1744,7 @@ export const exams: PracticeExam[] = [
     //     name: 'Learning Case __',
     //     workbookName: 'Learning Case __',
     //     difficulty: 'easy',
+    //     acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
     //     rightMotorScores: {
     //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
     //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'

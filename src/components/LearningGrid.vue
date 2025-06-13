@@ -1,5 +1,6 @@
 <template>
     <div class="wrapper">
+        <p class="acknowledgment"> {{ exam.acknowledgment }} </p>
         <table class="grid">
             <!-- VAC / comments | RIGHT side | diagram | LEFT side | DAP / desc -->
             <colgroup>
@@ -194,6 +195,11 @@ const withinSpan = (l:string) => {
     flex-direction:column;
     align-items:center;
     overflow-x:auto;
+}
+
+.acknowledgment {
+    font:200 0.75rem 'Inter',sans-serif;
+    text-align:center;
 }
 
 @media (min-width:751px){

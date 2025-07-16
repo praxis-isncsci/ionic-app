@@ -262,3 +262,11 @@ html, body {
 .text-description {
   font-weight: 400;
 }
+
+.ws-name::before { 
+  content: 'Name'; 
+}
+
+.ws-date::before { 
+  content: 'Exam date / time'; 
+}

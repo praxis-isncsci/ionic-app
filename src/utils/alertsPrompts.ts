@@ -86,18 +86,20 @@ export const promptForWorksheetDetails = (
         alertController
             .create({
             header: 'Worksheet Details:',
-            subHeader: 'Name and exam date/time',
             inputs: [
                 {
                 name: 'worksheetName',
                 type: 'text',
                 value: initialName,
                 placeholder: 'Worksheet Name',
+                cssClass: 'ws-name',
                 },
                 {
                 name: 'examDate',
                 type: 'datetime-local',
                 value: formatDateTimeLocal(defaultExamDate),
+                cssClass: 'ws-date',
+                attributes: { 'aria-label': 'Exam date / time' },
                 },
             ],
             buttons: [

@@ -21,8 +21,16 @@
                     placeholder="Email to contact you" />
                 </ion-item>
     
+
                 <ion-item>
-                    <ion-label class="lbl">Attach Worksheet (optional)</ion-label>
+                    <ion-label position="stacked" class="lbl">Your Message</ion-label>
+                    <ion-textarea
+                    placeholder="Type your message here..."
+                    v-model="contactMessage"
+                    ></ion-textarea>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked" class="lbl">Attach Worksheet (optional)</ion-label>
                     <ion-select
                     v-model="selectedWorksheetId"
                     placeholder="Select a Worksheet"
@@ -38,13 +46,6 @@
                     </ion-select>
                 </ion-item>
     
-                <ion-item>
-                    <ion-label position="stacked" class="lbl">Your Message</ion-label>
-                    <ion-textarea
-                    placeholder="Type your message here..."
-                    v-model="contactMessage"
-                    ></ion-textarea>
-                </ion-item>
             </ion-list>
     
             <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">

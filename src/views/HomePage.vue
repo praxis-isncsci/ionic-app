@@ -1,3 +1,4 @@
+
 <template>
   <MainLayout title="ISNCSCI" :showNavbar="true" :showFooter="true" :helpMode="helpMode" @update:helpMode="val => helpMode = val">
     <HelpMode ref="helpModeRef" :helpMode="helpMode" @update:helpMode="val => helpMode = val" />

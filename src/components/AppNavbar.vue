@@ -41,6 +41,9 @@
                             <ion-icon :icon="folderOpenOutline"></ion-icon>
                             <!-- <ion-icon :icon="bookmarksOutline"></ion-icon> -->
                         </ion-fab-button>
+                        <ion-fab-button class="fab-list-btn" @click="onNavigate('/learning-mode')">
+                            <ion-icon :icon="bulbOutline"></ion-icon>
+                        </ion-fab-button>
                         <ion-fab-button class="fab-list-btn" @click="onNavigate('/eula')">
                             <ion-icon :icon="newspaperOutline"></ion-icon>
                         </ion-fab-button>
@@ -70,7 +73,7 @@
 <script setup lang="ts">
 
 import { IonGrid, IonRow, IonCol, IonIcon, IonFab, IonFabButton, IonFabList, IonButton } from '@ionic/vue';
-import { manOutline, documentOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, folderOpenOutline, downloadOutline, mailOutline } from 'ionicons/icons';
+import { manOutline, documentOutline, saveOutline, calculatorOutline, chevronUp, newspaperOutline, folderOpenOutline, downloadOutline, mailOutline, bulbOutline } from 'ionicons/icons';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 defineProps<{ 
@@ -88,7 +91,7 @@ const isLessThan850 = ref(false);
 const isLessThan500 = ref(false);
 
 // Function to check screen size
-function checkScreenSize() {
+const checkScreenSize = () => {
     const width = window.innerWidth;
     isLessThan850.value = width < 850;
     isLessThan500.value = width < 500;

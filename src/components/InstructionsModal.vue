@@ -46,6 +46,11 @@
             </ion-item>
 
             <ion-item>
+                <ion-icon slot="start" :icon="bulbOutline" class="tip-icon" />
+                <ion-label><strong>Learning mode</strong>: turn on learning mode.</ion-label>
+            </ion-item>
+
+            <ion-item>
                 <ion-icon slot="start" :icon="folderOpenOutline" class="tip-icon" />
                 <ion-label><strong>Saved Worksheets</strong>: rename/change exam date, edit, or delete saved exams.</ion-label>
             </ion-item>
@@ -65,13 +70,9 @@
                 <ion-label>
                     <strong>Saves to</strong>: <br>
                     <em>Files › On My iPhone › isncsci</em> on iOS, 
-                    <br><em>Downloads</em> on Android.
+                    <br>
+                    <em>Files app › Internal storage › Documents</em> on Android.
                 </ion-label>
-            </ion-item>
-
-            <ion-item>
-                <ion-icon slot="start" :icon="bulbOutline" class="tip-icon" />
-                <ion-label><strong>Learning mode</strong>: turn on learning mode.</ion-label>
             </ion-item>
 
             <ion-item> 
@@ -80,7 +81,7 @@
             </ion-item>
 
             <ion-item>
-                <ion-label><strong>Multi-select</strong> pick two cells to select a range for bulk fill/clear.</ion-label>
+                <ion-label><strong>Multi-select</strong>: pick two cells to select a range for bulk fill/clear.</ion-label>
             </ion-item>
 
             <ion-item>

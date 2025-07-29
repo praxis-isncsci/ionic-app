@@ -38,6 +38,9 @@ import { promptFoNameExist, promptForWorksheetDetails, showToast, showUnsavedDat
 import { exportPDF } from '@/utils/examDataHelpers';
 import HelpMode from '@/components/HelpMode.vue';
 import ContactUs from '@/components/ContactUs.vue';
+import { hasSeenInstructions } from '@/utils/instructions';
+import { modalController } from '@ionic/vue';
+import InstructionsModal from '@/components/InstructionsModal.vue';
 
 const showContactModal = ref(false);
 const helpMode = ref(false);
@@ -248,6 +251,14 @@ const showChart = () => {
 };
 
 onMounted(async () => {
+  if (!hasSeenInstructions()) {
+    const modal = await modalController.create({
+      component: InstructionsModal,
+      backdropDismiss: false,
+      componentProps: { rememberOnClose: true },
+    });
+    await modal.present();
+  }
   await worksheets.loadMeta();
   await loadWorksheet();
 });

@@ -5,6 +5,9 @@
                 <ion-icon slot="start" :icon="bookOutline"></ion-icon>
                 <ion-label class="ion-text-wrap">Motor</ion-label>
             </ion-button>
+            <ion-button class="help-btn btn-tips" @click="openTipsModal">
+                <ion-label class="ion-text-wrap">Tips</ion-label>
+            </ion-button>
             <ion-button class="help-btn btn-sensory" @click="openHelpDoc('Key_Sensory')">
                 <ion-icon slot="start" :icon="bookOutline"></ion-icon>
                 <ion-label class="ion-text-wrap">Sensory</ion-label>
@@ -55,9 +58,10 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, computed } from 'vue';
 import { defineProps, ref } from 'vue';
-import { IonModal, IonIcon, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent } from '@ionic/vue';
+import { IonModal, IonIcon, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, modalController } from '@ionic/vue';
 import { useExamGuide } from '@/utils/useExamGuides';
 import { bookOutline, close, closeOutline } from 'ionicons/icons';
+import InstructionsModal from './InstructionsModal.vue';
 
 
 defineProps<{ helpMode: boolean }>();
@@ -87,6 +91,15 @@ const scaledContainerRef = ref<HTMLElement | null>(null);
 const contentRef = ref<InstanceType<typeof IonContent> | null>(null);
 
 let resizeObs: ResizeObserver | null = null;
+
+const openTipsModal = async() => {
+    const modal = await modalController.create({
+        component: InstructionsModal,
+        cssClass: 'full-modal',
+        componentProps: {rememberOnClose: false}
+    })
+    await modal.present();
+}
 
 const currentGuideTitle = computed(() => {
     if (currentGuideName.value === 'Motor_Exam') {
@@ -232,6 +245,10 @@ onBeforeUnmount(() => {
 
 .btn-sensory, .btn-sensory:hover {
     --background: #ff4961;
+}
+
+.btn-tips, .btn-tips:hover {
+    --background: #3B9F9E;
 }
 
 ion-toolbar.nav-toolbar  {

@@ -12,17 +12,17 @@
         <ion-list lines="none" class="tips">
             <ion-item>
                 <ion-icon slot="start" :icon="informationCircleOutline" class="tip-icon" />
-                <ion-label><strong>Help Mode</strong>: access Tips, Motor Exam Guide and Key Sensory Point Guide.</ion-label>
+                <ion-label><strong>Help Mode</strong>: access Help, Motor Exam Guide and Key Sensory Point Guide.</ion-label>
             </ion-item>
 
             <ion-item>
                 <ion-icon slot="start" :icon="manOutline" class="tip-icon" />
-                <ion-label><strong>Dermatome</strong>: review the chart any time.</ion-label>
+                <ion-label><strong>Dermatome</strong>: open the dermatome chart at any time.</ion-label>
             </ion-item>
 
             <ion-item>
                 <ion-icon slot="start" :icon="documentOutline" class="tip-icon" />
-                <ion-label><strong>New Exam</strong>: starts a blank form. Unsaved changes? You’ll be asked to save or discard.</ion-label>
+                <ion-label><strong>New Exam</strong>: opens a blank form. If there are unsaved changes you’ll be asked to save or discard them.</ion-label>
             </ion-item>
 
             <ion-item>
@@ -32,7 +32,7 @@
 
             <ion-item>
                 <ion-icon slot="start" :icon="calculatorOutline" class="tip-icon" />
-                <ion-label><strong>Calculate</strong>: runs classification. Missing inputs show an error with the required cells.</ion-label>
+                <ion-label><strong>Calculate</strong>: runs classification. Missing inputs are listed in an error message.</ion-label>
             </ion-item>
 
             <ion-item>
@@ -42,17 +42,17 @@
 
             <ion-item>
                 <ion-icon slot="start" :icon="newspaperOutline" class="tip-icon" />
-                <ion-label><strong>EULA</strong>: review User Agreement.</ion-label>
+                <ion-label><strong>EULA</strong>: review the End-User Licence Agreement.</ion-label>
             </ion-item>
 
             <ion-item>
                 <ion-icon slot="start" :icon="bulbOutline" class="tip-icon" />
-                <ion-label><strong>Learning mode</strong>: place to practice exams classifications.</ion-label>
+                <ion-label><strong>Learning mode</strong>: practice exam classification.</ion-label>
             </ion-item>
 
             <ion-item>
                 <ion-icon slot="start" :icon="folderOpenOutline" class="tip-icon" />
-                <ion-label><strong>Saved Worksheets</strong>: rename/change exam date, edit, or delete saved exams.</ion-label>
+                <ion-label><strong>Saved Worksheets</strong>: rename and change exam date, edit or delete any saved exam.</ion-label>
             </ion-item>
 
             <!-- <ion-item>
@@ -62,19 +62,19 @@
             <ion-item>
                 <ion-icon slot="start" :icon="downloadOutline" class="tip-icon" />
                 <ion-label>
-                    <strong>Export&nbsp;PDF</strong>:
-                    exports all data (blank ASIA form if empty).<br />
+                    <strong>Export PDF</strong>:
+                    exports all data (exports a blank ASIA form if the worksheet is empty).<br />
                     <em>Saves to {{ exportPath }}</em>.
                 </ion-label>
             </ion-item>
 
             <ion-item> 
                 <ion-icon slot="start" :icon="mailOutline" class="tip-icon" />
-                <ion-label><strong>Contact Us</strong>: send your feedback or questions related to app functionality or specific ISNCSCI exams questions.</ion-label>
+                <ion-label><strong>Contact Us</strong>: send feedback or questions related to app functionality or specific ISNCSCI exams questions.</ion-label>
             </ion-item>
 
             <ion-item>
-                <ion-label><strong>Multi-select</strong>: pick two cells to select a range for bulk fill/clear.</ion-label>
+                <ion-label><strong>Multi-select</strong>: pick two cells to highlight a range for bulk fill or clear.</ion-label>
             </ion-item>
 
             <ion-item>

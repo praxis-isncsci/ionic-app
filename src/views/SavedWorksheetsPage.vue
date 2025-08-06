@@ -15,6 +15,7 @@
                 </div>
                 <div v-else>
                 <h2>{{ worksheet.name }}</h2>
+                <p class="text-description">Exam date: {{ new Date(worksheet.examDate).toLocaleString() }}</p>
                 <p class="text-description">Last time edited: {{ new Date(worksheet.lastUpdateDate).toLocaleString() }}</p>
                 </div>
                 <div class="button-group">

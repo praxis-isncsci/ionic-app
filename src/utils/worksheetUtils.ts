@@ -95,7 +95,7 @@ export class Worksheets {
     }
 
     public nextWorksheetName(): string {
-        const suffex = 'Worksheet ';
+        const suffex = 'Exam ';
         let index = 1;
         let name = `${suffex}${index}`;
         while (this.isNameExist(name)) {

@@ -68,7 +68,7 @@ export const showConfirmDeleteAlert = async (): Promise<boolean> => {
     });
 };
 
-function formatDateTimeLocal(date: Date): string {
+const formatDateTimeLocal = (date: Date): string =>{
     const pad = (n: number) => n.toString().padStart(2, '0');
     const YYYY = date.getFullYear();
     const MM = pad(date.getMonth() + 1);
@@ -85,19 +85,21 @@ export const promptForWorksheetDetails = (
         return new Promise((resolve) => {
         alertController
             .create({
-            header: 'Worksheet Details:',
-            subHeader: 'Name and exam date/time',
+            header: 'Exam Details:',
             inputs: [
                 {
                 name: 'worksheetName',
                 type: 'text',
                 value: initialName,
-                placeholder: 'Worksheet Name',
+                placeholder: 'Exam Name',
+                cssClass: 'ws-name',
                 },
                 {
                 name: 'examDate',
                 type: 'datetime-local',
                 value: formatDateTimeLocal(defaultExamDate),
+                cssClass: 'ws-date',
+                attributes: { 'aria-label': 'Exam date / time' },
                 },
             ],
             buttons: [

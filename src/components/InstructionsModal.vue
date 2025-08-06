@@ -1,7 +1,7 @@
 <template>
     <ion-header>
     <ion-toolbar color="primary">
-        <ion-title>Instructions</ion-title>
+        <ion-title>Help</ion-title>
         <ion-buttons slot="end">
         <ion-button fill="clear" @click="finish(false)">Close</ion-button>
         </ion-buttons>
@@ -47,7 +47,7 @@
 
             <ion-item>
                 <ion-icon slot="start" :icon="bulbOutline" class="tip-icon" />
-                <ion-label><strong>Learning mode</strong>: turn on learning mode.</ion-label>
+                <ion-label><strong>Learning mode</strong>: place to practice exams classifications.</ion-label>
             </ion-item>
 
             <ion-item>
@@ -61,23 +61,16 @@
             </ion-item> -->
             <ion-item>
                 <ion-icon slot="start" :icon="downloadOutline" class="tip-icon" />
-                <ion-label><strong>Export PDF</strong>: export all data; empty form exports a blank ASIA form.</ion-label>
-                <!-- <ion-label>
-                    <strong>Export&nbsp;PDF</strong>:
-                    saves to <em>Files › On My iPhone › ISNCSCI</em> on iOS, or the
-                    <em>Downloads</em> folder on Android.
-                </ion-label> -->
                 <ion-label>
-                    <strong>Saves to</strong>: <br>
-                    <em>Files › On My iPhone › isncsci</em> on iOS, 
-                    <br>
-                    <em>Files app › Internal storage › Documents</em> on Android.
+                    <strong>Export&nbsp;PDF</strong>:
+                    exports all data (blank ASIA form if empty).<br />
+                    <em>Saves to {{ exportPath }}</em>.
                 </ion-label>
             </ion-item>
 
             <ion-item> 
                 <ion-icon slot="start" :icon="mailOutline" class="tip-icon" />
-                <ion-label><strong>Contact Us</strong>: send your feedback or question to the team.</ion-label>
+                <ion-label><strong>Contact Us</strong>: send your feedback or questions related to app functionality or specific ISNCSCI exams questions.</ion-label>
             </ion-item>
 
             <ion-item>
@@ -85,7 +78,16 @@
             </ion-item>
 
             <ion-item>
-                <ion-label><strong>Remove values</strong>: select the cell or range of cells, tap the highlighted button.</ion-label>
+                <ion-label class="remove-tip">
+                    <strong>Remove values</strong>:
+                    select a cell or range, then tap
+                    <span class="purple-fake-btn">1</span>
+                    (purple button) to clear them.
+                </ion-label>
+            </ion-item>
+
+            <ion-item>
+                <ion-label><strong>Basic Data Input</strong>: placeholder.</ion-label>
             </ion-item>
             
         </ion-list>
@@ -93,27 +95,52 @@
 
     <ion-footer>
     <ion-toolbar>
-        <ion-button expand="block" @click="finish(true)">Got it</ion-button>
+        <ion-button slot="end" expand="block" @click="finish(true)">Got it</ion-button>
     </ion-toolbar>
     </ion-footer>
 </template>
 
 <script setup lang="ts">
-import { modalController, IonContent, IonList, IonItem, IonLabel, IonIcon } from '@ionic/vue';
+import { modalController, IonContent, isPlatform, IonList, IonItem, IonLabel, IonIcon } from '@ionic/vue';
 import { markInstructionsSeen } from '@/utils/instructions';
 import { bulbOutline, calculatorOutline, chevronUp, documentOutline, downloadOutline, folderOpenOutline, informationCircleOutline, mailOutline, manOutline, newspaperOutline, saveOutline } from 'ionicons/icons';
 
-const props = withDefaults(defineProps<{
-    rememberOnClose?: boolean;   // true when shown on first use
-}>(), { rememberOnClose: false });
+const exportPath =
+    isPlatform('ios')
+        ? 'Files › On My iPhone › isncsci'
+        : isPlatform('android')
+        ? 'Files app › Internal storage › Documents'
+        : 'your browser’s download folder';
 
-function finish(primary: boolean) {
+const props = withDefaults(defineProps<{ rememberOnClose?: boolean }>(), {
+    rememberOnClose: false,
+});
+
+const finish = (primary: boolean) => {
     if (primary && props.rememberOnClose) markInstructionsSeen();
     modalController.dismiss();
 }
 </script>
 
 <style scoped>
-.tip-icon { font-size: 24px; color: var(--ion-color-primary); }
-.tips ion-item { --inner-padding-end: 0; }
+.tip-icon { 
+    font-size: 24px; color: var(--ion-color-primary); 
+}
+
+.tips ion-item { 
+    --inner-padding-end: 0; 
+}
+.remove-tip .purple-fake-btn {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin: 0 2px 0 4px;
+    background: #800080;
+    color: #fff;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 4px;
+    user-select: none;
+}
 </style>

@@ -21,7 +21,7 @@ const routes = [
   },
   {
     path: '/saved-worksheets',
-    name: 'Saved Worksheets',
+    name: 'Saved Exams',
     component: SavedWorksheetsPage
   },
 

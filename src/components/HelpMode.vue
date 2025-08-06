@@ -6,7 +6,7 @@
                 <ion-label class="ion-text-wrap">Motor</ion-label>
             </ion-button>
             <ion-button class="help-btn btn-tips" @click="openTipsModal">
-                <ion-label class="ion-text-wrap">Tips</ion-label>
+                <ion-label class="ion-text-wrap">Help</ion-label>
             </ion-button>
             <ion-button class="help-btn btn-sensory" @click="openHelpDoc('Key_Sensory')">
                 <ion-icon slot="start" :icon="bookOutline"></ion-icon>

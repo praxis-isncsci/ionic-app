@@ -85,13 +85,13 @@ export const promptForWorksheetDetails = (
         return new Promise((resolve) => {
         alertController
             .create({
-            header: 'Worksheet Details:',
+            header: 'Exam Details:',
             inputs: [
                 {
                 name: 'worksheetName',
                 type: 'text',
                 value: initialName,
-                placeholder: 'Worksheet Name',
+                placeholder: 'Exam Name',
                 cssClass: 'ws-name',
                 },
                 {

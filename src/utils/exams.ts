@@ -1740,11 +1740,1572 @@ export const exams: PracticeExam[] = [
             }
         }
     },
+
+    {
+        name: 'Learning Case 1',
+        workbookName: 'Learning Case __Praxis',
+        difficulty: 'easy',
+        acknowledgment: '',
+        rightMotorScores: {
+            'C5': '4', 'C6': '3', 'C7': '3', 'C8': '3', 'T1': '2',
+            'L2': '3', 'L3': '4', 'L4': '3', 'L5': '3', 'S1': '3'
+        },
+        leftMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '4',
+            'L2': '5', 'L3': '5', 'L4': '5', 'L5': '1', 'S1': '5'
+        },
+        rightLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '1', 'C5': '1', 'C6': '1', 'C7': '1', 'C8': '1', 'T1': '1',
+            'T2': '1', 'T3': '1', 'T4': '1', 'T5': '1', 'T6': '1', 'T7': '1', 'T8': '1', 'T9': '1',
+            'T10': '1', 'T11': '1', 'T12': '1', 'L1': '1', 'L2': '1', 'L3': '1', 'L4': '1', 'L5': '1',
+            'S1': '1', 'S2': '1', 'S3': '1', 'S4_5': '1'
+        },
+        leftLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '2', 'L2': '2', 'L3': '2', 'L4': '2', 'L5': '2',
+            'S1': '2', 'S2': '2', 'S3': '2', 'S4_5': '2'
+        },
+        rightPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '1', 'C5': '1', 'C6': '1', 'C7': '1', 'C8': '1', 'T1': '1',
+            'T2': '1', 'T3': '1', 'T4': '1', 'T5': '1', 'T6': '1', 'T7': '1', 'T8': '1', 'T9': '1',
+            'T10': '1', 'T11': '1', 'T12': '1', 'L1': '1', 'L2': '1', 'L3': '1', 'L4': '1', 'L5': '1',
+            'S1': '1', 'S2': '1', 'S3': '1', 'S4_5': '1'
+        },
+        leftPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '2', 'L2': '2', 'L3': '2', 'L4': '2', 'L5': '2',
+            'S1': '2', 'S2': '2', 'S3': '2', 'S4_5': '2'
+        },
+        vac: true,
+        dap: true,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: 'C3',
+            sensoryLeft: 'INT',
+            motorRight: 'C3',
+            motorLeft: 'T1',
+            nli: 'C3',
+            ais: 'D',
+            completeness: 'Incomplete',
+            zppSensoryRight: 'NA',
+            zppSensoryLeft: 'NA',
+            zppMotorRight: 'NA',
+            zppMotorLeft: 'NA',
+            answerKey: {
+                sensoryLevels: `<u>Sensory levels:</u> .`,
+                motorLevels: `<u>Motor levels:</u> .`,
+                nli: `<u>NLI:</u> .`,
+                completeness: `<u>Completeness:</u> .`,
+                ais: `<u>AIS:</u> .`,
+                sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+                motorZpp: `<u>Motor ZPPs:</u> .`
+            }
+        }
+    },
+    
     // {
     //     name: 'Learning Case __',
-    //     workbookName: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
     //     difficulty: 'easy',
-    //     acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
+    //     rightMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     leftMotorScores: {
+    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+    //     },
+    //     rightLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftLightTouchScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     rightPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     leftPinPrickScores: {
+    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+    //     },
+    //     vac: true,
+    //     dap: false,
+    //     lowestNonKeyMuscle: { right: null, left: null },
+    //     comments: '',
+    //     expected: {
+    //         sensoryRight: '-',
+    //         sensoryLeft: '-',
+    //         motorRight: '-',
+    //         motorLeft: '-',
+    //         nli: '-',
+    //         ais: '-',
+    //         completeness: 'Incomplete',
+    //         zppSensoryRight: '-',
+    //         zppSensoryLeft: '-',
+    //         zppMotorRight: '-',
+    //         zppMotorLeft: '-',
+    //         answerKey: {
+    //             sensoryLevels: `<u>Sensory levels:</u> .`,
+    //             motorLevels: `<u>Motor levels:</u> .`,
+    //             nli: `<u>NLI:</u> .`,
+    //             completeness: `<u>Completeness:</u> .`,
+    //             ais: `<u>AIS:</u> .`,
+    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
+    //             motorZpp: `<u>Motor ZPPs:</u> .`
+    //         }
+    //     }
+    // },
+
+    // {
+    //     name: 'Learning Case __',
+    //     workbookName: 'Learning Case __Praxis',
+    //     difficulty: 'easy',
+    //     acknowledgment: '',
     //     rightMotorScores: {
     //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
     //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'

@@ -1742,8 +1742,8 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case 1',
-        workbookName: 'Learning Case __Praxis',
+        name: 'Learning Case _1',
+        workbookName: 'Learning Case 1__Praxis',
         difficulty: 'easy',
         acknowledgment: '',
         rightMotorScores: {
@@ -1795,601 +1795,601 @@ export const exams: PracticeExam[] = [
             zppMotorRight: 'NA',
             zppMotorLeft: 'NA',
             answerKey: {
-                sensoryLevels: `<u>Sensory levels:</u> .`,
-                motorLevels: `<u>Motor levels:</u> .`,
-                nli: `<u>NLI:</u> .`,
-                completeness: `<u>Completeness:</u> .`,
-                ais: `<u>AIS:</u> .`,
-                sensoryZpp: `<u>Sensory ZPPs:</u> .`,
-                motorZpp: `<u>Motor ZPPs:</u> .`
+                sensoryLevels: `<u>Sensory levels:</u> The right sensory level is C3, as sensory function is intact at C2 and C3 on the right side. The sensory function on the left is intact (including the most caudal sacral segments), so “INT” should be written in the Left sensory box.`,
+                motorLevels: `<u>Motor levels:</u> The right motor level is C3 because the motor level defers to the sensory level on this side; while the right elbow flexors (C5) have a motor grade of 4, it cannot be presumed that the motor function on the right side is intact at C4 as sensory function is impaired at that segment. The left motor level is T1 because this is the most caudal key muscle with a grade ≥3, and all motor function rostral to this level is presumed to be intact.`,
+                nli: `<u>NLI:</u> The NLI is C3, as this is the most rostral of the sensory and motor levels.`,
+                completeness: `<u>Completeness:</u> There is sensory and motor sparing in the lowest sacral segments because there is DAP sensation, bilateral S4-5 LT/PP sensation, and VAC is present. This is therefore an incomplete injury.`,
+                ais: `<u>AIS:</u> The AIS grade is D. Because VAC is present, this is a motor incomplete injury. More than half (18/20) of the key muscles below the NLI (C3) have a motor grade ≥3, so this injury meets criteria for AIS D grade.`,
+                sensoryZpp: `<u>Sensory ZPPs:</u> The sensory ZPP is N/A bilaterally because there is sensory sparing in the most caudal sacral segments on both sides (DAP is present, and LT/PP sensation is preserved in the S4-5 dermatome bilaterally).`,
+                motorZpp: `<u>Motor ZPPs:</u> The motor ZPP is N/A bilaterally because there is preserved motor function in the most caudal segments (VAC is present).`
             }
         }
     },
     
-    // {
-    //     name: 'Learning Case __',
-    //     workbookName: 'Learning Case __Praxis',
-    //     difficulty: 'easy',
-    //     acknowledgment: '',
-    //     rightMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     leftMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     rightLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     rightPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     vac: true,
-    //     dap: false,
-    //     lowestNonKeyMuscle: { right: null, left: null },
-    //     comments: '',
-    //     expected: {
-    //         sensoryRight: '-',
-    //         sensoryLeft: '-',
-    //         motorRight: '-',
-    //         motorLeft: '-',
-    //         nli: '-',
-    //         ais: '-',
-    //         completeness: 'Incomplete',
-    //         zppSensoryRight: '-',
-    //         zppSensoryLeft: '-',
-    //         zppMotorRight: '-',
-    //         zppMotorLeft: '-',
-    //         answerKey: {
-    //             sensoryLevels: `<u>Sensory levels:</u> .`,
-    //             motorLevels: `<u>Motor levels:</u> .`,
-    //             nli: `<u>NLI:</u> .`,
-    //             completeness: `<u>Completeness:</u> .`,
-    //             ais: `<u>AIS:</u> .`,
-    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
-    //             motorZpp: `<u>Motor ZPPs:</u> .`
-    //         }
-    //     }
-    // },
+    {
+        name: 'Learning Case _2',
+        workbookName: 'Learning Case 2__Praxis',
+        difficulty: 'medium',
+        acknowledgment: '',
+        rightMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
+            'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        leftMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '3*', 'C8': '1*', 'T1': '1*',
+            'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        rightLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '1', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '1*', 'C8': '1*', 'T1': '1*',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '1', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        rightPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '1', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '1*', 'C8': '1*', 'T1': '1*',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '1', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        vac: false,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: `Klumpke's paralysis. Partial palsy of the lower root of the brachial plexus on the left.  *tagged scores affected by brachial plexus injury; normal for classification.`,
+        expected: {
+            sensoryRight: 'T6',
+            sensoryLeft: 'T6*',
+            motorRight: 'T6',
+            motorLeft: 'T6*',
+            nli: 'T6*',
+            ais: 'A',
+            completeness: 'Complete',
+            zppSensoryRight: 'T7',
+            zppSensoryLeft: 'T7',
+            zppMotorRight: 'T6',
+            zppMotorLeft: 'T6*',
+            answerKey: {
+                sensoryLevels: `<u>Sensory levels:</u> The right sensory level is T6 because right-sided sensory function is intact from C2 – T6 dermatomes. The left sensory level is T6*. Apart from the levels affected by the brachial plexus injury, sensory function on the left is also intact from C2 – T6 dermatomes. Based upon clinical assumptions, “*”-tagged scores are considered normal for classification as documented in the comments box, and due to this assumption, T6 requires an “*” (T6*). Under different assumptions about the dermatomes that were affected by Klumpke’s paralysis, the left sensory level would be C6.`,
+                motorLevels: `<u>Motor levels:</u> The right motor level defers to the sensory level of T6 because motor function is presumed to be intact through this segment. Similarly, left-sided motor function is also presumed to be intact through T6. Left C7-T1 myotomes are rated with a “*” due to a brachial plexus injury as noted in the comment box and are considered normal for classification. Because of this assumption, the left motor level must be tagged with an “*” (T6*). Under different assumptions about the myotomes affected by Klumpke’s paralysis, the motor level would be C7.`,
+                nli: `<u>NLI:</u> The NLI is T6*. An “*” is required for the same reasons the left sensory and motor levels require one. If the clinical assumption was that the C7-T1 myotomes would not test as intact due to the SCI, the NLI would be C6.`,
+                completeness: `<u>Completeness:</u> There is no sensory or motor sparing in the lowest sacral segments because DAP sensation, bilateral S4-5 LT/PP sensation, and VAC are absent. This is therefore a complete injury, as indicated by the “N0000N” sign.`,
+                ais: `<u>AIS:</u> The AIS grade is A because this is a complete injury. Note that the AIS grade is not tagged with an “*” because the presence of the non-SCI condition has no impact on the anorectal exam in this case.`,
+                sensoryZpp: `<u>Sensory ZPPs:</u> The sensory ZPP is T7 bilaterally, as this is the most caudal segment on both sides with any sensory function. It is important to note that the left sensory ZPP should not receive an “*” because a clinical assumption does not influence this classification component; in other words, left T7 is the lowest dermatome with any sensory sparing, and this does not depend on the presence or absence of the non-SCI condition.`,
+                motorZpp: `<u>Motor ZPPs:</u> The motor ZPP is T6 on the right because this is the right motor level, and there is no motor function below this segment. Similarly, the left motor ZPP is T6*, as this is also the left motor level, and there is no motor function distal to this myotome. The left ZPP requires the “*”-tag because if the assumption were instead that the C7-T1 myotomes were impaired from the SCI, the left motor ZPP could be as rostral as C7. `
+            }
+        }
+    },
 
-    // {
-    //     name: 'Learning Case __',
-    //     workbookName: 'Learning Case __Praxis',
-    //     difficulty: 'easy',
-    //     acknowledgment: '',
-    //     rightMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     leftMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     rightLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     rightPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     vac: true,
-    //     dap: false,
-    //     lowestNonKeyMuscle: { right: null, left: null },
-    //     comments: '',
-    //     expected: {
-    //         sensoryRight: '-',
-    //         sensoryLeft: '-',
-    //         motorRight: '-',
-    //         motorLeft: '-',
-    //         nli: '-',
-    //         ais: '-',
-    //         completeness: 'Incomplete',
-    //         zppSensoryRight: '-',
-    //         zppSensoryLeft: '-',
-    //         zppMotorRight: '-',
-    //         zppMotorLeft: '-',
-    //         answerKey: {
-    //             sensoryLevels: `<u>Sensory levels:</u> .`,
-    //             motorLevels: `<u>Motor levels:</u> .`,
-    //             nli: `<u>NLI:</u> .`,
-    //             completeness: `<u>Completeness:</u> .`,
-    //             ais: `<u>AIS:</u> .`,
-    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
-    //             motorZpp: `<u>Motor ZPPs:</u> .`
-    //         }
-    //     }
-    // },
+    {
+        name: 'Learning Case _3',
+        workbookName: 'Learning Case 3__Praxis',
+        difficulty: 'medium',
+        acknowledgment: '',
+        rightMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '4', 'C8': '0', 'T1': '0',
+            'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        leftMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '3', 'C8': '0', 'T1': '0',
+            'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        rightLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '1', 'T1': '0',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '0', 'C8': '0', 'T1': '0',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        rightPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '1', 'T1': '1',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '1', 'C8': '0', 'T1': '0',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        vac: false,
+        dap: true,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: 'Motor function present in non-key muscle at L2on the right. +R adductors',
+        expected: {
+            sensoryRight: 'C7',
+            sensoryLeft: 'C6',
+            motorRight: 'C7',
+            motorLeft: 'C7',
+            nli: 'C6',
+            ais: 'C',
+            completeness: 'Incomplete',
+            zppSensoryRight: 'NA',
+            zppSensoryLeft: 'NA',
+            zppMotorRight: 'L2',
+            zppMotorLeft: 'C7',
+            answerKey: {
+                sensoryLevels: `<u>Sensory levels:</u> The sensory levels are C7 on the right and C6 on the left because sensory function is intact from C2 through these dermatomes on the respective sides.`,
+                motorLevels: `<u>Motor levels:</u> The motor level is C7 bilaterally, as this is the most caudal key muscle with a motor grade ≥3, and all motor function rostral to this level is intact on both sides.`,
+                nli: `<u>NLI:</u> The NLI is C6, as this is the most rostral of the sensory and motor levels.`,
+                completeness: `<u>Completeness:</u> This injury is incomplete because DAP sensation is preserved.`,
+                ais: `<u>AIS:</u> The AIS grade is C. Because DAP sensation is preserved, the lesion is at least sensory incomplete. VAC is absent, and there is no key muscle function more than 3 segments below the motor level on either side. However, in cases with preserved sensory function in the most caudal sacral segments, non-key muscle function should be evaluated. In this case, non-key muscle function is preserved in the right hip adductors as noted in the comments box. Hip adduction is assigned to the L2 myotome. (Please note that the most common non-key muscle functions and their associated myotomes can be found on the back of the ISNCSCI worksheet). Therefore, this injury is considered motor incomplete because there is sensory sacral sparing and motor sparing in right L2, which is more than 3 segments below the right motor level (C7). This injury is AIS C (and not AIS D) because less than half (in this case, 0/14) of the key muscles below the NLI have a motor grade ≥3.`,
+                sensoryZpp: `<u>Sensory ZPPs:</u> The sensory ZPP is N/A bilaterally because there is sensory sacral sparing on both sides (DAP sensation is preserved).`,
+                motorZpp: `<u>Motor ZPPs:</u> The motor ZPPs are applicable because VAC is absent. On the left, the motor ZPP is C7 because there is no motor function present below the left motor level. The right motor ZPP is L2 because a note in the Comments box indicates that motor function is present in a non-key muscle at L2. `
+            }
+        }
+    },
 
-    // {
-    //     name: 'Learning Case __',
-    //     workbookName: 'Learning Case __Praxis',
-    //     difficulty: 'easy',
-    //     acknowledgment: '',
-    //     rightMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     leftMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     rightLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     rightPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     vac: true,
-    //     dap: false,
-    //     lowestNonKeyMuscle: { right: null, left: null },
-    //     comments: '',
-    //     expected: {
-    //         sensoryRight: '-',
-    //         sensoryLeft: '-',
-    //         motorRight: '-',
-    //         motorLeft: '-',
-    //         nli: '-',
-    //         ais: '-',
-    //         completeness: 'Incomplete',
-    //         zppSensoryRight: '-',
-    //         zppSensoryLeft: '-',
-    //         zppMotorRight: '-',
-    //         zppMotorLeft: '-',
-    //         answerKey: {
-    //             sensoryLevels: `<u>Sensory levels:</u> .`,
-    //             motorLevels: `<u>Motor levels:</u> .`,
-    //             nli: `<u>NLI:</u> .`,
-    //             completeness: `<u>Completeness:</u> .`,
-    //             ais: `<u>AIS:</u> .`,
-    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
-    //             motorZpp: `<u>Motor ZPPs:</u> .`
-    //         }
-    //     }
-    // },
+    {
+        name: 'Learning Case _4',
+        workbookName: 'Learning Case 4__Praxis',
+        difficulty: 'easy',
+        acknowledgment: '',
+        rightMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
+            'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        leftMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
+            'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        rightLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '1', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        rightPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        vac: false,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: 'T12',
+            sensoryLeft: 'T11',
+            motorRight: 'T12',
+            motorLeft: 'T11',
+            nli: 'T11',
+            ais: 'A',
+            completeness: 'Complete',
+            zppSensoryRight: 'T12',
+            zppSensoryLeft: 'T12',
+            zppMotorRight: 'T12',
+            zppMotorLeft: 'T11',
+            answerKey: {
+                sensoryLevels: `<u>Sensory levels:</u> The sensory level is T12 on the right and T11 on the left, as sensory function is intact from C2 through these dermatomes on the respective sides.`,
+                motorLevels: `<u>Motor levels:</u> The right motor level is T12 and the left motor level is T11 (following the sensory levels) because testable motor function is intact in the C5-T1 myotomes and is presumed to be intact through these levels (T12 on the right and T11 on the left) based on intact sensory scores.`,
+                nli: `<u>NLI:</u> .`,
+                completeness: `<u>Completeness:</u> There is no sensory or motor sparing in the lowest sacral segments because DAP sensation, bilateral S4-5 LT/PP sensation, and VAC are absent. This is therefore a complete injury, as indicated by the “N0000N” sign.`,
+                ais: `<u>AIS:</u> The AIS grade is A because this is a complete injury, as no sensory or motor function is preserved in the sacral segments (DAP sensation, bilateral S4-5 LT/PP sensation, and VAC are absent).`,
+                sensoryZpp: `<u>Sensory ZPPs:</u> The sensory ZPP is T12 bilaterally, as these are the most caudal segments on the respective sides with preserved sensory function.`,
+                motorZpp: `<u>Motor ZPPs:</u> The motor ZPPs are T12 on the right and T11 on the left because there is no preserved motor function in clinically testable key muscles caudal to the motor level. Even though the sensory ZPP extends to T12 on the left, it is important to note that motor function does not follow sensory function when determining the motor ZPPs.`
+            }
+        }
+    },
 
-    // {
-    //     name: 'Learning Case __',
-    //     workbookName: 'Learning Case __Praxis',
-    //     difficulty: 'easy',
-    //     acknowledgment: '',
-    //     rightMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     leftMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     rightLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     rightPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     vac: true,
-    //     dap: false,
-    //     lowestNonKeyMuscle: { right: null, left: null },
-    //     comments: '',
-    //     expected: {
-    //         sensoryRight: '-',
-    //         sensoryLeft: '-',
-    //         motorRight: '-',
-    //         motorLeft: '-',
-    //         nli: '-',
-    //         ais: '-',
-    //         completeness: 'Incomplete',
-    //         zppSensoryRight: '-',
-    //         zppSensoryLeft: '-',
-    //         zppMotorRight: '-',
-    //         zppMotorLeft: '-',
-    //         answerKey: {
-    //             sensoryLevels: `<u>Sensory levels:</u> .`,
-    //             motorLevels: `<u>Motor levels:</u> .`,
-    //             nli: `<u>NLI:</u> .`,
-    //             completeness: `<u>Completeness:</u> .`,
-    //             ais: `<u>AIS:</u> .`,
-    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
-    //             motorZpp: `<u>Motor ZPPs:</u> .`
-    //         }
-    //     }
-    // },
+    {
+        name: 'Learning Case _5',
+        workbookName: 'Learning Case 5__Praxis',
+        difficulty: 'easy',
+        acknowledgment: '',
+        rightMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
+            'L2': '2', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        leftMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
+            'L2': '1', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        rightLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '2', 'L2': '1', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '1', 'S4_5': '1'
+        },
+        leftLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '2', 'L2': '2', 'L3': '1', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '1', 'S4_5': '1'
+        },
+        rightPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '2', 'L2': '1', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '1', 'S4_5': '1'
+        },
+        leftPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '2', 'L2': '2', 'L3': '1', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '1', 'S4_5': '2'
+        },
+        vac: false,
+        dap: true,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: 'L1',
+            sensoryLeft: 'L2',
+            motorRight: 'L1',
+            motorLeft: 'L1',
+            nli: 'L1',
+            ais: 'B',
+            completeness: 'Incomplete',
+            zppSensoryRight: 'NA',
+            zppSensoryLeft: 'NA',
+            zppMotorRight: 'L2',
+            zppMotorLeft: 'L2',
+            answerKey: {
+                sensoryLevels: `<u>Sensory levels:</u> The sensory levels are L1 on the right and L2 on the left because sensory function is intact from C2 through these dermatomes on the respective sides.`,
+                motorLevels: `<u>Motor levels:</u> The motor level is L1 bilaterally. Given that the key muscles on both right and left at L2 are less than a grade 3, we defer to the ‘motor follows sensory’ rule. Since there is intact sensory function at and rostral to is L1, we presume these levels are also motor intact.`,
+                nli: `<u>NLI:</u> The NLI is L1, as this is the most rostral of the sensory and motor levels.`,
+                completeness: `<u>Completeness:</u> This injury is incomplete because there is sensory sparing in the lowest sacral segments. DAP sensation is preserved and there is bilateral S4-5 LT/PP sensation.`,
+                ais: `<u>AIS:</u> The AIS grade is B because this is a sensory incomplete injury. The injury is not motor incomplete because there is no VAC, nor is there any motor function more than 3 levels below the motor level on either side.`,
+                sensoryZpp: `<u>Sensory ZPPs:</u> The sensory ZPP is N/A bilaterally because there is sensory sacral sparing in the most caudal sacral segments on both sides (DAP sensation is preserved in the S4-5 dermatome bilaterally).`,
+                motorZpp: `<u>Motor ZPPs:</u> The motor ZPPs are applicable because VAC is absent, and are L2 bilaterally. This is the most caudal segment with any motor function.`
+            }
+        }
+    },
 
-    // {
-    //     name: 'Learning Case __',
-    //     workbookName: 'Learning Case __Praxis',
-    //     difficulty: 'easy',
-    //     acknowledgment: '',
-    //     rightMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     leftMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     rightLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     rightPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     vac: true,
-    //     dap: false,
-    //     lowestNonKeyMuscle: { right: null, left: null },
-    //     comments: '',
-    //     expected: {
-    //         sensoryRight: '-',
-    //         sensoryLeft: '-',
-    //         motorRight: '-',
-    //         motorLeft: '-',
-    //         nli: '-',
-    //         ais: '-',
-    //         completeness: 'Incomplete',
-    //         zppSensoryRight: '-',
-    //         zppSensoryLeft: '-',
-    //         zppMotorRight: '-',
-    //         zppMotorLeft: '-',
-    //         answerKey: {
-    //             sensoryLevels: `<u>Sensory levels:</u> .`,
-    //             motorLevels: `<u>Motor levels:</u> .`,
-    //             nli: `<u>NLI:</u> .`,
-    //             completeness: `<u>Completeness:</u> .`,
-    //             ais: `<u>AIS:</u> .`,
-    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
-    //             motorZpp: `<u>Motor ZPPs:</u> .`
-    //         }
-    //     }
-    // },
+    {
+        name: 'Learning Case _6',
+        workbookName: 'Learning Case 6__Praxis',
+        difficulty: 'easy',
+        acknowledgment: '',
+        rightMotorScores: {
+            'C5': '5', 'C6': '4', 'C7': '1', 'C8': '0', 'T1': '0',
+            'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        leftMotorScores: {
+            'C5': '5', 'C6': '4', 'C7': '0', 'C8': '0', 'T1': '0',
+            'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        rightLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '0', 'C8': '0', 'T1': '0',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '0', 'C8': '0', 'T1': '0',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        rightPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '0', 'C8': '0', 'T1': '0',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '0', 'C8': '0', 'T1': '0',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        vac: false,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: 'C6',
+            sensoryLeft: 'C6',
+            motorRight: 'C6',
+            motorLeft: 'C6',
+            nli: 'C6',
+            ais: 'A',
+            completeness: 'Complete',
+            zppSensoryRight: 'C6',
+            zppSensoryLeft: 'C6',
+            zppMotorRight: 'C7',
+            zppMotorLeft: 'C6',
+            answerKey: {
+                sensoryLevels: `<u>Sensory levels:</u> The sensory level is C6 bilaterally, as sensory function is intact from C2 through this dermatome on both sides.`,
+                motorLevels: `<u>Motor levels:</u> The motor level is C6 bilaterally, as this is the most caudal key muscle on each side with a grade ≥3, and all motor function above this level is intact.`,
+                nli: `<u>NLI:</u> The NLI is C6, as this is the most rostral of the sensory and motor levels.`,
+                completeness: `<u>Completeness:</u> There is no sensory or motor sparing in the lowest sacral segments because DAP sensation, bilateral S4-5 LT/PP sensation, and VAC are absent. This is therefore a complete injury, as indicated by the “N0000N” sign.`,
+                ais: `<u>AIS:</u> The AIS grade is A because this is a complete injury, with no sensory or motor function preserved in the most caudal sacral segments (S4-5, DAP or VAC).`,
+                sensoryZpp: `<u>Sensory ZPPs:</u> The sensory ZPP is C6 bilaterally, as these are the most caudal segments on the respective sides with preserved sensory function.`,
+                motorZpp: `<u>Motor ZPPs:</u> With no VAC present, the motor ZPP is C7 on the right since it is the most caudal segment with any motor function. The left motor level of C6 is recorded as the left motor ZPP, since there is no motor function below this level. `
+            }
+        }
+    },
 
-    // {
-    //     name: 'Learning Case __',
-    //     workbookName: 'Learning Case __Praxis',
-    //     difficulty: 'easy',
-    //     acknowledgment: '',
-    //     rightMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     leftMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     rightLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     rightPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     vac: true,
-    //     dap: false,
-    //     lowestNonKeyMuscle: { right: null, left: null },
-    //     comments: '',
-    //     expected: {
-    //         sensoryRight: '-',
-    //         sensoryLeft: '-',
-    //         motorRight: '-',
-    //         motorLeft: '-',
-    //         nli: '-',
-    //         ais: '-',
-    //         completeness: 'Incomplete',
-    //         zppSensoryRight: '-',
-    //         zppSensoryLeft: '-',
-    //         zppMotorRight: '-',
-    //         zppMotorLeft: '-',
-    //         answerKey: {
-    //             sensoryLevels: `<u>Sensory levels:</u> .`,
-    //             motorLevels: `<u>Motor levels:</u> .`,
-    //             nli: `<u>NLI:</u> .`,
-    //             completeness: `<u>Completeness:</u> .`,
-    //             ais: `<u>AIS:</u> .`,
-    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
-    //             motorZpp: `<u>Motor ZPPs:</u> .`
-    //         }
-    //     }
-    // },
+    {
+        name: 'Learning Case _7',
+        workbookName: 'Learning Case 7__Praxis',
+        difficulty: 'easy',
+        acknowledgment: '',
+        rightMotorScores: {
+            'C5': '4', 'C6': '1', 'C7': '2', 'C8': '1', 'T1': '1',
+            'L2': '2', 'L3': '3', 'L4': '1', 'L5': '1', 'S1': '2'
+        },
+        leftMotorScores: {
+            'C5': '4', 'C6': '2', 'C7': '1', 'C8': '1', 'T1': '1',
+            'L2': '4', 'L3': '3', 'L4': '4', 'L5': '4', 'S1': '4'
+        },
+        rightLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+            'T2': '1', 'T3': '1', 'T4': '1', 'T5': '1', 'T6': '0', 'T7': '1', 'T8': '1', 'T9': '1',
+            'T10': '1', 'T11': '1', 'T12': '1', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '1', 'C6': '1', 'C7': '0', 'C8': '0', 'T1': '0',
+            'T2': '0', 'T3': '1', 'T4': '1', 'T5': '1', 'T6': '1', 'T7': '1', 'T8': '1', 'T9': '1',
+            'T10': '1', 'T11': '1', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        rightPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+            'T2': '2', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '1', 'T7': '1', 'T8': '1', 'T9': '1',
+            'T10': '0', 'T11': '1', 'T12': '1', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        vac: true,
+        dap: true,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: 'C4',
+            sensoryLeft: 'C4',
+            motorRight: 'C5',
+            motorLeft: 'C5',
+            nli: 'C4',
+            ais: 'C',
+            completeness: 'Incomplete',
+            zppSensoryRight: 'NA',
+            zppSensoryLeft: 'NA',
+            zppMotorRight: 'NA',
+            zppMotorLeft: 'NA',
+            answerKey: {
+                sensoryLevels: `<u>Sensory levels:</u> The sensory level is C4 bilaterally, as sensory function is intact from C2 through this dermatome on both sides.`,
+                motorLevels: `<u>Motor levels:</u> The motor level is C5 bilaterally. The key muscle on each side has a grade ≥3, and it can be presumed that motor function is intact at C4 and rostrally, as sensory function is intact in those segments.`,
+                nli: `<u>NLI:</u> The NLI is C4, as this is the most rostral of the sensory and motor levels.`,
+                completeness: `<u>Completeness:</u> This is an incomplete injury, with both VAC and DAP present.`,
+                ais: `<u>AIS:</u> The injury severity is motor incomplete (at least AIS C) because VAC is present. This injury is classified as AIS C (and not AIS D) because less than half (in this case 8/20) of the key muscles below the NLI (C4) have a motor grade ≥3. `,
+                sensoryZpp: `<u>Sensory ZPPs:</u> The sensory ZPP is N/A bilaterally because DAP is present.`,
+                motorZpp: `<u>Motor ZPPs:</u> The motor ZPP is N/A bilaterally because VAC is present.`
+            }
+        }
+    },
 
-    // {
-    //     name: 'Learning Case __',
-    //     workbookName: 'Learning Case __Praxis',
-    //     difficulty: 'easy',
-    //     acknowledgment: '',
-    //     rightMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     leftMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     rightLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     rightPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     vac: true,
-    //     dap: false,
-    //     lowestNonKeyMuscle: { right: null, left: null },
-    //     comments: '',
-    //     expected: {
-    //         sensoryRight: '-',
-    //         sensoryLeft: '-',
-    //         motorRight: '-',
-    //         motorLeft: '-',
-    //         nli: '-',
-    //         ais: '-',
-    //         completeness: 'Incomplete',
-    //         zppSensoryRight: '-',
-    //         zppSensoryLeft: '-',
-    //         zppMotorRight: '-',
-    //         zppMotorLeft: '-',
-    //         answerKey: {
-    //             sensoryLevels: `<u>Sensory levels:</u> .`,
-    //             motorLevels: `<u>Motor levels:</u> .`,
-    //             nli: `<u>NLI:</u> .`,
-    //             completeness: `<u>Completeness:</u> .`,
-    //             ais: `<u>AIS:</u> .`,
-    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
-    //             motorZpp: `<u>Motor ZPPs:</u> .`
-    //         }
-    //     }
-    // },
+    {
+        name: 'Learning Case _8',
+        workbookName: 'Learning Case 8__Praxis',
+        difficulty: 'medium',
+        acknowledgment: '',
+        rightMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
+            'L2': '1', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        leftMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '5',
+            'L2': '2', 'L3': '1', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        rightLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        rightPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        vac: false,
+        dap: true,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: 'T12',
+            sensoryLeft: 'T12',
+            motorRight: 'T12',
+            motorLeft: 'T12',
+            nli: 'T12',
+            ais: 'B',
+            completeness: 'Incomplete',
+            zppSensoryRight: 'NA',
+            zppSensoryLeft: 'NA',
+            zppMotorRight: 'L2',
+            zppMotorLeft: 'L3',
+            answerKey: {
+                sensoryLevels: `<u>Sensory levels:</u> The sensory level is T12 bilaterally, as sensory function is intact from C3 through this dermatome on both sides.`,
+                motorLevels: `<u>Motor levels:</u> The right and left motor levels are T12 (following the sensory levels) because testable motor function is intact in the C5- T1 myotomes and is presumed to be intact through T12 based on intact sensory scores in all dermatomes rostral to L1.`,
+                nli: `<u>NLI:</u> The NLI is T12, as this is the most rostral of the sensory and motor levels.`,
+                completeness: `<u>Completeness:</u> This injury is incomplete because DAP sensation is preserved.`,
+                ais: `<u>AIS:</u> The AIS grade is B. Because DAP sensation is preserved, the lesion is sensory incomplete. However, VAC is absent, and there is no key muscle function more than 3 segments below the motor level on either side. (Motor function is present exactly 3 levels below the NLI on the right.) In cases with preserved sensory function in the most caudal sacral segments, non-key muscle function should be evaluated, although there are no comments indicating that any non-key muscle function was present. Therefore, we presume that motor function is not preserved at more than 3 levels below the NLI and assign a classification of AIS B.`,
+                sensoryZpp: `<u>Sensory ZPPs:</u> The sensory ZPP is N/A bilaterally because there is sensory sacral sparing on both sides (DAP sensation is preserved).`,
+                motorZpp: `<u>Motor ZPPs:</u> The motor ZPPs are applicable because VAC is absent, and are L2 on the left and L3 on the right. These are the most caudal segments with any motor function.`
+            }
+        }
+    },
 
-    // {
-    //     name: 'Learning Case __',
-    //     workbookName: 'Learning Case __Praxis',
-    //     difficulty: 'easy',
-    //     acknowledgment: '',
-    //     rightMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     leftMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     rightLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     rightPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     vac: true,
-    //     dap: false,
-    //     lowestNonKeyMuscle: { right: null, left: null },
-    //     comments: '',
-    //     expected: {
-    //         sensoryRight: '-',
-    //         sensoryLeft: '-',
-    //         motorRight: '-',
-    //         motorLeft: '-',
-    //         nli: '-',
-    //         ais: '-',
-    //         completeness: 'Incomplete',
-    //         zppSensoryRight: '-',
-    //         zppSensoryLeft: '-',
-    //         zppMotorRight: '-',
-    //         zppMotorLeft: '-',
-    //         answerKey: {
-    //             sensoryLevels: `<u>Sensory levels:</u> .`,
-    //             motorLevels: `<u>Motor levels:</u> .`,
-    //             nli: `<u>NLI:</u> .`,
-    //             completeness: `<u>Completeness:</u> .`,
-    //             ais: `<u>AIS:</u> .`,
-    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
-    //             motorZpp: `<u>Motor ZPPs:</u> .`
-    //         }
-    //     }
-    // },
+    {
+        name: 'Learning Case _9',
+        workbookName: 'Learning Case 9__Praxis',
+        difficulty: 'easy',
+        acknowledgment: '',
+        rightMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '5', 'C8': '5', 'T1': '4',
+            'L2': '4', 'L3': '5', 'L4': '4', 'L5': '5', 'S1': '5'
+        },
+        leftMotorScores: {
+            'C5': '5', 'C6': '5', 'C7': '5', 'C8': '4', 'T1': '0',
+            'L2': '1', 'L3': '1', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        rightLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '1', 'T1': '2',
+            'T2': '1', 'T3': '1', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '1', 'T9': '2',
+            'T10': '2', 'T11': '1', 'T12': '1', 'L1': '1', 'L2': '1', 'L3': '1', 'L4': '1', 'L5': '1',
+            'S1': '1', 'S2': '2', 'S3': '1', 'S4_5': '1'
+        },
+        leftLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '1', 'C8': '1', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '1', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '1', 'L1': '1', 'L2': '1', 'L3': '1', 'L4': '1', 'L5': '1',
+            'S1': '1', 'S2': '2', 'S3': '1', 'S4_5': '1'
+        },
+        rightPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '0', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '1', 'T12': '2', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '0', 'C8': '0', 'T1': '2',
+            'T2': '2', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '2', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '1', 'T12': '1', 'L1': '0', 'L2': '1', 'L3': '1', 'L4': '0', 'L5': '1',
+            'S1': '1', 'S2': '2', 'S3': '1', 'S4_5': '1'
+        },
+        vac: true,
+        dap: true,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: 'C7',
+            sensoryLeft: 'C6',
+            motorRight: 'T1',
+            motorLeft: 'C8',
+            nli: 'C6',
+            ais: 'D',
+            completeness: 'Incomplete',
+            zppSensoryRight: 'NA',
+            zppSensoryLeft: 'NA',
+            zppMotorRight: 'NA',
+            zppMotorLeft: 'NA',
+            answerKey: {
+                sensoryLevels: `<u>Sensory levels:</u> The sensory levels are C7 on the right and C6 on the left because sensory function is intact from C2 through these dermatomes on the respective sides.`,
+                motorLevels: `<u>Motor levels:</u> The motor levels are T1 on the right and C8 on the left. These are the most caudal key muscles on each side with a grade ≥3, and all motor function above these levels is intact.`,
+                nli: `<u>NLI:</u> The NLI is C6, as this is the most rostral of the sensory and motor levels.`,
+                completeness: `<u>Completeness:</u> This injury is incomplete as there is sacral sparing (DAP, S4-5 PP and LT, and VAC are preserved).`,
+                ais: `<u>AIS:</u> The AIS grade is D. Because VAC is present, this is a motor incomplete injury. More than half (10/16) of the key muscles below the NLI (C6) have a motor grade ≥3, so this injury meets criteria for AIS D grade. `,
+                sensoryZpp: `<u>Sensory ZPPs:</u> The sensory ZPP is N/A bilaterally because there is sensory sacral sparing on both sides (DAP sensation is preserved).`,
+                motorZpp: `<u>Motor ZPPs:</u> The motor ZPP is N/A bilaterally because there is preserved motor function in the most caudal sacral segments (VAC is present).`
+            }
+        }
+    },
 
-    // {
-    //     name: 'Learning Case __',
-    //     workbookName: 'Learning Case __Praxis',
-    //     difficulty: 'easy',
-    //     acknowledgment: '',
-    //     rightMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     leftMotorScores: {
-    //         'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
-    //     },
-    //     rightLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftLightTouchScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     rightPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     leftPinPrickScores: {
-    //         'C2': '0', 'C3': '0', 'C4': '0', 'C5': '0', 'C6': '0', 'C7': '0', 'C8': '0', 'T1': '0',
-    //         'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
-    //         'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
-    //         'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
-    //     },
-    //     vac: true,
-    //     dap: false,
-    //     lowestNonKeyMuscle: { right: null, left: null },
-    //     comments: '',
-    //     expected: {
-    //         sensoryRight: '-',
-    //         sensoryLeft: '-',
-    //         motorRight: '-',
-    //         motorLeft: '-',
-    //         nli: '-',
-    //         ais: '-',
-    //         completeness: 'Incomplete',
-    //         zppSensoryRight: '-',
-    //         zppSensoryLeft: '-',
-    //         zppMotorRight: '-',
-    //         zppMotorLeft: '-',
-    //         answerKey: {
-    //             sensoryLevels: `<u>Sensory levels:</u> .`,
-    //             motorLevels: `<u>Motor levels:</u> .`,
-    //             nli: `<u>NLI:</u> .`,
-    //             completeness: `<u>Completeness:</u> .`,
-    //             ais: `<u>AIS:</u> .`,
-    //             sensoryZpp: `<u>Sensory ZPPs:</u> .`,
-    //             motorZpp: `<u>Motor ZPPs:</u> .`
-    //         }
-    //     }
-    // },
+    {
+        name: 'Learning Case _10',
+        workbookName: 'Learning Case 10__Praxis',
+        difficulty: 'easy',
+        acknowledgment: '',
+        rightMotorScores: {
+            'C5': '5', 'C6': '4', 'C7': '4', 'C8': '2', 'T1': '3',
+            'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        leftMotorScores: {
+            'C5': '4', 'C6': '4', 'C7': '4', 'C8': '0', 'T1': '0',
+            'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0', 'S1': '0'
+        },
+        rightLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '1', 'T1': '2',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftLightTouchScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '1', 'C6': '1', 'C7': '1', 'C8': '0', 'T1': '0',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        rightPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '1', 'C8': '0', 'T1': '0',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        leftPinPrickScores: {
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '0', 'C8': '0', 'T1': '0',
+            'T2': '0', 'T3': '0', 'T4': '0', 'T5': '0', 'T6': '0', 'T7': '0', 'T8': '0', 'T9': '0',
+            'T10': '0', 'T11': '0', 'T12': '0', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
+        },
+        vac: false,
+        dap: false,
+        lowestNonKeyMuscle: { right: null, left: null },
+        comments: '',
+        expected: {
+            sensoryRight: 'C6',
+            sensoryLeft: 'C4',
+            motorRight: 'C6',
+            motorLeft: 'C5',
+            nli: 'C4',
+            ais: 'A',
+            completeness: 'Complete',
+            zppSensoryRight: 'T1',
+            zppSensoryLeft: 'C7',
+            zppMotorRight: 'T1',
+            zppMotorLeft: 'C7',
+            answerKey: {
+                sensoryLevels: `<u>Sensory levels:</u> The sensory levels are C6 on the right and C4 on the left because sensory function is intact from C2 through these dermatomes on the respective sides.`,
+                motorLevels: `<u>Motor levels:</u> The right motor level is C6 because this is the most caudal key muscle with a grade ≥3, and motor function above this level is intact. The left motor level is C5 because this is the most caudal key muscle with a grade ≥3, and motor function above this level is presumed to be intact as sensory function is intact.`,
+                nli: `<u>NLI:</u> The NLI is C4, as this is the most rostral of the sensory and motor levels.`,
+                completeness: `<u>Completeness:</u> There is no sensory or motor sparing in the lowest sacral segments because DAP sensation, bilateral S4-5 LT/PP sensation, and VAC are absent. This is therefore a complete injury, as indicated by the “N0000N” sign.`,
+                ais: `<u>AIS:</u> The AIS grade is A because this is a complete injury, with no sensory or motor function preserved in the most caudal sacral segments (S4-5, DAP or VAC).`,
+                sensoryZpp: `<u>Sensory ZPPs:</u> The sensory ZPPs are T1 on the right and C7 on the left, as these are the most caudal segments on the respective sides with preserved sensory function.`,
+                motorZpp: `<u>Motor ZPPs:</u> The motor ZPPs are T1 on the right and C7 on the left, as these are the most caudal myotomes on the respective sides with any motor function.`
+            }
+        }
+    },
 
     // {
     //     name: 'Learning Case __',
@@ -3366,3 +3366,8 @@ export const exams: PracticeExam[] = [
     //     }
     // },
 ];
+
+
+
+
+// ≥

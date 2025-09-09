@@ -1,5 +1,5 @@
 <template>
-    <MainLayout title="Saved Worksheets"  :showNavbar="true" :showFooter="false" :helpMode="false" >
+    <MainLayout title="Saved Exams"  :showNavbar="true" :showFooter="false" :helpMode="false" >
         <template #header-buttons>
             <ion-buttons slot="end">
             <ion-button @click="close_onClick" fill="clear">
@@ -47,7 +47,7 @@ import { promptFoNameExist, promptForWorksheetDetails, showConfirmDeleteAlert } 
 const worksheets = Worksheets.getInstance();
 const router = useRouter();
 
-// Load saved worksheets from local storage (reactive variables)
+// Load saved exams from local storage (reactive variables)
 const savedWorksheets = ref<IWorksheetMetaItem[]>([]);
 const editingWorksheetId = ref<string | null>(null);
 const editingWorksheetName = ref<string>('');

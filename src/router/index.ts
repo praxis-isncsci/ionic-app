@@ -20,7 +20,7 @@ const routes = [
     component: EulaPage
   },
   {
-    path: '/saved-worksheets',
+    path: '/saved-exams',
     name: 'Saved Exams',
     component: SavedWorksheetsPage
   },

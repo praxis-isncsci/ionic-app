@@ -1,5 +1,5 @@
 import { APP_PREFIX } from '@/config'
-import { inject, reactive } from 'vue'
+import { inject, reactive, toRaw } from 'vue'
 import { Storage } from '@ionic/storage'
 
 export interface ProgressEntry {
@@ -26,12 +26,15 @@ class LearningProgress {
     }
 
     private async save () {
-        await this.store.set(this.key, JSON.stringify(this.progress))
+        await this.store.set(this.key, JSON.stringify(toRaw(this.progress)))
     }
     private async load () {
         if (this.isLoaded) return
         const v = await this.store.get(this.key)
-        if (v) this.progress = JSON.parse(v)
+        if (v) {
+            const parsed = JSON.parse(v) as Record<number, ProgressEntry>
+            Object.assign(this.progress, parsed)
+        }
         this.isLoaded = true
     }
 
@@ -45,8 +48,11 @@ class LearningProgress {
     }
 
     markDone (idx: number) {
+        const now = new Date().toISOString()
+        if (!this.progress[idx]) this.progress[idx] = { done: false }
         if (!this.progress[idx].done) {
-            this.progress[idx] = { done: true, finishedAt: new Date().toISOString() }
+            this.progress[idx].done = true
+            this.progress[idx].finishedAt = now
             this.save()
         }
     }

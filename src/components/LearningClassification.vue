@@ -11,19 +11,19 @@
             </div>
             <div class="twoRows">
                 <label>1.&nbsp;SENSORY</label>
-                <select v-model="a.sensoryRight" :class="cellCls(b.sensoryRight)"><option value=""> </option><option v-for="l in levels" :key="'sr'+l">{{l}}</option></select>
-                <select v-model="a.sensoryLeft"  :class="cellCls(b.sensoryLeft )"><option value=""> </option><option v-for="l in levels" :key="'sl'+l">{{l}}</option></select>
+                <select v-model="a.sensoryRight" :class="cellCls(b.sensoryRight)"><option value=""> </option><option v-for="l in neurologicalLevels" :key="'sr'+l">{{l}}</option></select>
+                <select v-model="a.sensoryLeft"  :class="cellCls(b.sensoryLeft )"><option value=""> </option><option v-for="l in neurologicalLevels" :key="'sl'+l">{{l}}</option></select>
         
                 <label>2.&nbsp;MOTOR</label>
-                <select v-model="a.motorRight"   :class="cellCls(b.motorRight )"><option value=""> </option><option v-for="l in levels" :key="'mr'+l">{{l}}</option></select>
-                <select v-model="a.motorLeft"    :class="cellCls(b.motorLeft  )"><option value=""> </option><option v-for="l in levels" :key="'ml'+l">{{l}}</option></select>
+                <select v-model="a.motorRight"   :class="cellCls(b.motorRight )"><option value=""> </option><option v-for="l in neurologicalLevels" :key="'mr'+l">{{l}}</option></select>
+                <select v-model="a.motorLeft"    :class="cellCls(b.motorLeft  )"><option value=""> </option><option v-for="l in neurologicalLevels" :key="'ml'+l">{{l}}</option></select>
             </div>
         </fieldset>
     
         <!-- NLI --------------------------------------------------->
         <fieldset class="box small">
             <legend>3.&nbsp;NEUROLOGICAL&nbsp;LEVEL&nbsp;OF&nbsp;INJURY</legend>
-            <select v-model="a.nli" :class="cellCls(b.nli)"><option value=""> </option><option v-for="l in levels" :key="'n'+l">{{l}}</option></select>
+            <select v-model="a.nli" :class="cellCls(b.nli)"><option value=""> </option><option v-for="l in neurologicalLevels" :key="'n'+l">{{l}}</option></select>
         </fieldset>
     
         <!-- Complete / AIS --------------------------------------------------->
@@ -37,7 +37,7 @@
         <fieldset class="box tiny">
             <legend>5.&nbsp;ASIA&nbsp;IMPAIRMENT&nbsp;SCALE&nbsp;(AIS)</legend>
             <select v-model="a.ais" :class="cellCls(b.ais)" >
-            <option value=""> </option><option v-for="g in ['A','B','C','D','E']" :key="g">{{g}}</option>
+            <option value=""> </option><option v-for="g in ['A','B','C','C*','D','E', 'ND (C or D)']" :key="g">{{g}}</option>
             </select>
         </fieldset>
     
@@ -65,7 +65,7 @@
         <p :class="ok ? 'msg ok' : 'msg err'">{{ msg }}</p>
     
         <div class="actions">
-            <IonButton type="submit" color="primary">Submit</IonButton>
+            <IonButton v-if="!ok" type="submit" color="primary">Submit</IonButton>
             <IonButton v-if="showKey" color="medium" @click="reveal">Answer key</IonButton>
         </div>
 
@@ -88,23 +88,27 @@ const emit = defineEmits<{ completed: [] }>();
 
 /* ---------- helper data ------------------------------------------- */
 const levels = [
-    'C2','C3','C4','C5','C6','C7','C8','T1','T2','T3','T4','T5','T6','T7','T8',
+    'C2','C3','C4','C5','C6','C6*','C7','C8','T1','T2','T3','T4','T5','T6','T6*','T7','T8',
     'T9','T10','T11','T12','L1','L2','L3','L4','L5','S1','S2','S3','S4_5'
 ];
 
 const zppLevels = [...levels, 'NA']
 
+const neurologicalLevels = [...levels, 'INT', 'ND: C5 or C6', 'ND: C6, C7']
+
 /* ---------- answers / validation ------------------------------------------- */
 const a = reactive({
     sensoryRight:'', sensoryLeft:'', motorRight:'', motorLeft:'',
-    nli:'', ais:'', completeness:'Incomplete',
+    nli:'', completeness:'Incomplete', ais:'', 
     zppSensoryRight:'', zppSensoryLeft:'', zppMotorRight:'', zppMotorLeft:''
 });
 const b = reactive<Record<keyof typeof a, boolean|null>>(
     Object.fromEntries(Object.keys(a).map(k => [k, null])) as any
 );
 
-const msg = ref('');   const ok = ref(false);   const showKey = ref(false);
+const msg = ref('');   
+const ok = ref(false);   
+const showKey = ref(false);
 const clean = (s:string)=>s.trim().toUpperCase();
 const answersToShow = ref<string[]>([]) 
 /* ---------- check / reveal ------------------------------------------- */

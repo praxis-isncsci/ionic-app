@@ -1911,7 +1911,7 @@ export const exams: PracticeExam[] = [
         vac: false,
         dap: true,
         lowestNonKeyMuscle: { right: null, left: null },
-        comments: 'Motor function present in non-key muscle at L2on the right. +R adductors',
+        comments: 'Motor function present in non-key muscle at L2 on the right. +R adductors',
         expected: {
             sensoryRight: 'C7',
             sensoryLeft: 'C6',
@@ -2476,9 +2476,9 @@ export const exams: PracticeExam[] = [
             'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
         },
         leftLightTouchScores: {
-            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '0', 'T1': '2',
-            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '0', 'T9': '2',
-            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '0', 'L2': '0', 'L3': '0', 'L4': '0', 'L5': '0',
+            'C2': '2', 'C3': '2', 'C4': '2', 'C5': '2', 'C6': '2', 'C7': '2', 'C8': '2', 'T1': '2',
+            'T2': '2', 'T3': '2', 'T4': '2', 'T5': '2', 'T6': '2', 'T7': '2', 'T8': '2', 'T9': '2',
+            'T10': '2', 'T11': '2', 'T12': '2', 'L1': '1', 'L2': '1', 'L3': '1', 'L4': '1', 'L5': '0',
             'S1': '0', 'S2': '0', 'S3': '0', 'S4_5': '0'
         },
         rightPinPrickScores: {
@@ -2511,7 +2511,7 @@ export const exams: PracticeExam[] = [
             zppMotorLeft: 'L4',
             answerKey: {
                 sensoryLevels: `<u>Sensory levels:</u> The sensory levels are T12 bilaterally because sensory function is intact from C2 through these dermatomes on the respective sides.`,
-                motorLevels: `<u>Motor levels:</u> The right and left motor levels are T12 (following the sensory levels) because testable motor function is intact in the C5- T1 myotomes and is presumed to be intact through T12 based on intact sensory scores in all dermatomes rostral to L1. `,
+                motorLevels: `<u>Motor levels:</u> The right and left motor levels are T12 (following the sensory levels) because testable motor function is intact in the C5-T1 myotomes and is presumed to be intact through T12 based on intact sensory scores in all dermatomes rostral to L1. `,
                 nli: `<u>NLI:</u> The NLI is T12, as this is the most rostral of the sensory and motor levels.`,
                 completeness: `<u>Completeness:</u> This injury is incomplete because DAP sensation is preserved.`,
                 ais: `<u>AIS:</u> The AIS grade is C because this is a sensory incomplete injury, as well as a motor incomplete injury, since there is also sparing of motor function more than 3 levels below the motor level on the left side. This injury is classified as AIS C (and not AIS D) because less than half (in this case 0/10) of the key muscles below the NLI (T12) have a motor grade ≥3.`,
@@ -2706,7 +2706,7 @@ export const exams: PracticeExam[] = [
             zppMotorLeft: 'C7',
             answerKey: {
                 sensoryLevels: `<u>Sensory levels:</u>  The sensory levels are C7 bilaterally as sensory function is intact from C2 through these dermatomes on both sides.`,
-                motorLevels: `<u>Motor levels:</u> The motor level is C7 bilaterally as this is the most caudal key muscle with a motor grade >3, and all motor function above this level is presumed to be intact. `,
+                motorLevels: `<u>Motor levels:</u> The motor level is C7 bilaterally as this is the most caudal key muscle with a motor grade ≥3, and all motor function above this level is presumed to be intact. `,
                 nli: `<u>NLI:</u> The NLI is C7, as this is the most rostral of the sensory and motor levels.`,
                 completeness: `<u>Completeness:</u> This injury is incomplete because there is sparing of sensory function in the most caudal sacral segments (preserved light touch on right S4-5).`,
                 ais: `<u>AIS:</u> The AIS grade is B because this is a sensory incomplete injury. The injury is not motor incomplete because there is no VAC, nor is there any motor function more than 3 levels below the motor level on either the right or left side in either a key or non-key muscle.`,
@@ -2853,7 +2853,7 @@ export const exams: PracticeExam[] = [
         acknowledgment: '',
         rightMotorScores: {
             'C5': '5', 'C6': '2', 'C7': '1', 'C8': '1', 'T1': '1',
-            'L2': '2', 'L3': '4', 'L4': '3*', 'L5': '2*', 'S1': '3*'
+            'L2': '2', 'L3': '4', 'L4': '3*', 'L5': '2*', 'S1': '3'
         },
         leftMotorScores: {
             'C5': '5', 'C6': '3', 'C7': '3', 'C8': '2', 'T1': '1',
@@ -2893,7 +2893,7 @@ export const exams: PracticeExam[] = [
             motorRight: 'C5',
             motorLeft: 'C6',
             nli: 'C5',
-            ais: 'ND(C or D)',
+            ais: 'ND (C or D)',
             completeness: 'Incomplete',
             zppSensoryRight: 'NA',
             zppSensoryLeft: 'NA',
@@ -2951,7 +2951,7 @@ export const exams: PracticeExam[] = [
         vac: true,
         dap: true,
         lowestNonKeyMuscle: { right: null, left: null },
-        comments: '',
+        comments: 'Right upper extremity weakness due to 6 weeks immobilization and shoulder pain; consider right C5 & C7 normal for classification.',
         expected: {
             sensoryRight: 'T6',
             sensoryLeft: 'T6',

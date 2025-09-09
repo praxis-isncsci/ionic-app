@@ -27,7 +27,7 @@
 
             <ion-item>
                 <ion-icon slot="start" :icon="saveOutline" class="tip-icon" />
-                <ion-label><strong>Save exam</strong>: enter a worksheet name and exam date.</ion-label>
+                <ion-label><strong>Save exam</strong>: enter an exam name and date.</ion-label>
             </ion-item>
 
             <ion-item>
@@ -37,7 +37,7 @@
 
             <ion-item>
                 <ion-icon slot="start" :icon="chevronUp" class="tip-icon" />
-                <ion-label><strong>Arrow-Up menu</strong>: EULA, Saved Worksheets, Export, Learning Mode, Contact Us.</ion-label>
+                <ion-label><strong>Arrow-Up menu</strong>: EULA, Saved Exams, Export, Learning Mode, Contact Us.</ion-label>
             </ion-item>
 
             <ion-item>
@@ -52,7 +52,7 @@
 
             <ion-item>
                 <ion-icon slot="start" :icon="folderOpenOutline" class="tip-icon" />
-                <ion-label><strong>Saved Worksheets</strong>: rename and change exam date, edit or delete any saved exam.</ion-label>
+                <ion-label><strong>Saved Exams</strong>: rename and change exam date, edit or delete any saved exam.</ion-label>
             </ion-item>
 
             <!-- <ion-item>

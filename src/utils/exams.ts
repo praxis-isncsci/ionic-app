@@ -116,7 +116,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 9',
+        name: 'Learning Case 1',
         workbookName: 'Learning Case 2',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -244,7 +244,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 10',
+        name: 'Learning Case 2',
         workbookName: 'Learning Case 4',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -372,7 +372,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 11',
+        name: 'Learning Case 3',
         workbookName: 'Learning Case 6',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -628,7 +628,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 12',
+        name: 'Learning Case 4',
         workbookName: 'Learning Case 10',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -692,7 +692,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 13',
+        name: 'Learning Case 5',
         workbookName: 'Learning Case 11',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -756,7 +756,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 14',
+        name: 'Learning Case 6',
         workbookName: 'Learning Case 12',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -820,7 +820,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 15',
+        name: 'Learning Case 7',
         workbookName: 'Learning Case 13',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -884,7 +884,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 16',
+        name: 'Learning Case 8',
         workbookName: 'Learning Case 14',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -948,7 +948,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 17',
+        name: 'Learning Case 9',
         workbookName: 'Learning Case 15',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -1076,7 +1076,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 18',
+        name: 'Learning Case 10',
         workbookName: 'Learning Case 17',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -1140,7 +1140,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 19',
+        name: 'Learning Case 11',
         workbookName: 'Learning Case 18',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -1204,7 +1204,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 20',
+        name: 'Learning Case 12',
         workbookName: 'Learning Case 19',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -1289,7 +1289,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 23',
+        name: 'Learning Case 1',
         workbookName: 'Learning Case 20',
         difficulty: 'hard',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -1354,7 +1354,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 24',
+        name: 'Learning Case 2',
         workbookName: 'Learning Case 21',
         difficulty: 'hard',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -1419,7 +1419,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 25',
+        name: 'Learning Case 3',
         workbookName: 'Learning Case 22',
         difficulty: 'hard',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -1484,7 +1484,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 26',
+        name: 'Learning Case 4',
         workbookName: 'Learning Case 23',
         difficulty: 'hard',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -1549,7 +1549,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 21',
+        name: 'Learning Case 13',
         workbookName: 'Learning Case 24',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -1677,7 +1677,7 @@ export const exams: PracticeExam[] = [
         }
     },
     {
-        name: 'Learning Case 22',
+        name: 'Learning Case 14',
         workbookName: 'Learning Case 26',
         difficulty: 'medium',
         acknowledgment: 'This case was developed by Brittany Snider and Steven Kirshblum with other members of ASIA’s International Standards Committee',
@@ -1742,7 +1742,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _1',
+        name: 'Learning Case 9',
         workbookName: 'Learning Case 1__Praxis',
         difficulty: 'easy',
         acknowledgment: '',
@@ -1807,7 +1807,7 @@ export const exams: PracticeExam[] = [
     },
     
     {
-        name: 'Learning Case _2',
+        name: 'Learning Case 15',
         workbookName: 'Learning Case 2__Praxis',
         difficulty: 'medium',
         acknowledgment: '',
@@ -1872,7 +1872,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _3',
+        name: 'Learning Case 16',
         workbookName: 'Learning Case 3__Praxis',
         difficulty: 'medium',
         acknowledgment: '',
@@ -1937,7 +1937,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _4',
+        name: 'Learning Case 10',
         workbookName: 'Learning Case 4__Praxis',
         difficulty: 'easy',
         acknowledgment: '',
@@ -2002,7 +2002,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _5',
+        name: 'Learning Case 11',
         workbookName: 'Learning Case 5__Praxis',
         difficulty: 'easy',
         acknowledgment: '',
@@ -2067,7 +2067,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _6',
+        name: 'Learning Case 12',
         workbookName: 'Learning Case 6__Praxis',
         difficulty: 'easy',
         acknowledgment: '',
@@ -2132,7 +2132,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _7',
+        name: 'Learning Case 13',
         workbookName: 'Learning Case 7__Praxis',
         difficulty: 'easy',
         acknowledgment: '',
@@ -2197,7 +2197,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _8',
+        name: 'Learning Case 17',
         workbookName: 'Learning Case 8__Praxis',
         difficulty: 'medium',
         acknowledgment: '',
@@ -2262,7 +2262,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _9',
+        name: 'Learning Case 14',
         workbookName: 'Learning Case 9__Praxis',
         difficulty: 'easy',
         acknowledgment: '',
@@ -2327,7 +2327,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _10',
+        name: 'Learning Case 15',
         workbookName: 'Learning Case 10__Praxis',
         difficulty: 'easy',
         acknowledgment: '',
@@ -2392,7 +2392,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _11',
+        name: 'Learning Case 18',
         workbookName: 'Learning Case 11__Praxis',
         difficulty: 'medium',
         acknowledgment: '',
@@ -2457,7 +2457,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _12',
+        name: 'Learning Case 19',
         workbookName: 'Learning Case 12__Praxis',
         difficulty: 'medium',
         acknowledgment: '',
@@ -2522,7 +2522,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _13',
+        name: 'Learning Case 20',
         workbookName: 'Learning Case 13__Praxis',
         difficulty: 'medium',
         acknowledgment: '',
@@ -2587,7 +2587,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _14',
+        name: 'Learning Case 21',
         workbookName: 'Learning Case 14__Praxis',
         difficulty: 'medium',
         acknowledgment: '',
@@ -2652,7 +2652,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _15',
+        name: 'Learning Case 16',
         workbookName: 'Learning Case 15__Praxis',
         difficulty: 'easy',
         acknowledgment: '',
@@ -2717,7 +2717,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _16',
+        name: 'Learning Case 5',
         workbookName: 'Learning Case 16__Praxis',
         difficulty: 'hard',
         acknowledgment: '',
@@ -2761,7 +2761,7 @@ export const exams: PracticeExam[] = [
             sensoryRight: 'C5',
             sensoryLeft: 'C6',
             motorRight: 'C6',
-            motorLeft: 'ND: C6, C7',
+            motorLeft: 'ND',
             nli: 'C5',
             ais: 'A',
             completeness: 'Complete',
@@ -2782,7 +2782,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _17',
+        name: 'Learning Case 6',
         workbookName: 'Learning Case 17__Praxis',
         difficulty: 'hard',
         acknowledgment: '',
@@ -2847,7 +2847,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _18',
+        name: 'Learning Case 7',
         workbookName: 'Learning Case 18__Praxis',
         difficulty: 'hard',
         acknowledgment: '',
@@ -2893,7 +2893,7 @@ export const exams: PracticeExam[] = [
             motorRight: 'C5',
             motorLeft: 'C6',
             nli: 'C5',
-            ais: 'ND (C or D)',
+            ais: 'ND',
             completeness: 'Incomplete',
             zppSensoryRight: 'NA',
             zppSensoryLeft: 'NA',
@@ -2912,7 +2912,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _19',
+        name: 'Learning Case 8',
         workbookName: 'Learning Case 19__Praxis',
         difficulty: 'hard',
         acknowledgment: '',
@@ -2977,7 +2977,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _21',
+        name: 'Learning Case 9',
         workbookName: 'Learning Case 21__Praxis',
         difficulty: 'hard',
         acknowledgment: '',
@@ -3042,7 +3042,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _23',
+        name: 'Learning Case 22',
         workbookName: 'Learning Case 23__Praxis',
         difficulty: 'medium',
         acknowledgment: '',
@@ -3088,7 +3088,7 @@ export const exams: PracticeExam[] = [
             motorRight: 'C8',
             motorLeft: 'C7',
             nli: 'C7',
-            ais: 'ND (C or D)',
+            ais: 'ND',
             completeness: 'Incomplete',
             zppSensoryRight: 'NA',
             zppSensoryLeft: 'NA',
@@ -3107,7 +3107,7 @@ export const exams: PracticeExam[] = [
     },
 
     {
-        name: 'Learning Case _24',
+        name: 'Learning Case 10',
         workbookName: 'Learning Case 24__Praxis',
         difficulty: 'hard',
         acknowledgment: '',
@@ -3151,8 +3151,8 @@ export const exams: PracticeExam[] = [
             sensoryRight: 'C6',
             sensoryLeft: 'C6',
             motorRight: 'C7',
-            motorLeft: 'ND: C5 or C6',
-            nli: 'ND: C5 or C6',
+            motorLeft: 'ND',
+            nli: 'ND',
             ais: 'A',
             completeness: 'Complete',
             zppSensoryRight: 'C6',

@@ -27,7 +27,7 @@
 
             <ion-item>
                 <ion-icon slot="start" :icon="saveOutline" class="tip-icon" />
-                <ion-label><strong>Save exam</strong>: enter an exam name and date.</ion-label>
+                <ion-label><strong>Save Exam</strong>: enter an exam name and date.</ion-label>
             </ion-item>
 
             <ion-item>
@@ -37,7 +37,7 @@
 
             <ion-item>
                 <ion-icon slot="start" :icon="chevronUp" class="tip-icon" />
-                <ion-label><strong>Arrow-Up menu</strong>: EULA, Saved Exams, Export, Learning Mode, Contact Us.</ion-label>
+                <ion-label><strong>Arrow-Up Menu</strong>: EULA, Learning Mode, Saved Exams, Export, Contact Us.</ion-label>
             </ion-item>
 
             <ion-item>
@@ -47,7 +47,7 @@
 
             <ion-item>
                 <ion-icon slot="start" :icon="bulbOutline" class="tip-icon" />
-                <ion-label><strong>Learning mode</strong>: practice exam classification.</ion-label>
+                <ion-label><strong>Learning Mode</strong>: practice exam classification.</ion-label>
             </ion-item>
 
             <ion-item>
@@ -70,7 +70,7 @@
 
             <ion-item> 
                 <ion-icon slot="start" :icon="mailOutline" class="tip-icon" />
-                <ion-label><strong>Contact Us</strong>: send feedback or questions related to app functionality or specific ISNCSCI exams questions.</ion-label>
+                <ion-label><strong>Contact Us</strong>: send feedback or questions related to app functionality or specific ISNCSCI exam questions.</ion-label>
             </ion-item>
 
             <ion-item>
@@ -79,7 +79,7 @@
 
             <ion-item>
                 <ion-label class="remove-tip">
-                    <strong>Remove values</strong>:
+                    <strong>Remove Values</strong>:
                     select a cell or range, then tap
                     <span class="purple-fake-btn">1</span>
                     (purple button) to clear them.

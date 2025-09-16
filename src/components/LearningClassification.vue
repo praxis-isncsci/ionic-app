@@ -37,7 +37,7 @@
         <fieldset class="box tiny">
             <legend>5.&nbsp;ASIA&nbsp;IMPAIRMENT&nbsp;SCALE&nbsp;(AIS)</legend>
             <select v-model="a.ais" :class="cellCls(b.ais)" >
-            <option value=""> </option><option v-for="g in ['A','B','C','C*','D','E', 'ND']" :key="g">{{g}}</option>
+            <option value=""> </option><option v-for="g in ['A','B','C','D','E', 'ND','A*','B*','C*','D*','E*']" :key="g">{{g}}</option>
             </select>
         </fieldset>
     
@@ -139,31 +139,42 @@ const check = () => {
 }
 
 const reveal = () => { 
-const e = expectedResults;
+    const e = expectedResults;
 
-// map between each field and answerKey
-const map = {
-    sensoryRight : e.answerKey?.sensoryLevels,
-    sensoryLeft  : e.answerKey?.sensoryLevels,
-    motorRight   : e.answerKey?.motorLevels,
-    motorLeft    : e.answerKey?.motorLevels,
-    nli          : e.answerKey?.nli,
-    completeness : e.answerKey?.completeness,
-    ais          : e.answerKey?.ais,
-    zppSensoryRight : e.answerKey?.sensoryZpp,
-    zppSensoryLeft  : e.answerKey?.sensoryZpp,
-    zppMotorRight   : e.answerKey?.motorZpp,
-    zppMotorLeft    : e.answerKey?.motorZpp
-} as Record<string,string|undefined>;
+    // map between each field and answerKey
+    const map = {
+        sensoryRight : e.answerKey?.sensoryLevels,
+        sensoryLeft  : e.answerKey?.sensoryLevels,
+        motorRight   : e.answerKey?.motorLevels,
+        motorLeft    : e.answerKey?.motorLevels,
+        nli          : e.answerKey?.nli,
+        completeness : e.answerKey?.completeness,
+        ais          : e.answerKey?.ais,
+        zppSensoryRight : e.answerKey?.sensoryZpp,
+        zppSensoryLeft  : e.answerKey?.sensoryZpp,
+        zppMotorRight   : e.answerKey?.motorZpp,
+        zppMotorLeft    : e.answerKey?.motorZpp
+    } as Record<string, string | undefined>;
 
-// explanations for the wrong fields
-const unique: Set<string> = new Set();
-(Object.keys(b) as (keyof typeof b)[]).forEach(k=>{
-    if(b[k]===false && map[k]) unique.add(map[k]!);
-});
+    // explanations for the wrong fields
+    const unique: Set<string> = new Set();
+    let hasWrong = false;
 
-answersToShow.value = Array.from(unique);
-}
+    (Object.keys(b) as (keyof typeof b)[]).forEach(k => {
+        if (b[k] === false) {
+        hasWrong = true;
+        if (map[k]) unique.add(map[k]!);
+        }
+    });
+
+    // Build final list: include optional top-level note ONLY if something is wrong
+    const list: string[] = [];
+    if (hasWrong && e.answerKey?.note) list.push(e.answerKey.note);
+    list.push(...Array.from(unique));
+
+    answersToShow.value = list;
+};
+
 
 const cellCls = (val: boolean|null)=>({
     cell:true,

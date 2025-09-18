@@ -37,7 +37,7 @@
                         <ion-fab-button class="fab-list-btn" @click="exportToPDF">
                             <ion-icon :icon="downloadOutline"></ion-icon>
                         </ion-fab-button>
-                        <ion-fab-button class="fab-list-btn" @click="onNavigate('/saved-worksheets')">
+                        <ion-fab-button class="fab-list-btn" @click="onNavigate('/saved-exams')">
                             <ion-icon :icon="folderOpenOutline"></ion-icon>
                             <!-- <ion-icon :icon="bookmarksOutline"></ion-icon> -->
                         </ion-fab-button>

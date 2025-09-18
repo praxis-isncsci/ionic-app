@@ -1,5 +1,8 @@
 <template>
     <div class="wrapper">
+        <p class="case-desc"> {{ exam.name }} 
+            <span style="margin-left:.35rem"><DifficultyLevels :difficulty="exam.difficulty" /></span>
+        </p>
         <p class="acknowledgment"> {{ exam.acknowledgment }} </p>
         <table class="grid">
             <!-- VAC / comments | RIGHT side | diagram | LEFT side | DAP / desc -->
@@ -151,6 +154,7 @@
 <script setup lang="ts">
 import { PracticeExam } from '@/utils/exams'
 import type { MotorLevel, SensoryLevel } from 'isncsci-ui/dist/esm/core/domain'
+import DifficultyLevels from './DifficultyLevels.vue';
 
 
 defineProps<{ exam: PracticeExam }>()
@@ -199,6 +203,10 @@ const withinSpan = (l:string) => {
 
 .acknowledgment {
     font:200 0.75rem 'Inter',sans-serif;
+    text-align:center;
+}
+.case-desc {
+    font:500 0.9rem 'Inter',sans-serif;
     text-align:center;
 }
 

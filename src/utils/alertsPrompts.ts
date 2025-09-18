@@ -28,7 +28,7 @@ export const showUnsavedDataAlert = (): Promise<boolean> => {
 
 export const promptForUniqueWorksheetName = async (initialName: string): Promise<string | null> => {
     const alert = await alertController.create({
-        header: 'Enter worksheet name',
+        header: 'Enter exam name',
         inputs: [{
             type: 'text',
             value: initialName,
@@ -48,7 +48,7 @@ export const promptForUniqueWorksheetName = async (initialName: string): Promise
 export const promptFoNameExist = async () => {
     const errorAlert = await alertController.create({
         header: 'Name already exists',
-        message: 'A worksheet with this name already exists. Please enter a unique name.',
+        message: 'An exam with this name already exists. Please enter a unique name.',
         buttons: ['OK'],
     });
     await errorAlert.present();
@@ -59,7 +59,7 @@ export const showConfirmDeleteAlert = async (): Promise<boolean> => {
     return new Promise((resolve) => {
         alertController.create({
             header: 'Confirm Delete',
-            message: 'Are you sure you want to delete this worksheet?',
+            message: 'Are you sure you want to delete this exam?',
             buttons: [
                 { text: 'Cancel', role: 'cancel', handler: () => resolve(false) },
                 { text: 'Delete', role: 'confirm', handler: () => resolve(true) },

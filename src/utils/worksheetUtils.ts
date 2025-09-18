@@ -106,7 +106,7 @@ export class Worksheets {
 
     public async newWorksheet(name: string, examData: ExamData, examDate: Date): Promise<IWorksheetMetaItem> {
         if (this.isNameExist(name)) {
-            throw "Worksheet name exists";
+            throw "Exam name exists";
         }
         const id = new Date().getTime().toString();
         const now = new Date();
@@ -125,7 +125,7 @@ export class Worksheets {
     public async saveWorksheet(worksheet: IWorksheet) {
         const worksheetMeta = this.meta.find(m => m.id == worksheet.id);
         if (!worksheetMeta) {
-            throw "Worksheet not found";
+            throw "Exam not found";
         }
         worksheetMeta.lastUpdateDate = new Date();
         await this.updateMetaLocalStorage();

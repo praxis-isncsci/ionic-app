@@ -4,7 +4,7 @@
     <HelpMode ref="helpModeRef" :helpMode="helpMode" @update:helpMode="val => helpMode = val" />
     <template #worksheet-info-slot>
       <div v-if="currentMeta" class="worksheet-info">
-        <div class="worksheet-name">Worksheet Name: {{ currentMeta.name }}</div>
+        <div class="worksheet-name">Exam Name: {{ currentMeta.name }}</div>
         <div class="worksheet-exam-date">Exam Date: {{ new Date(currentMeta.examDate).toLocaleString() }}</div>
         <input type="hidden" id="worksheet-id" name="worksheet-id" value="{{ currentMeta.id }}" />
       </div>

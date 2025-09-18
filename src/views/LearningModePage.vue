@@ -35,16 +35,9 @@
         </IonListHeader>
 
         <template v-for="d in difficultyOrder" :key="d">
-        <!-- skip empty groups -->
         <IonItem v-if="groupedExams[d].length" lines="none" class="category-hdr">
             <IonLabel>
-            <IonIcon
-                v-for="n in 3"
-                :key="n"
-                :icon="n <= filledCount(d) ? star : starOutline"
-                :color="n <= filledCount(d) ? 'warning' : 'medium'"
-                class="hdr-star"
-            />
+                <DifficultyLevels :difficulty="d" />
             </IonLabel>
         </IonItem>
 
@@ -96,21 +89,19 @@ import {
     IonNote,
     IonProgressBar
 } from '@ionic/vue'
-import { closeOutline, star, starOutline } from 'ionicons/icons'
+import { closeOutline } from 'ionicons/icons'
 
 import MainLayout from './MainLayout.vue'
 import LearningGrid from '@/components/LearningGrid.vue'
 import LearningClassification from '@/components/LearningClassification.vue'
 import { exams as presetExams, PracticeExam, Difficulty } from '@/utils/exams'
 import LearningProgress from '@/utils/learningProgress'
+import DifficultyLevels from '@/components/DifficultyLevels.vue'
 
 const router           = useRouter()
 const progressStore    = LearningProgress.getInstance()
 const examList         = presetExams
 const currentIndex     = ref<number | null>(null)
-
-const filledCount = (d: Difficulty) => (d === 'easy' ? 1 : d === 'medium' ? 2 : 3)
-
 
 type ExamWithIdx = { ex: PracticeExam; idx: number }
 const difficultyOrder: Difficulty[] = ['easy', 'medium', 'hard']
@@ -118,7 +109,7 @@ const difficultyOrder: Difficulty[] = ['easy', 'medium', 'hard']
 const groupedExams = computed<Record<Difficulty, ExamWithIdx[]>>(() =>
     difficultyOrder.reduce((acc, d) => {
     acc[d] = examList
-        .map((ex, idx) => ({ ex, idx }))   // keep idx
+        .map((ex, idx) => ({ ex, idx }))
         .filter(item => item.ex.difficulty === d)
     return acc
     }, {} as Record<Difficulty, ExamWithIdx[]>)
